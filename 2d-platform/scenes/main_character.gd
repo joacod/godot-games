@@ -34,13 +34,23 @@ func _physics_process(delta):
 	update_animation()
 	move_and_slide()
 
+# more gravity when falling
+func get_gravity():
+	if velocity.y < 0:
+		return gravity
+	return gravity * 2
+
 func handle_gravity(delta):
 	if not is_on_floor():
-		velocity.y += gravity * delta
+		velocity.y += get_gravity() * delta
 
 func handle_jump():
 	if Input.is_action_just_pressed(INPUT_JUMP) and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+	# small jump if released earlier
+	# falling down shorter velocity
+	if Input.is_action_just_released(INPUT_JUMP) and velocity.y < 0:
+		velocity.y = JUMP_VELOCITY / 4
 
 # Get the input direction and handle the movement/deceleration.
 func handle_movement():
