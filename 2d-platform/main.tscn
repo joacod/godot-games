@@ -1,8 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://cklx3ai2go6q7"]
+[gd_scene load_steps=9 format=3 uid="uid://cklx3ai2go6q7"]
 
 [ext_resource type="Texture2D" uid="uid://dqnc863esgvd1" path="res://Tileset.png" id="2_4rmy6"]
 [ext_resource type="PackedScene" uid="uid://c62b2vf5owq8q" path="res://scenes/main_character.tscn" id="3_ivxs8"]
 [ext_resource type="Script" path="res://scenes/level_camera.gd" id="4_camera"]
+
+[ext_resource type="Script" path="res://scenes/run_state.gd" id="5_run"]
+[ext_resource type="PackedScene" path="res://scenes/hazard.tscn" id="6_hazard"]
+[ext_resource type="PackedScene" path="res://scenes/death_ui.tscn" id="7_death_ui"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dcf4v"]
 texture = ExtResource("2_4rmy6")
@@ -2089,6 +2093,7 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_dcf4v")
 
 [node name="Node" type="Node"]
+script = ExtResource("5_run")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_sw07p")
@@ -2105,3 +2110,8 @@ limit_top = 0
 limit_right = 2112
 limit_bottom = 1080
 script = ExtResource("4_camera")
+
+[node name="Spikes" parent="." instance=ExtResource("6_hazard")]
+position = Vector2(600, 864)
+
+[node name="DeathUI" parent="." instance=ExtResource("7_death_ui")]

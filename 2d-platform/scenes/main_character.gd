@@ -1,5 +1,15 @@
 extends CharacterBody2D
 
+signal died
+
+## Health restored at the start of every run.
+@export var max_health = 3
+## Seconds during which ordinary damage is ignored after a hit.
+@export var invulnerability_duration = 1.0
+var health = 0
+var invulnerability_remaining = 0.0
+var is_dead = false
+
 
 ## Horizontal walking speed in pixels per second.
 @export var walk_speed = 400.0
@@ -32,17 +42,50 @@ const INPUT_ATTACK2 = "attack2"
 const INPUT_ATTACK3 = "attack3"
 
 func _ready():
+	health = max_health
 	player.animation_finished.connect(_on_animation_finished)
 
 # This function runs on every physics frame
 # at a constant rate (usually 60 times per second)
 func _physics_process(delta):
+	if is_dead:
+		return
+	invulnerability_remaining = maxf(0.0, invulnerability_remaining - delta)
+	if invulnerability_remaining > 0.0:
+		var blink_alpha = 0.45 if fmod(invulnerability_remaining, 0.2) < 0.1 else 1.0
+		player.modulate = Color(1.0, 0.45, 0.45, blink_alpha)
+	else:
+		player.modulate = Color.WHITE
 	handle_gravity(delta)
 	handle_jump()
 	handle_movement(delta)
 	handle_attacks()
 	update_animation()
 	move_and_slide()
+
+func take_damage(amount: int = 1):
+	if is_dead or invulnerability_remaining > 0.0 or amount <= 0:
+		return
+	health = maxi(0, health - amount)
+	if health == 0:
+		kill()
+	else:
+		invulnerability_remaining = invulnerability_duration
+		player.modulate = Color(1.0, 0.45, 0.45, 0.45)
+
+func kill():
+	# Lethal hazards bypass invulnerability; emit exactly once.
+	if is_dead:
+		return
+	is_dead = true
+	health = 0
+	velocity = Vector2.ZERO
+	is_attacking = false
+	invulnerability_remaining = 0.0
+	player.modulate = Color.WHITE
+	player.stop()
+	set_physics_process(false)
+	died.emit()
 
 func handle_gravity(delta):
 	if not is_on_floor():
@@ -81,6 +124,8 @@ func handle_attacks():
 	attack_direction = last_direction
 
 func _on_animation_finished():
+	if is_dead:
+		return
 	if is_attacking:
 		is_attacking = false
 		handle_movement_animations()
