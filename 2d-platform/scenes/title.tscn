@@ -1,0 +1,195 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/title.gd" id="1_script"]
+[ext_resource type="Theme" path="res://scenes/menu_theme.tres" id="2_theme"]
+
+[node name="Title" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.035, 0.05, 0.075, 1)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu" type="VBoxContainer" parent="Center"]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+
+[node name="Heading" type="Label" parent="Center/Menu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "2D Platform"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Center/Menu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.73, 0.80, 1)
+text = "A platforming demo"
+horizontal_alignment = 1
+
+[node name="Play" type="Button" parent="Center/Menu"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+text = "Play"
+
+[node name="HowToPlay" type="Button" parent="Center/Menu"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+text = "How to Play"
+
+[node name="Quit" type="Button" parent="Center/Menu"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+text = "Quit"
+
+[node name="Help" type="VBoxContainer" parent="Center"]
+visible = false
+custom_minimum_size = Vector2(920, 0)
+layout_mode = 2
+
+[node name="Heading" type="Label" parent="Center/Help"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "How to Play"
+horizontal_alignment = 1
+
+[node name="Goal" type="Label" parent="Center/Help"]
+layout_mode = 2
+text = "Reach the EXIT. Combat and the two gems are optional."
+horizontal_alignment = 1
+
+[node name="Controls" type="GridContainer" parent="Center/Help"]
+layout_mode = 2
+theme_override_constants/h_separation = 40
+theme_override_constants/v_separation = 14
+columns = 3
+
+[node name="Cell0_0" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Action"
+theme_override_colors/font_color = Color(1, 0.81, 0.43, 1)
+
+[node name="Cell0_1" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Keyboard"
+theme_override_colors/font_color = Color(1, 0.81, 0.43, 1)
+
+[node name="Cell0_2" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Gamepad (Xbox positions)"
+theme_override_colors/font_color = Color(1, 0.81, 0.43, 1)
+
+[node name="Cell1_0" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Move"
+
+[node name="Cell1_1" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Left / Right arrows"
+
+[node name="Cell1_2" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "D-pad / left stick"
+
+[node name="Cell2_0" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Jump"
+
+[node name="Cell2_1" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Up arrow"
+
+[node name="Cell2_2" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "A / south"
+
+[node name="Cell3_0" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Run (hold)"
+
+[node name="Cell3_1" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Shift"
+
+[node name="Cell3_2" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "LB / left shoulder"
+
+[node name="Cell4_0" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Attack 1 / 2 / 3"
+
+[node name="Cell4_1" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Z / X / C"
+
+[node name="Cell4_2" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "X / west, Y / north, B / east"
+
+[node name="Cell5_0" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Pause / resume"
+
+[node name="Cell5_1" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Esc"
+
+[node name="Cell5_2" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Start"
+
+[node name="Cell6_0" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Menu navigation"
+
+[node name="Cell6_1" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Up / Down arrows"
+
+[node name="Cell6_2" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "D-pad / left stick"
+
+[node name="Cell7_0" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Confirm"
+
+[node name="Cell7_1" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "Enter / Space"
+
+[node name="Cell7_2" type="Label" parent="Center/Help/Controls"]
+layout_mode = 2
+text = "A / south"
+
+[node name="Note" type="Label" parent="Center/Help"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Controller labels may differ. Retry restarts the entire level."
+horizontal_alignment = 1
+
+[node name="Back" type="Button" parent="Center/Help"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+text = "Back"

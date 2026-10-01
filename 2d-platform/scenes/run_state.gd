@@ -23,6 +23,7 @@ func _ready():
 	for menu in [death_ui, pause_ui, win_ui]:
 		menu.get_node("Overlay/Panel/Buttons/Retry").pressed.connect(retry)
 		menu.get_node("Overlay/Panel/Buttons/Quit").pressed.connect(_quit)
+		menu.get_node("Overlay/Panel/Buttons/MainMenu").pressed.connect(main_menu)
 	pause_ui.get_node("Overlay/Panel/Buttons/Resume").pressed.connect(resume)
 	for pickup in $Collectibles.get_children():
 		pickup.collected.connect(_on_collected)
@@ -96,6 +97,22 @@ func _reload_level(previous_state):
 	if error != OK:
 		state = previous_state
 		push_error("Could not reload the level: %s" % error)
+		return
+	tree.paused = false
+
+func main_menu():
+	if state not in [RunState.DEAD, RunState.PAUSED, RunState.WON]:
+		return
+	var previous_state = state
+	state = RunState.RETRYING
+	_open_main_menu.call_deferred(previous_state)
+
+func _open_main_menu(previous_state):
+	var tree = get_tree()
+	var error = tree.change_scene_to_file("res://scenes/title.tscn")
+	if error != OK:
+		state = previous_state
+		push_error("Could not open the main menu: %s" % error)
 		return
 	tree.paused = false
 

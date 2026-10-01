@@ -1,7 +1,7 @@
 # Polish the platformer into a complete demo
 
 Status: the original playable-level plan is complete and accepted by the user
-on 2026-10-01. This is the new active plan. No steps below have started.
+on 2026-10-01. This is the new active plan. Step 1 is implemented; Steps 2–7 have not started.
 
 ## Goal
 
@@ -197,13 +197,34 @@ remaining bugs; do not use a headless result as evidence of gameplay feel.
 
 ## Progress
 
-- [ ] 1. Landing screen and menu navigation
+- [x] 1. Landing screen and menu navigation
 - [ ] 2. World and UI visual identity
 - [ ] 3. Movement and camera feel
 - [ ] 4. Distinct attacks and readable combat
 - [ ] 5. Refreshed level, arena, and boss retry point
 - [ ] 6. Final boss and demo ending
 - [ ] 7. Complete-demo polish and verification
+
+### Step 1 implementation record — 2026-10-01
+
+- Added `scenes/title.tscn` and `title.gd` as startup, with Play, actual controls
+  help/Back, Quit, and initial/restored focus. `main.tscn` still runs with F6.
+- Added `scenes/menu_theme.tres` for shared button states, palette, and spacing.
+  Pause/death/win scenes now offer Main Menu. `run_state.gd` owns the deferred
+  transition, guards duplicate requests, frees the old run, and clears pause.
+  Play creates a new level without an autoload or persistent state.
+- Updated `project.godot`, README, and this record. Gameplay scripts, level
+  geometry, HUD, engine/renderer settings, input mappings, and artwork are untouched.
+- Passed startup and `tests/menu_navigation.gd`, plus damage/death/retry,
+  combat, game-loop, and level-route suites using Godot 4.7.2. The new suite
+  checks help/back focus, injected keyboard/mouse/controller input, repeated
+  Play cycles, all three Main Menu paths, state resets, and title Quit.
+- Native Metal/Mobile title/help/pause/death/win frames were inspected; layout
+  and focus are readable. `git diff --check` passed. Headless runs retain the
+  known macOS certificate diagnostic without script/scene errors.
+- Remaining live checks: human mouse/keyboard menu playthrough and physical
+  gamepad. Final world/menu artwork belongs to Step 2. No assets downloaded,
+  commits, branches, pushes, or publication performed.
 
 ## Out of scope
 

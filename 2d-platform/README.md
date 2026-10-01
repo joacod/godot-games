@@ -8,7 +8,9 @@ level, fight or avoid a patrol, collect two optional gems, and reach the EXIT.
 Use Godot 4.7; development checks use 4.7.2. Import [project.godot](project.godot)
 in the Godot Project Manager, open it, wait for asset import, and press **F6**
 with [main.tscn](main.tscn) open, or **F5** to run the configured main scene.
-The level starts immediately. Scripts use GDScript; no .NET setup is needed.
+F5 opens the title screen with Play, How to Play, and Quit. Play starts a fresh
+level; F6 with `main.tscn` open still starts the level directly. Scripts use
+GDScript; no .NET setup is needed.
 Keep the Mobile renderer and the configured 1920 × 1080 viewport with expand
 stretch unless a demonstrated display problem requires changing them.
 
@@ -25,7 +27,7 @@ stretch unless a demonstrated display problem requires changing them.
 | Confirm menu selection | Enter / Space | A / south button |
 
 Gamepad labels describe Xbox positions; other controllers may print different
-letters. Controls are also displayed in the HUD. Mappings live in
+letters. Controls are displayed in How to Play and the HUD. Mappings live in
 [project.godot](project.godot), under Project Settings → Input Map.
 
 You start with three health points. Enemy contact costs one point and gives
@@ -35,9 +37,10 @@ damage; the enemy takes two hits to defeat. Movement and jumping remain
 available during a swing, its facing stays fixed, and another attack cannot
 interrupt it. Neither defeating the enemy nor collecting gems is required to win.
 
-Pause freezes gameplay and offers Resume, Retry, and Quit. Death and win show
-Retry and Quit; win also shows the collected count. Menus have visible initial
-focus and work without a mouse. Retry reloads the entire level from its start,
+Pause freezes gameplay and offers Resume, Retry, Main Menu, and Quit. Death
+and win show Retry, Main Menu, and Quit; win also shows the collected count.
+Main Menu discards the current run and clears pause. Play always starts fresh.
+Menus have visible initial focus and work without a mouse. Retry reloads the entire level from its start,
 resetting health, velocity, enemies, gems, count, and combat state. Quit closes
 the running game. There are no checkpoints or saved progress.
 
@@ -45,11 +48,13 @@ the running game. There are no checkpoints or saved progress.
 
 | File or folder | Edit here |
 | --- | --- |
+| [scenes/title.tscn](scenes/title.tscn) / [title.gd](scenes/title.gd) | Startup title, controls help, focus, and Play navigation |
+| [scenes/menu_theme.tres](scenes/menu_theme.tres) | Shared menu palette, button states, and spacing |
 | [main.tscn](main.tscn) | Level tiles, spawn, camera limits, signs, and instances of gameplay scenes and UI |
 | [scenes/main_character.tscn](scenes/main_character.tscn) | Player SpriteFrames, atlas references, body collision, and attack area |
 | [scenes/main_character.gd](scenes/main_character.gd) | Player movement, health, invulnerability, damage, and striking frames |
 | [scenes/enemy.tscn](scenes/enemy.tscn) / [enemy.gd](scenes/enemy.gd) | Enemy art, collision/contact shapes, health, patrol, and ledge probe |
-| [scenes/run_state.gd](scenes/run_state.gd) | Death, fall threshold, pause, win, count, and full-level retry |
+| [scenes/run_state.gd](scenes/run_state.gd) | Death, fall threshold, pause, win, count, full-level retry, and Main Menu navigation |
 | [scenes/level_camera.gd](scenes/level_camera.gd) | Camera fitting for an expanded viewport |
 | [scenes/hazard.tscn](scenes/hazard.tscn), [collectible.tscn](scenes/collectible.tscn), [exit.tscn](scenes/exit.tscn) | Reusable spikes, gems, and goal, each with its matching `.gd` script |
 | [scenes/hud.tscn](scenes/hud.tscn), [death_ui.tscn](scenes/death_ui.tscn), [pause_ui.tscn](scenes/pause_ui.tscn), [win_ui.tscn](scenes/win_ui.tscn) | HUD, control text, menus, and focus styling |
@@ -95,7 +100,7 @@ The implementation machine uses
 For changes to gameplay, run the existing focused checks:
 
 ```sh
-for suite in damage_death_retry combat game_loop level_route; do
+for suite in menu_navigation damage_death_retry combat game_loop level_route; do
   godot --headless --path 2d-platform --fixed-fps 60 \
     --script "res://tests/$suite.gd" || exit 1
 done
@@ -123,8 +128,17 @@ performed during final verification. No connected gamepad was detected.
 Physical controller testing and the 1–2 minute human pacing target remain
 unconfirmed. The user accepted the original completion plan as done; these
 optional follow-ups do not block the new [demo polish plan](PLAN.md). That plan
-covers a title screen, graphics, mechanics, menus, and a final boss; none of
-those new steps are implemented yet.
+covers a title screen, graphics, mechanics, menus, and a final boss. Step 1
+(title and menu navigation) is implemented. Steps 2–7 remain pending.
+
+Step 1 checks on 2026-10-01 passed startup, the new menu-navigation suite, and
+all four existing gameplay suites. Navigation checks cover keyboard help/back,
+injected mouse help/back, injected controller confirm, Main Menu from pause,
+death, and win, duplicate transition requests, fresh-run resets, and title Quit.
+Native Metal/Mobile frames for title, help, pause, death, and win were inspected
+for layout and readable focus. These checks do not establish physical controller
+behavior or replace a human menu/playthrough check. Headless runs emitted the
+existing macOS certificate diagnostic; there were no script or scene errors.
 
 The current level uses Godot's deprecated TileMap node; migration is outside
 the demo polish plan's scope. Original-level verification and documentation are complete;
