@@ -1,14 +1,17 @@
 # Complete one playable platformer level
 
-Status: Step 1 complete; runtime checks and rendered frame inspection passed,
-and manual validation was reported by the user. Step 2 is complete; runtime
-checks and rendered frame inspection passed, and manual validation was reported
-by the user. Step 3 is implemented; runtime checks and rendered frame inspection
-passed, with manual combat playtesting pending. Step 4 is implemented; runtime
-checks and rendered frame inspection passed, with manual gameplay and physical
-controller validation pending. Step 5 is implemented; route traversal and camera
-checks passed, with manual readability, feel, and pacing validation pending.
+Status: Steps 1–5 are implemented and manually validated, as reported by the
+user on 2026-10-01. Runtime checks and rendered frame inspection also passed.
 Steps 6–7 have not started.
+
+Manual validation report (2026-10-01): the user reported testing everything
+implemented through Step 5, including that step. This records acceptance of
+movement, camera, jumps, all attacks, combat, damage and death, collectibles,
+pause/resume, menus, retry, and the complete route to the exit. Individual
+scenarios, input devices, and timed run durations were not separately recorded;
+physical controller testing and the 1–2 minute pacing target remain unconfirmed.
+The pending manual checks in the implementation records below describe the
+state before this report and are now superseded for gameplay acceptance.
 
 ## Goal
 
@@ -259,9 +262,9 @@ Implementation and verification (2026-10-01):
   all three striking animations facing both directions. Every captured
   strike reduced enemy health from two to one. These checks establish static
   rendering and scripted combat behavior, not continuous game feel or manual
-  keyboard usability. Manual combat acceptance remains pending: try each
-  attack in both directions, defeat or jump past the patrol, take contact
-  damage, and die/retry. Actual controller checks remain Step 4. Stop here;
+  keyboard usability. Manual combat acceptance was pending at implementation:
+  try each attack in both directions, defeat or jump past the patrol, take
+  contact damage, and die/retry. Actual controller checks remain Step 4. Stop here;
   no Step 4 features have been implemented.
 
 ### 4. Finish the game loop and controls
@@ -329,8 +332,9 @@ Implementation and verification (2026-10-01):
   frames in `/tmp` were inspected for HUD/control readability, visible gem/exit,
   and centered pause/win menus with initial focus. Static frames and synthetic
   input events do not establish continuous gameplay feel or physical gamepad
-  behavior. Manual acceptance remains pending: collect, pause during a swing,
-  resume, die/retry, reach the exit/win/retry, navigate menus without a mouse,
+  behavior. Manual acceptance was pending at implementation: collect, pause
+  during a swing, resume, die/retry, reach the exit/win/retry, navigate menus
+  without a mouse,
   and try all displayed bindings on an actual controller when available.
 - Existing level geometry, camera, art, enemy/hazard scenes, death UI, renderer,
   viewport settings, and README files remain unchanged. Stop after Step 4;
@@ -403,8 +407,9 @@ Implementation and verification (2026-10-01):
   the sandboxed attempt exited 134; the native check then exited 0 without
   errors. Temporary captures in `/tmp` were inspected at the start, optional
   shelf, combat platform, spikes, and exit.
-- Manual acceptance remains pending: play from spawn to exit, try collecting
-  both gems and returning to the route, fight or avoid the patrol, check jump
+- Manual acceptance was pending at implementation: play from spawn to exit,
+  try collecting both gems and returning to the route, fight or avoid the
+  patrol, check jump
   timing and camera readability while moving, and retry after death and win.
   Time successful runs with a new player to assess the 1–2 minute target and
   whether any stretches feel repetitive. Physical controller validation from
@@ -454,13 +459,13 @@ is checked with a small reversible art change before claiming it works.
 
 ## Completion checklist
 
-- [ ] Godot 4.7 opens the project and Play starts the level without script/scene errors.
-- [ ] Movement, camera, jumps, collectibles, hazards, and simple combat are playtested.
-- [ ] All three attacks deal damage and complete their animations.
-- [ ] Death, win, pause, and retry behave consistently and reset correctly.
-- [ ] Keyboard gameplay and menus work; controller verification status is recorded.
-- [ ] One cohesive short level is complete, with readable danger and a clear exit.
-- [ ] Reusable scenes and exposed values remain simple and understandable.
+- [x] Godot 4.7 opens the project and Play starts the level without script/scene errors.
+- [x] Movement, camera, jumps, collectibles, hazards, and simple combat are playtested.
+- [x] All three attacks deal damage and complete their animations.
+- [x] Death, win, pause, and retry behave consistently and reset correctly.
+- [x] Keyboard gameplay and menus work; controller verification status is recorded.
+- [x] One cohesive short level is complete, with readable danger and a clear exit.
+- [x] Reusable scenes and exposed values remain simple and understandable.
 - [ ] Art replacement instructions describe the actual supported format and are checked.
 - [ ] Project README and root game description accurately reflect verified behavior.
 
