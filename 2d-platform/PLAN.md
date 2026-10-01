@@ -6,7 +6,9 @@ checks and rendered frame inspection passed, and manual validation was reported
 by the user. Step 3 is implemented; runtime checks and rendered frame inspection
 passed, with manual combat playtesting pending. Step 4 is implemented; runtime
 checks and rendered frame inspection passed, with manual gameplay and physical
-controller validation pending. Steps 5–7 have not started.
+controller validation pending. Step 5 is implemented; route traversal and camera
+checks passed, with manual readability, feel, and pacing validation pending.
+Steps 6–7 have not started.
 
 ## Goal
 
@@ -347,6 +349,68 @@ Implementation and verification (2026-10-01):
 
 Acceptance: a new player can understand the route and finish; optional collection
 adds interest; successful runs target 1–2 minutes without artificial padding.
+
+Implementation and verification (2026-10-01):
+
+- `main.tscn` remains the entry and editable level scene. It reuses the current
+  TileMap and colliding stone tiles across a 24,768 px route, with 24 main
+  platforms, 96–160 px gaps, and platform tops at y=736, 800, or 864 px.
+  Adjacent upward steps are at most 128 px. Broad landing areas, a grounded
+  safe spawn at (160, 718), end walls, and signs introduce the goal, first
+  jump, optional collection, combat, spikes, and final approach.
+- Two elevated gem shelves at y=608 branch from higher preceding platforms
+  through deliberate run jumps. Lower ground offers a route beneath them;
+  neither gem is required. Shelf placement accounts for the player's 138 px
+  collision height, keeping the lower route clear. Both shelves have a safe
+  return to the main route.
+- The enemy instance is at (10624, 864), with patrol offsets -160/+160 on a
+  1600 px wide platform. This level's instance uses uniform 0.85 scale for
+  forgiving jump clearance while preserving matching art and collision shapes.
+  A sign offers fighting or running and jumping past it; defeat is optional.
+  Spikes at (14912, 864) have visible approach and landing room. The green
+  exit is at (24528, 800) on the final platform.
+- Camera right bound is now 24768; left/top/bottom remain 0/0/1080. Existing
+  camera fitting, movement values, damage feedback, reusable gameplay scenes,
+  run-state logic, UI, input mappings, artwork, renderer, and engine version
+  remain unchanged. No TileMap migration or folder moves were made.
+- `tests/level_route.gd` traverses the actual tile geometry using movement and
+  jump inputs, without teleporting along the full route. Walking with a short
+  run jump past the patrol reaches the exit in 60.0 simulated seconds; running
+  throughout takes 34.6 seconds. Both finish at full health without collecting
+  gems and visit every main platform. These ideal scripted times do not establish
+  the 1–2 minute human pacing target, especially when running throughout.
+- The route checks also sample camera containment during both traversals, test
+  damage-free run jumps past four patrol phases, and check collection and safe
+  returns from both optional shelves. Optional-route and patrol-phase checks
+  position the player on a starting platform before exercising real inputs.
+  `tests/combat.gd` now captures the real enemy spawn for retry checks instead
+  of asserting Step 3's provisional coordinates.
+- Verification commands from the repository root (Godot 4.7.2):
+
+  ```sh
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+    --log-file /tmp/godot-platform-step5-startup.log --quit-after 120
+  for suite in level_route game_loop combat damage_death_retry; do
+    /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+      --fixed-fps 60 --script "res://tests/$suite.gd"
+  done
+  git diff --check
+  ```
+
+- Startup and all four runtime suites passed with exit 0 and no script/scene
+  errors. Headless runs retain the previously observed macOS certificate error.
+  Native Metal/Mobile rendering required execution outside the sandbox after
+  the sandboxed attempt exited 134; the native check then exited 0 without
+  errors. Temporary captures in `/tmp` were inspected at the start, optional
+  shelf, combat platform, spikes, and exit.
+- Manual acceptance remains pending: play from spawn to exit, try collecting
+  both gems and returning to the route, fight or avoid the patrol, check jump
+  timing and camera readability while moving, and retry after death and win.
+  Time successful runs with a new player to assess the 1–2 minute target and
+  whether any stretches feel repetitive. Physical controller validation from
+  Step 4 also remains pending. Static captures and scripted traversal do not
+  establish human usability or continuous gameplay feel. Stop after Step 5;
+  documentation preparation and final delivery remain Steps 6–7.
 
 ### 6. Prepare the base and document it
 
