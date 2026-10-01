@@ -12,6 +12,11 @@ Prioritize complete, understandable gameplay over frameworks or speculative reus
   worktree changes. Avoid new dependencies and unrelated refactors.
 - Keep each game's configured Godot version and renderer unless a requested fix
   requires a change. Use GDScript for `2d-platform`.
+- Track Godot-generated `.gd.uid` files alongside their scripts. Include a new
+  script's UID in the same commit once Godot generates it. Before committing,
+  check for missing or untracked UIDs for scripts in scope; do not ignore these
+  files or treat them as disposable cache. Preserve unrelated pre-existing
+  changes, and report any UID that cannot be included in the current scope.
 - Ask before deletes, overwrites, migrations, dependency removal, commits,
   branches, pushes, PRs, publishing, external API calls, or outbound messages,
   unless the user has explicitly authorized the action in the current task.
