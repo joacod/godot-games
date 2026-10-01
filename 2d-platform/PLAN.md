@@ -1,6 +1,7 @@
 # Complete one playable platformer level
 
-Status: planned; gameplay implementation has not started under this plan.
+Status: Step 1 complete; runtime checks and rendered frame inspection passed,
+and manual validation was reported by the user. Steps 2–7 have not started.
 
 ## Goal
 
@@ -61,6 +62,53 @@ acceptance criteria as passed.
 
 Acceptance: movement remains usable; all three attacks complete; the camera
 follows without revealing space outside the intended level bounds.
+
+Implementation and verification (2026-10-01):
+
+- `scenes/main_character.gd` exposes `walk_speed` (400 px/s), `run_speed`
+  (700 px/s), `jump_velocity` (-900 px/s), and `deceleration` (3000 px/s²).
+  Deceleration preserves the previous 50 px/s reduction per tick at 60 Hz and
+  now scales with the physics timestep. Project gravity remains 2500 px/s².
+- All three attack animations are non-looping and keep priority until
+  `animation_finished`. They retain their existing frames and 10 fps playback:
+  attack 1 lasts 0.6 s, attack 2 lasts 0.4 s, and attack 3 lasts 0.5 s.
+  Other attacks pressed during a swing are ignored. Movement and jumping stay
+  available; sprite facing stays fixed for the swing and resumes afterward.
+  Attack damage is still Step 3 work.
+- `main.tscn` adds a player-following `Camera2D`, centered on the existing
+  collision shape, with pixel bounds left 0, top 0, right 2112, bottom 1080.
+  Current tiles occupy x=0–2112 and y=640–944. At the default viewport, the
+  camera can travel only 192 pixels horizontally and has no vertical travel.
+  Revisit these bounds during Step 5 when the level geometry is finalized.
+- `scenes/level_camera.gd` preserves zoom 1 for the default viewport and raises
+  zoom only when the expanded viewport would exceed those bounds. Renderer,
+  viewport configuration, artwork, collisions, and tile geometry are unchanged.
+- Startup command from the repository root (Godot 4.7.2), exit 0, no script or
+  scene errors:
+
+  ```sh
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+    --log-file /tmp/godot-platform-step1-check.log --quit-after 120
+  git diff --check
+  ```
+
+- Temporary GDScript runtime checks in `/tmp` passed: spawn landing, idle,
+  walking, running, deceleration, jumping and landing; attacks 1–3 in both
+  directions; rejection of interrupting attacks; movement during swings;
+  completion and facing recovery; fresh scene spawn and attack state. Camera
+  rectangles stayed bounded at spawn, interior, and out-of-bounds positions
+  with 1920×1080, 2560×1080, and 1080×1920 window sizes. Separate checks verified
+  camera following and clamping, not just containment.
+- Native Metal/Mobile rendering produced inspected frames at spawn, the right
+  edge, and a left-facing attack. This verifies static rendering and framing;
+  it does not establish movement feel or continuous animation quality.
+- Sandboxed headless runs emit a macOS `get_system_ca_certificates` error;
+  the same error occurred before these changes. Native rendering exited 0
+  without that error. No network behavior was added.
+- Manual acceptance: the user reported manual validation of Step 1 on
+  2026-10-01. Step 1 is complete based on that report and the runtime checks
+  above. Individual manual scenarios were not separately recorded. Controller
+  checks and actual death/retry belong to later steps.
 
 ### 2. Complete damage, death, and retry
 

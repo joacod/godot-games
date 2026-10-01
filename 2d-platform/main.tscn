@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cklx3ai2go6q7"]
+[gd_scene load_steps=6 format=3 uid="uid://cklx3ai2go6q7"]
 
 [ext_resource type="Texture2D" uid="uid://dqnc863esgvd1" path="res://Tileset.png" id="2_4rmy6"]
 [ext_resource type="PackedScene" uid="uid://c62b2vf5owq8q" path="res://scenes/main_character.tscn" id="3_ivxs8"]
+[ext_resource type="Script" path="res://scenes/level_camera.gd" id="4_camera"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dcf4v"]
 texture = ExtResource("2_4rmy6")
@@ -2096,3 +2097,11 @@ layer_0/tile_data = PackedInt32Array(3538944, 458752, 10, 3604480, 458752, 11, 3
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("3_ivxs8")]
 position = Vector2(104, 316)
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
+position = Vector2(44, 77)
+limit_left = 0
+limit_top = 0
+limit_right = 2112
+limit_bottom = 1080
+script = ExtResource("4_camera")

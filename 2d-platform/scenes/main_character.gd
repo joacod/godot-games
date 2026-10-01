@@ -1,14 +1,21 @@
 extends CharacterBody2D
 
 
-const WALK_SPEED = 400.0
-const RUN_SPEED = 700.0
-const JUMP_VELOCITY = -900.0
+## Horizontal walking speed in pixels per second.
+@export var walk_speed = 400.0
+## Horizontal running speed in pixels per second.
+@export var run_speed = 700.0
+## Upward jump velocity in pixels per second; negative points upward.
+@export var jump_velocity = -900.0
+## Horizontal slowdown in pixels per second squared (50 per tick at 60 Hz).
+@export var deceleration = 3000.0
 @onready var player = $AnimatedSprite2D
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var last_direction = 1  # 1 for right, -1 for left
+var is_attacking = false
+var attack_direction = 1
 
 # Animation states
 enum Animations {DEFAULT, WALKING, RUNNING, JUMPING, ATTACKING1, ATTACKING2, ATTACKING3}
@@ -24,12 +31,15 @@ const INPUT_ATTACK1 = "attack1"
 const INPUT_ATTACK2 = "attack2"
 const INPUT_ATTACK3 = "attack3"
 
+func _ready():
+	player.animation_finished.connect(_on_animation_finished)
+
 # This function runs on every physics frame
 # at a constant rate (usually 60 times per second)
 func _physics_process(delta):
 	handle_gravity(delta)
 	handle_jump()
-	handle_movement()
+	handle_movement(delta)
 	handle_attacks()
 	update_animation()
 	move_and_slide()
@@ -40,21 +50,24 @@ func handle_gravity(delta):
 
 func handle_jump():
 	if Input.is_action_just_pressed(INPUT_JUMP) and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+		velocity.y = jump_velocity
 
 # Get the input direction and handle the movement/deceleration.
-func handle_movement():
+func handle_movement(delta):
 	var direction = Input.get_axis(INPUT_MOVE_LEFT, INPUT_MOVE_RIGHT)
-	var speed = WALK_SPEED # Default to WALK_SPEED
-	if Input.is_action_pressed("run"):
-		speed = RUN_SPEED # Change to RUN_SPEED if "run" key is pressed
+	var speed = walk_speed
+	if Input.is_action_pressed(INPUT_RUN):
+		speed = run_speed
 	if direction != 0:
 		velocity.x = direction * speed
 		last_direction = direction
 	else:
-		velocity.x = move_toward(velocity.x, 0, 50)
+		velocity.x = move_toward(velocity.x, 0, deceleration * delta)
 
 func handle_attacks():
+	if is_attacking:
+		return
+
 	if Input.is_action_just_pressed(INPUT_ATTACK1):
 		current_animation = Animations.ATTACKING1
 	elif Input.is_action_just_pressed(INPUT_ATTACK2):
@@ -63,6 +76,15 @@ func handle_attacks():
 		current_animation = Animations.ATTACKING3
 	else:
 		handle_movement_animations()
+		return
+	is_attacking = true
+	attack_direction = last_direction
+
+func _on_animation_finished():
+	if is_attacking:
+		is_attacking = false
+		handle_movement_animations()
+		update_animation()
 
 func handle_movement_animations():
 	if not is_on_floor():
@@ -79,21 +101,21 @@ func handle_movement_animations():
 func update_animation():
 	match current_animation:
 		Animations.JUMPING:
-			player.animation = "jumping"
+			player.play("jumping")
 		Animations.RUNNING:
-			player.animation = "running"
+			player.play("running")
 		Animations.WALKING:
-			player.animation = "walking"
+			player.play("walking")
 		Animations.ATTACKING1:
-			player.animation = "attacking1"
+			player.play("attacking1")
 		Animations.ATTACKING2:
-			player.animation = "attacking2"
+			player.play("attacking2")
 		Animations.ATTACKING3:
-			player.animation = "attacking3"
+			player.play("attacking3")
 		_:
-			player.animation = "default"
+			player.play("default")
 	# Change player sprite left or right
-	player.flip_h = last_direction < 0
+	player.flip_h = (attack_direction if is_attacking else last_direction) < 0
 
 
 # Before refactoring
