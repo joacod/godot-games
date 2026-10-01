@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[node name="HUD" type="CanvasLayer"]
+layer = 5
+
+[node name="Margin" type="MarginContainer" parent="."]
+offset_left = 32.0
+offset_top = 24.0
+mouse_filter = 2
+
+[node name="Info" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Health" type="Label" parent="Margin/Info"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Health: 3 / 3"
+
+[node name="Count" type="Label" parent="Margin/Info"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Collected: 0"
+
+[node name="Controls" type="Label" parent="Margin/Info"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Keyboard: ←/→ move · ↑ jump · Shift run · Z/X/C attacks · Esc pause
+Gamepad: D-pad / left stick move · A (south) jump · LB run
+X (west) / Y (north) / B (east) attacks · Start pause
+Menus: ↑/↓ or D-pad / left stick · Enter / Space / A confirm"
