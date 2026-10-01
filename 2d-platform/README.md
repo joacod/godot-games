@@ -114,15 +114,22 @@ available; injected input checks cannot establish device behavior.
 ## Validation status and limits
 
 The user reported manual acceptance of Steps 1–5 on 2026-10-01. Runtime checks
-and rendered frame inspection also passed; see [PLAN.md](PLAN.md) for evidence
-and Step 6's reversible art replacement check. Physical controller testing and
-the 1–2 minute human pacing target remain unconfirmed. Time successful runs
-with a new player, including an optional collection run, and record device,
-duration, confusing jumps, and repetitive stretches.
+and rendered frame inspection also passed. A reversible idle-sheet replacement
+was checked with baseline, replacement, and restored native captures. Final
+local verification on 2026-10-01 passed startup and all four gameplay suites, with native Metal/Mobile
+frames inspected for the start, combat area, pause, death, and win. These checks
+supplement the recorded manual acceptance; no fresh editor playthrough was
+performed during final verification. No connected gamepad was detected.
+Physical controller testing and the 1–2 minute human pacing target remain
+unconfirmed. The user accepted the original completion plan as done; these
+optional follow-ups do not block the new [demo polish plan](PLAN.md). That plan
+covers a title screen, graphics, mechanics, menus, and a final boss; none of
+those new steps are implemented yet.
 
 The current level uses Godot's deprecated TileMap node; migration is outside
-this step's scope. Final Step 7 verification and publication remain pending.
+the demo polish plan's scope. Original-level verification and documentation are complete;
+publication requires separate authorization.
 Original source/license information for the existing player sheets and tileset
 is unresolved; enemy
 provenance is recorded in [ASSETS.md](ASSETS.md#gorgon-enemy). There is no export
-or distribution setup in this completion plan.
+or distribution setup in the current project.
