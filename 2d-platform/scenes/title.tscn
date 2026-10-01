@@ -140,7 +140,7 @@ text = "LB / left shoulder"
 
 [node name="Cell4_0" type="Label" parent="Center/Help/Controls"]
 layout_mode = 2
-text = "Attack 1 / 2 / 3"
+text = "Thrust / Quick / Heavy"
 
 [node name="Cell4_1" type="Label" parent="Center/Help/Controls"]
 layout_mode = 2

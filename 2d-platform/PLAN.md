@@ -1,7 +1,7 @@
 # Polish the platformer into a complete demo
 
 Status: the original playable-level plan is complete and accepted by the user
-on 2026-10-01. This is the new active plan. Steps 1–3 are implemented; Steps 4–7 have not started.
+on 2026-10-01. This is the new active plan. Steps 1–4 are implemented; Steps 5–7 have not started.
 
 ## Goal
 
@@ -200,7 +200,7 @@ remaining bugs; do not use a headless result as evidence of gameplay feel.
 - [x] 1. Landing screen and menu navigation
 - [x] 2. World and UI visual identity
 - [x] 3. Movement and camera feel
-- [ ] 4. Distinct attacks and readable combat
+- [x] 4. Distinct attacks and readable combat
 - [ ] 5. Refreshed level, arena, and boss retry point
 - [ ] 6. Final boss and demo ending
 - [ ] 7. Complete-demo polish and verification
@@ -276,6 +276,35 @@ remaining bugs; do not use a headless result as evidence of gameplay feel.
   and physical gamepad. Native movement verification was automated, without
   visual inspection or a human playtest. Step 4 has not started. No assets,
   branches, commits, pushes, PRs, or publication performed.
+
+### Step 4 implementation record — 2026-10-01
+
+- Tuned Z as the longer thrust (1 damage, 0.50 s), X as the quick close strike
+  (1 damage, 0.25 s), and C as the heavy uppercut (2 damage, 0.75 s). Existing
+  sheets/frame order remain; FPS and final recovery holds changed. Hitboxes
+  follow the visible reach/height; the uppercut strikes only on raised frame 3.
+  Fixed facing, movement, and one hit per target per swing are preserved.
+- The Gorgon uses explicit patrol/windup/strike/recovery states: a stationary
+  0.55 s gold tell, 0.15 s committed forward strike, and 0.75 s harmless recovery.
+  Body contact now senses the player without damaging them. Hits interrupt
+  attacks, flash/show a native impact burst, and apply at most 0.16 s of
+  knockback constrained by patrol bounds and ledge detection. Defeat clears
+  attacks immediately; pause freezes combat, animation, and knockback.
+- Changed player/enemy scripts and scenes, the combat suite, combat sign,
+  controls-help role label, README, ASSETS, and this record. ASSETS documents
+  final timings, damage, shapes, and effects. No new assets or dependencies.
+  Geometry, movement/camera, navigation/state owner, input mappings, other
+  menus/HUD, engine, and renderer are untouched. The existing untracked
+  `tests/movement.gd.uid` was preserved.
+- Godot 4.7.2 startup and all six suites passed: movement, menu navigation,
+  damage/death/retry, combat, game loop, and level route. Native Metal/Mobile
+  combat checks passed. Native frames were inspected for every attack in both
+  directions, enemy windup/strike/recovery, impact, combat sign, and controls help.
+  Headless checks retain the known macOS certificate diagnostic without script
+  or scene errors. `git diff --check` passed.
+- Remaining live checks: human attack tradeoffs/combat feel, fresh full route,
+  and physical gamepad. Step 5 has not started. No branch, commit, push, PR,
+  or publication performed.
 
 ## Out of scope
 

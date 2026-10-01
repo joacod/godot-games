@@ -2205,7 +2205,7 @@ theme = ExtResource("20_theme")
 theme_override_colors/font_color = Color(0.76, 0.81, 0.65, 1)
 theme_override_font_sizes/font_size = 26
 text = "PATROL AHEAD
-Z / X / C or X / Y / B: attack\nOr run + jump past →"
+Gold tell: avoid, then strike\nZ: thrust · X: quick · C: heavy\nOr run + jump past →"
 
 [node name="Hazard" type="Label" parent="RouteSigns"]
 offset_left = 14472.0

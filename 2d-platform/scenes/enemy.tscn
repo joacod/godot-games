@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3]
+[gd_scene load_steps=28 format=3]
 
 [ext_resource type="Script" path="res://scenes/enemy.gd" id="1_enemy"]
 [ext_resource type="Texture2D" path="res://enemy_sprites/Walk.png" id="2_Walk"]
@@ -91,6 +91,12 @@ animations = [
 [sub_resource type="RectangleShape2D" id="Shape_enemy"]
 size = Vector2(60, 150)
 
+[sub_resource type="RectangleShape2D" id="Shape_awareness"]
+size = Vector2(340, 150)
+
+[sub_resource type="RectangleShape2D" id="Shape_strike"]
+size = Vector2(110, 110)
+
 [node name="Enemy" type="CharacterBody2D"]
 texture_filter = 1
 collision_layer = 4
@@ -98,6 +104,7 @@ collision_mask = 1
 script = ExtResource("1_enemy")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+show_behind_parent = true
 position = Vector2(0, -128)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_enemy")
@@ -115,7 +122,16 @@ monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ContactDamage"]
 position = Vector2(0, -75)
-shape = SubResource("Shape_enemy")
+shape = SubResource("Shape_awareness")
+
+[node name="AttackHitbox" type="Area2D" parent="."]
+position = Vector2(78, -75)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox"]
+shape = SubResource("Shape_strike")
 
 [node name="FloorAhead" type="RayCast2D" parent="."]
 position = Vector2(34, -28)

@@ -243,12 +243,12 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_dntl3")
 }, {
-"duration": 1.0,
+"duration": 2.0,
 "texture": SubResource("AtlasTexture_mfe8b")
 }],
 "loop": false,
 "name": &"attacking1",
-"speed": 10.0
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -265,7 +265,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attacking2",
-"speed": 10.0
+"speed": 16.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -280,12 +280,12 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_axll0")
 }, {
-"duration": 1.0,
+"duration": 2.0,
 "texture": SubResource("AtlasTexture_ukdaw")
 }],
 "loop": false,
 "name": &"attacking3",
-"speed": 10.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
