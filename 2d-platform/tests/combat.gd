@@ -172,10 +172,11 @@ func _run():
 	# The real full-scene retry restores enemies and clears attack state.
 	change_scene_to_file("res://main.tscn")
 	await scene_changed
+	var enemy_spawn = current_scene.get_node("Enemy").position
 	for attempt in range(2):
 		var run = current_scene
 		var enemy = run.get_node("Enemy")
-		check(enemy.health == 2 and not enemy.is_defeated and enemy.position == Vector2(390, 864), "Run starts with a fresh enemy at its spawn")
+		check(enemy.health == 2 and not enemy.is_defeated and enemy.position == enemy_spawn, "Run starts with a fresh enemy at its spawn")
 		enemy.take_damage(2)
 		var player = run.character
 		Input.action_press("attack1")
