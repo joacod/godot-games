@@ -2,7 +2,7 @@
 
 Status: Steps 1–5 are implemented and manually validated, as reported by the
 user on 2026-10-01. Runtime checks and rendered frame inspection also passed.
-Steps 6–7 have not started.
+Step 6 is complete with a checked art replacement procedure. Step 7 has not started.
 
 Manual validation report (2026-10-01): the user reported testing everything
 implemented through Step 5, including that step. This records acceptance of
@@ -436,6 +436,63 @@ Acceptance: another developer can find the level, player, tunable values, and ar
 references without reading every script. The documented replacement procedure
 is checked with a small reversible art change before claiming it works.
 
+Implementation and verification (2026-10-01):
+
+- `README.md` adds Godot opening instructions, actual keyboard/gamepad and menu
+  controls, health/combat rules, full-level retry behavior, an editing map,
+  exported defaults and level overrides, art guidance, validation commands,
+  and manual playtest instructions. It distinguishes the user's reported
+  Steps 1–5 acceptance from unconfirmed physical controller and timed human
+  pacing checks.
+- `ASSETS.md` now documents all player/enemy PNG dimensions, frame counts,
+  animation names, FPS and looping, the tileset grid and occupied atlas cells,
+  scene origins/scales, body/contact/detection shapes, and striking frames.
+  It explains matching-file replacement/reimport/restoration and where to edit
+  scene resources for different paths, dimensions, or layouts. Existing asset
+  attribution and unresolved player/tileset provenance remain recorded.
+- Art references already live directly in scene resources. Gameplay scripts,
+  scenes, original PNGs and import settings, folder paths, engine, renderer,
+  and root README are unchanged. The root game description remains pending
+  final completion verification; no Step 7 delivery work was started.
+- A disposable project copy at `/tmp/godot-step6-586zrj8p/project` was imported
+  without copying the original `.godot` cache. A temporary GDScript recolored
+  nontransparent pixels in `player_sprites/Idle.png` cyan while preserving
+  its 1024 × 128 px layout and alpha. Godot reimported that same-path replacement.
+  Native Metal/Mobile captures of baseline, replacement, and restored art were
+  inspected: cyan art appeared and the original appearance returned. The backup
+  was restored byte-for-byte and reimported. Original repository art was never
+  changed.
+- Temporary runtime checks passed in all three states: the imported texture
+  matched an opaque source pixel, idle retained eight frames at 14 FPS with
+  looping/playback, and grounded spawn, health, body capsule, and attack rectangle
+  remained unchanged. This checks one compatible idle-sheet replacement; other
+  sheets and differing layouts still require the documented visual/combat checks.
+- Verification commands from the repository root (Godot 4.7.2):
+
+  ```sh
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+    --log-file /tmp/godot-platform-step6-startup.log --quit-after 120
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --editor \
+    --path /tmp/godot-step6-586zrj8p/project \
+    --log-file /tmp/godot-step6-586zrj8p/import-restored.log --import
+  /Applications/Godot.app/Contents/MacOS/Godot \
+    --path /tmp/godot-step6-586zrj8p/project --fixed-fps 60 \
+    --log-file /tmp/godot-step6-586zrj8p/restored.log \
+    --script /tmp/godot-step6-586zrj8p/check.gd \
+    -- restored /tmp/godot-step6-586zrj8p/restored.png
+  git diff --check
+  ```
+
+- Startup, import, and runtime/render checks exited 0 with no script/scene
+  errors. Sandboxed headless runs retain the macOS certificate error; temporary
+  editor imports also report blocked editor-settings saves outside the repository.
+  Native rendering required execution outside the sandbox after an exit 134,
+  then passed. The temporary source-image inspection emits an export warning;
+  game code still uses imported scene textures. Local Markdown targets/anchors,
+  headings, fences, tables, and whitespace were checked statically; no Markdown
+  tooling or dependencies were added. Full gameplay suites were not rerun for
+  this documentation-only change. Step 6 is complete; stop here.
+
 ### 7. Verify and deliver
 
 - Run a scene/script startup check from the repository root, using a Godot 4.7
@@ -466,7 +523,7 @@ is checked with a small reversible art change before claiming it works.
 - [x] Keyboard gameplay and menus work; controller verification status is recorded.
 - [x] One cohesive short level is complete, with readable danger and a clear exit.
 - [x] Reusable scenes and exposed values remain simple and understandable.
-- [ ] Art replacement instructions describe the actual supported format and are checked.
+- [x] Art replacement instructions describe the actual supported format and are checked.
 - [ ] Project README and root game description accurately reflect verified behavior.
 
 ## Out of scope
