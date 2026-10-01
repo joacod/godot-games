@@ -1,6 +1,6 @@
-[gd_scene load_steps=15 format=3 uid="uid://cklx3ai2go6q7"]
+[gd_scene load_steps=21 format=3 uid="uid://cklx3ai2go6q7"]
 
-[ext_resource type="Texture2D" uid="uid://dqnc863esgvd1" path="res://Tileset.png" id="2_4rmy6"]
+[ext_resource type="Texture2D" path="res://fortress_art/masonry.svg" id="2_4rmy6"]
 [ext_resource type="PackedScene" uid="uid://c62b2vf5owq8q" path="res://scenes/main_character.tscn" id="3_ivxs8"]
 [ext_resource type="Script" path="res://scenes/level_camera.gd" id="4_camera"]
 
@@ -14,6 +14,13 @@
 [ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="11_hud"]
 [ext_resource type="PackedScene" path="res://scenes/pause_ui.tscn" id="12_pause_ui"]
 [ext_resource type="PackedScene" path="res://scenes/win_ui.tscn" id="13_win_ui"]
+
+[ext_resource type="Theme" path="res://scenes/menu_theme.tres" id="20_theme"]
+[ext_resource type="PackedScene" path="res://scenes/fortress_background.tscn" id="14_world"]
+[ext_resource type="Texture2D" path="res://fortress_art/torch.png" id="16_torch"]
+[ext_resource type="Texture2D" path="res://fortress_art/barrel.png" id="17_barrel"]
+[ext_resource type="Texture2D" path="res://fortress_art/shield.png" id="18_shield"]
+[ext_resource type="Texture2D" path="res://fortress_art/window.png" id="19_window"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dcf4v"]
 texture = ExtResource("2_4rmy6")
@@ -2102,6 +2109,16 @@ sources/0 = SubResource("TileSetAtlasSource_dcf4v")
 [node name="Node" type="Node"]
 script = ExtResource("5_run")
 
+[node name="Backdrop" type="CanvasLayer" parent="."]
+layer = -10
+
+[node name="FortressBackground" parent="Backdrop" instance=ExtResource("14_world")]
+follow_camera = true
+
+[node name="FortressProps" type="Node2D" parent="."]
+z_index = -1
+texture_filter = 1
+
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_sw07p")
 format = 2
@@ -2153,8 +2170,10 @@ offset_left = 120.0
 offset_top = 600.0
 offset_right = 820.0
 offset_bottom = 700.0
-theme_override_font_sizes/font_size = 30
-text = "REACH THE GREEN EXIT →
+theme = ExtResource("20_theme")
+theme_override_colors/font_color = Color(0.76, 0.81, 0.65, 1)
+theme_override_font_sizes/font_size = 26
+text = "REACH THE TEAL EXIT →
 Gems and combat are optional"
 
 [node name="TeachingJump" type="Label" parent="RouteSigns"]
@@ -2162,15 +2181,19 @@ offset_left = 620.0
 offset_top = 664.0
 offset_right = 1320.0
 offset_bottom = 764.0
-theme_override_font_sizes/font_size = 30
-text = "JUMP THE GAP →"
+theme = ExtResource("20_theme")
+theme_override_colors/font_color = Color(0.76, 0.81, 0.65, 1)
+theme_override_font_sizes/font_size = 26
+text = "JUMP THE GAP →\n↑ / A: jump"
 
 [node name="OptionalGem" type="Label" parent="RouteSigns"]
 offset_left = 5728.0
 offset_top = 440.0
 offset_right = 6428.0
 offset_bottom = 540.0
-theme_override_font_sizes/font_size = 30
+theme = ExtResource("20_theme")
+theme_override_colors/font_color = Color(0.76, 0.81, 0.65, 1)
+theme_override_font_sizes/font_size = 26
 text = "OPTIONAL GEM: RUN + JUMP ↑"
 
 [node name="Combat" type="Label" parent="RouteSigns"]
@@ -2178,16 +2201,20 @@ offset_left = 9904.0
 offset_top = 576.0
 offset_right = 10604.0
 offset_bottom = 676.0
-theme_override_font_sizes/font_size = 30
+theme = ExtResource("20_theme")
+theme_override_colors/font_color = Color(0.76, 0.81, 0.65, 1)
+theme_override_font_sizes/font_size = 26
 text = "PATROL AHEAD
-Fight, or run + jump over it →"
+Z / X / C or X / Y / B: attack\nOr run + jump past →"
 
 [node name="Hazard" type="Label" parent="RouteSigns"]
 offset_left = 14472.0
 offset_top = 624.0
 offset_right = 15172.0
 offset_bottom = 724.0
-theme_override_font_sizes/font_size = 30
+theme = ExtResource("20_theme")
+theme_override_colors/font_color = Color(0.76, 0.81, 0.65, 1)
+theme_override_font_sizes/font_size = 26
 text = "SPIKES: JUMP OVER →"
 
 [node name="Home" type="Label" parent="RouteSigns"]
@@ -2195,5 +2222,77 @@ offset_left = 22416.0
 offset_top = 568.0
 offset_right = 23116.0
 offset_bottom = 668.0
-theme_override_font_sizes/font_size = 30
+theme = ExtResource("20_theme")
+theme_override_colors/font_color = Color(0.76, 0.81, 0.65, 1)
+theme_override_font_sizes/font_size = 26
 text = "EXIT AHEAD →"
+
+[node name="StartBarrel" type="Sprite2D" parent="FortressProps"]
+position = Vector2(480, 832)
+scale = Vector2(3, 3)
+texture = ExtResource("17_barrel")
+
+[node name="StartTorch" type="Sprite2D" parent="FortressProps"]
+position = Vector2(360, 792)
+scale = Vector2(3, 3)
+texture = ExtResource("16_torch")
+
+[node name="GemShield" type="Sprite2D" parent="FortressProps"]
+position = Vector2(6120, 768)
+scale = Vector2(2, 2)
+texture = ExtResource("18_shield")
+
+[node name="PatrolTorch" type="Sprite2D" parent="FortressProps"]
+position = Vector2(10960, 792)
+scale = Vector2(3, 3)
+texture = ExtResource("16_torch")
+
+[node name="HazardTorch" type="Sprite2D" parent="FortressProps"]
+position = Vector2(14560, 792)
+scale = Vector2(3, 3)
+texture = ExtResource("16_torch")
+
+[node name="HomeBarrel" type="Sprite2D" parent="FortressProps"]
+position = Vector2(22560, 768)
+scale = Vector2(3, 3)
+texture = ExtResource("17_barrel")
+
+[node name="ExitTorch" type="Sprite2D" parent="FortressProps"]
+position = Vector2(24288, 792)
+scale = Vector2(3, 3)
+texture = ExtResource("16_torch")
+
+[node name="ExitWindow" type="Sprite2D" parent="FortressProps"]
+position = Vector2(24416, 704)
+scale = Vector2(2, 2)
+texture = ExtResource("19_window")
+
+[node name="Mount" type="Polygon2D" parent="FortressProps/StartTorch"]
+z_index = -1
+polygon = PackedVector2Array(-3, 8, 3, 8, 3, 24, -3, 24)
+color = Color(0.29, 0.34, 0.35, 1)
+
+[node name="Mount" type="Polygon2D" parent="FortressProps/PatrolTorch"]
+z_index = -1
+polygon = PackedVector2Array(-3, 8, 3, 8, 3, 24, -3, 24)
+color = Color(0.29, 0.34, 0.35, 1)
+
+[node name="Mount" type="Polygon2D" parent="FortressProps/HazardTorch"]
+z_index = -1
+polygon = PackedVector2Array(-3, 8, 3, 8, 3, 24, -3, 24)
+color = Color(0.29, 0.34, 0.35, 1)
+
+[node name="Mount" type="Polygon2D" parent="FortressProps/ExitTorch"]
+z_index = -1
+polygon = PackedVector2Array(-3, 8, 3, 8, 3, 24, -3, 24)
+color = Color(0.29, 0.34, 0.35, 1)
+
+[node name="Mount" type="Polygon2D" parent="FortressProps/GemShield"]
+z_index = -1
+polygon = PackedVector2Array(-3, 0, 3, 0, 3, 48, -3, 48)
+color = Color(0.29, 0.34, 0.35, 1)
+
+[node name="RuinPier" type="Polygon2D" parent="FortressProps/ExitWindow"]
+z_index = -1
+polygon = PackedVector2Array(-24, -32, -8, -32, -8, -24, 12, -24, 12, -32, 24, -32, 24, 80, -24, 80)
+color = Color(0.21, 0.28, 0.31, 1)

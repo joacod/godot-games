@@ -1,7 +1,7 @@
 # Polish the platformer into a complete demo
 
 Status: the original playable-level plan is complete and accepted by the user
-on 2026-10-01. This is the new active plan. Step 1 is implemented; Steps 2–7 have not started.
+on 2026-10-01. This is the new active plan. Steps 1–2 are implemented; Steps 3–7 have not started.
 
 ## Goal
 
@@ -198,7 +198,7 @@ remaining bugs; do not use a headless result as evidence of gameplay feel.
 ## Progress
 
 - [x] 1. Landing screen and menu navigation
-- [ ] 2. World and UI visual identity
+- [x] 2. World and UI visual identity
 - [ ] 3. Movement and camera feel
 - [ ] 4. Distinct attacks and readable combat
 - [ ] 5. Refreshed level, arena, and boss retry point
@@ -225,6 +225,30 @@ remaining bugs; do not use a headless result as evidence of gameplay feel.
 - Remaining live checks: human mouse/keyboard menu playthrough and physical
   gamepad. Final world/menu artwork belongs to Step 2. No assets downloaded,
   commits, branches, pushes, or publication performed.
+
+### Step 2 implementation record — 2026-10-01
+
+- Added a shared native-drawn night fortress background for the title and level,
+  with two restrained horizontal parallax layers, clouds, stars, moon, and ruins.
+  Added `fortress_art/masonry.svg` at the existing atlas coordinates and four
+  used CraftPix free medieval PNGs, with visible decorative mounts and a pier.
+- Updated `main.tscn`, title/help, the shared theme, pause/death/win menus,
+  spikes, gems, and exit visuals. The HUD now shows health/count/pause in one
+  compact strip; full controls stay in How to Play, with brief jump/combat signs.
+  ASSETS.md records sources, license, dimensions, font, and visual alignment;
+  README describes the implemented presentation. No SpriteFrames changed.
+- Passed startup and menu-navigation, damage/death/retry, combat, game-loop,
+  and level-route suites with Godot 4.7.2. Compared TileMap cells/collision
+  polygons, camera limits, and hazard/pickup/exit shapes against HEAD: unchanged.
+  Movement, attack/damage scripts, navigation/state owner, input mappings,
+  player/enemy sheets, original Tileset.png, engine, and renderer are untouched.
+- Inspected native Metal/Mobile frames for title/help, start/gem/combat/spikes/exit,
+  pause/death/win, and wide/tall viewport camera edges. Background coverage and
+  camera-bound assertions passed; native gap pixels confirm empty cells show
+  background. `git diff --check` passed. Headless checks retain the existing
+  macOS certificate diagnostic without script/scene errors.
+- Remaining live checks: fresh human route/menu playthrough and physical gamepad.
+  Step 3 has not started. No branch, commit, push, PR, or publication performed.
 
 ## Out of scope
 

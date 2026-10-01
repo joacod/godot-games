@@ -2,6 +2,8 @@
 
 A small Godot platformer for learning and experimentation. Jump across one
 level, fight or avoid a patrol, collect two optional gems, and reach the EXIT.
+The world and menus share a night fortress style with layered silhouettes,
+moss-capped stone, gold focus, and a teal exit marker.
 
 ## Open and play
 
@@ -27,7 +29,9 @@ stretch unless a demonstrated display problem requires changing them.
 | Confirm menu selection | Enter / Space | A / south button |
 
 Gamepad labels describe Xbox positions; other controllers may print different
-letters. Controls are displayed in How to Play and the HUD. Mappings live in
+letters. Full controls are displayed in How to Play. The compact HUD shows health,
+collection count, and a pause reminder; short level prompts introduce jumping
+and combat. Mappings live in
 [project.godot](project.godot), under Project Settings → Input Map.
 
 You start with three health points. Enemy contact costs one point and gives
@@ -49,7 +53,8 @@ the running game. There are no checkpoints or saved progress.
 | File or folder | Edit here |
 | --- | --- |
 | [scenes/title.tscn](scenes/title.tscn) / [title.gd](scenes/title.gd) | Startup title, controls help, focus, and Play navigation |
-| [scenes/menu_theme.tres](scenes/menu_theme.tres) | Shared menu palette, button states, and spacing |
+| [scenes/menu_theme.tres](scenes/menu_theme.tres) | Shared menu/HUD/prompt font, palette, button states, and spacing |
+| [scenes/fortress_background.tscn](scenes/fortress_background.tscn) / [fortress_background.gd](scenes/fortress_background.gd) | Shared title/gameplay scenery and restrained camera-driven parallax |
 | [main.tscn](main.tscn) | Level tiles, spawn, camera limits, signs, and instances of gameplay scenes and UI |
 | [scenes/main_character.tscn](scenes/main_character.tscn) | Player SpriteFrames, atlas references, body collision, and attack area |
 | [scenes/main_character.gd](scenes/main_character.gd) | Player movement, health, invulnerability, damage, and striking frames |
@@ -57,8 +62,8 @@ the running game. There are no checkpoints or saved progress.
 | [scenes/run_state.gd](scenes/run_state.gd) | Death, fall threshold, pause, win, count, full-level retry, and Main Menu navigation |
 | [scenes/level_camera.gd](scenes/level_camera.gd) | Camera fitting for an expanded viewport |
 | [scenes/hazard.tscn](scenes/hazard.tscn), [collectible.tscn](scenes/collectible.tscn), [exit.tscn](scenes/exit.tscn) | Reusable spikes, gems, and goal, each with its matching `.gd` script |
-| [scenes/hud.tscn](scenes/hud.tscn), [death_ui.tscn](scenes/death_ui.tscn), [pause_ui.tscn](scenes/pause_ui.tscn), [win_ui.tscn](scenes/win_ui.tscn) | HUD, control text, menus, and focus styling |
-| `player_sprites/`, `enemy_sprites/`, [Tileset.png](Tileset.png) | Art referenced directly by scene resources |
+| [scenes/hud.tscn](scenes/hud.tscn), [death_ui.tscn](scenes/death_ui.tscn), [pause_ui.tscn](scenes/pause_ui.tscn), [win_ui.tscn](scenes/win_ui.tscn) | Compact HUD, menus, and focus styling |
+| `player_sprites/`, `enemy_sprites/`, `fortress_art/` | Character sheets, masonry atlas, and used CraftPix props; original `Tileset.png` stays untouched |
 
 Select the player or enemy instance in `main.tscn` to override exported values
 in the Inspector. Edit the reusable scene or script default to change the base.
@@ -128,8 +133,8 @@ performed during final verification. No connected gamepad was detected.
 Physical controller testing and the 1–2 minute human pacing target remain
 unconfirmed. The user accepted the original completion plan as done; these
 optional follow-ups do not block the new [demo polish plan](PLAN.md). That plan
-covers a title screen, graphics, mechanics, menus, and a final boss. Step 1
-(title and menu navigation) is implemented. Steps 2–7 remain pending.
+covers a title screen, graphics, mechanics, menus, and a final boss. Steps 1–2
+(title/navigation and world/UI visual identity) are implemented. Steps 3–7 remain pending.
 
 Step 1 checks on 2026-10-01 passed startup, the new menu-navigation suite, and
 all four existing gameplay suites. Navigation checks cover keyboard help/back,
@@ -147,3 +152,12 @@ Original source/license information for the existing player sheets and tileset
 is unresolved; enemy
 provenance is recorded in [ASSETS.md](ASSETS.md#gorgon-enemy). There is no export
 or distribution setup in the current project.
+
+Step 2 checks on 2026-10-01 passed startup, menu navigation, damage/death/retry,
+combat, game-loop, and route suites. Native Metal/Mobile title/help,
+start/gem/combat/spikes/exit, pause/death/win, and wide/tall camera-edge frames
+were inspected. Tile positions, collision polygons, camera limits, and all
+hazard/pickup/exit detection shapes match the pre-step version. Headless checks
+retain the macOS certificate diagnostic without script or scene errors.
+A fresh human traversal and physical gamepad checks remain unverified.
+Sources, atlas layout, and visual-only prop placement are recorded in ASSETS.md.

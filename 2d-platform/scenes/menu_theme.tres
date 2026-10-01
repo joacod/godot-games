@@ -1,24 +1,28 @@
-[gd_resource type="Theme" load_steps=6 format=3]
+[gd_resource type="Theme" load_steps=7 format=3]
 
 [sub_resource type="StyleBoxFlat" id="Normal"]
-bg_color = Color(0.10, 0.14, 0.19, 1)
+bg_color = Color(0.09, 0.14, 0.17, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.35, 0.43, 0.50, 1)
+border_color = Color(0.48, 0.43, 0.29, 1)
 content_margin_left = 24.0
 content_margin_top = 14.0
 content_margin_right = 24.0
 content_margin_bottom = 14.0
 
 [sub_resource type="StyleBoxFlat" id="Hover"]
-bg_color = Color(0.18, 0.24, 0.30, 1)
+bg_color = Color(0.17, 0.26, 0.28, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.75, 0.82, 0.88, 1)
+border_color = Color(0.77, 0.70, 0.48, 1)
+content_margin_left = 24.0
+content_margin_top = 14.0
+content_margin_right = 24.0
+content_margin_bottom = 14.0
 
 [sub_resource type="StyleBoxFlat" id="Pressed"]
 bg_color = Color(0.07, 0.10, 0.14, 1)
@@ -27,6 +31,10 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.85, 0.68, 0.36, 1)
+content_margin_left = 24.0
+content_margin_top = 14.0
+content_margin_right = 24.0
+content_margin_bottom = 14.0
 
 [sub_resource type="StyleBoxFlat" id="Focus"]
 bg_color = Color(0, 0, 0, 0)
@@ -38,10 +46,26 @@ border_color = Color(1, 0.81, 0.43, 1)
 
 [sub_resource type="StyleBoxFlat" id="Disabled"]
 bg_color = Color(0.08, 0.10, 0.13, 1)
+content_margin_left = 24.0
+content_margin_top = 14.0
+content_margin_right = 24.0
+content_margin_bottom = 14.0
+
+[sub_resource type="StyleBoxFlat" id="Panel"]
+bg_color = Color(0.035, 0.07, 0.09, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.48, 0.43, 0.29, 1)
+content_margin_left = 20.0
+content_margin_top = 12.0
+content_margin_right = 20.0
+content_margin_bottom = 12.0
 
 [resource]
 default_font_size = 28
-Button/colors/font_color = Color(0.93, 0.95, 0.97, 1)
+Button/colors/font_color = Color(0.94, 0.91, 0.79, 1)
 Button/colors/font_hover_color = Color(1, 1, 1, 1)
 Button/colors/font_pressed_color = Color(1, 0.81, 0.43, 1)
 Button/colors/font_focus_color = Color(1, 0.88, 0.63, 1)
@@ -51,5 +75,9 @@ Button/styles/hover = SubResource("Hover")
 Button/styles/pressed = SubResource("Pressed")
 Button/styles/focus = SubResource("Focus")
 Button/styles/disabled = SubResource("Disabled")
-Label/colors/font_color = Color(0.93, 0.95, 0.97, 1)
+Label/colors/font_color = Color(0.94, 0.91, 0.79, 1)
 VBoxContainer/constants/separation = 20
+Label/colors/font_outline_color = Color(0.025, 0.04, 0.06, 1)
+Label/constants/outline_size = 4
+PanelContainer/styles/panel = SubResource("Panel")
+HBoxContainer/constants/separation = 28
