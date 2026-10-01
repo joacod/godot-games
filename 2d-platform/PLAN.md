@@ -3,7 +3,8 @@
 Status: Step 1 complete; runtime checks and rendered frame inspection passed,
 and manual validation was reported by the user. Step 2 is complete; runtime
 checks and rendered frame inspection passed, and manual validation was reported
-by the user. Steps 3–7 have not started.
+by the user. Step 3 is implemented; runtime checks and rendered frame inspection
+passed, with manual combat playtesting pending. Steps 4–7 have not started.
 
 ## Goal
 
@@ -188,6 +189,76 @@ Implementation and verification (2026-10-01):
 Acceptance: each attack works facing either direction, one swing cannot damage
 the same enemy repeatedly, contact damage respects invulnerability, and defeated
 enemies stop damaging the player. Confirm pause preserves attack timing.
+
+Implementation and verification (2026-10-01):
+
+- `scenes/enemy.tscn` and `scenes/enemy.gd` add a reusable Gorgon enemy.
+  Exposed defaults are `max_health` 2, `contact_damage` 1, `patrol_speed`
+  90 px/s, and patrol offsets -90/+90 px from its starting position. It
+  collides with World, reverses at walls and patrol bounds, and probes the
+  floor beyond its body and the next tick's movement to turn before ledges.
+  `main.tscn` instances it at (390, 864), patrolling x=300–480 on the existing
+  starting platform before the spikes. Final placement remains Step 5.
+- Enemy bodies use Enemy (layer 3) and collide with World. Their contact
+  `Area2D` detects Player (layer 2) and applies damage throughout overlap;
+  the player's existing 1 s `invulnerability_duration` prevents immediate
+  repeated hits. Hurt plays once with a red tint. Defeat immediately clears
+  motion and collision participation and stops contact damage, then plays
+  the non-looping death animation before removing the enemy.
+- `scenes/main_character.tscn` adds an 84×80 px attack detection area on
+  layer 4, detecting only Enemy. Its center is 94 px to either side of the
+  sprite's x origin and y=60 px. `scenes/main_character.gd` exposes
+  `attack_damage` (1), mirrors the area with the swing's fixed facing, and
+  records enemies hit during each swing. It checks existing overlaps when
+  striking begins, so an enemy need not enter the area during the attack.
+  Each swing can hit multiple enemies but only once each; new attacks cannot
+  interrupt it. Death cancels attack damage and clears hit history.
+- Striking frames use zero-based, inclusive indices at 10 fps: attack 1
+  frame 4 (0.4–0.5 s), attack 2 frame 2 (0.2–0.3 s), and attack 3 frames 2–3
+  (0.2–0.4 s). Windup and recovery deal no damage. Attack 1 was narrowed to
+  its extended punch after inspecting the rendered frame. Animation playback,
+  invulnerability, enemy movement, and hurt timing inherit gameplay pause.
+  A player-operated pause menu is still Step 4 work.
+- `enemy_sprites/` contains only the three used, unmodified `Gorgon_1`
+  walk/hurt/death sheets from CraftPix's free Gorgon pack, downloaded using
+  the signed-in browser. [Asset sources](ASSETS.md) records the product,
+  license, frame layout, and collision dimensions. Existing player art and
+  tiles, level geometry, camera, run-state/death UI, input mappings, engine,
+  and renderer remain unchanged.
+- Verification commands from the repository root (Godot 4.7.2):
+
+  ```sh
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+    --log-file /tmp/godot-platform-step3-startup.log --quit-after 120
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+    --log-file /tmp/godot-platform-step3-tests.log --script res://tests/combat.gd
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+    --log-file /tmp/godot-platform-step3-regression.log \
+    --script res://tests/damage_death_retry.gd
+  git diff --check
+  ```
+
+- Startup and both runtime suites passed with exit 0 and no script or scene
+  errors. Combat checks cover all attacks in both directions through actual
+  input actions and physics overlaps; harmless windup, ignored attack
+  interruption, fixed facing while moving, hits only during striking frames,
+  one hit per target with multiple targets, targets behind/out of reach,
+  second-swing defeat and removal, sustained contact and invulnerability,
+  pause during windup/strikes and contact cooldown, ledges at both ends of a
+  platform, explicit patrol bounds, wall reversal, and two full scene retries
+  restoring enemies and combat state. Step 2's existing regression checks
+  passed unchanged. Sandboxed headless runs retain the previously observed
+  macOS `get_system_ca_certificates` error; asset import also reported a
+  sandbox-blocked editor-settings save outside the repository.
+- Native Metal/Mobile rendering exited 0 without errors. Temporary scripted
+  captures in `/tmp` were inspected at spawn, during hurt/death, and during
+  all three striking animations facing both directions. Every captured
+  strike reduced enemy health from two to one. These checks establish static
+  rendering and scripted combat behavior, not continuous game feel or manual
+  keyboard usability. Manual combat acceptance remains pending: try each
+  attack in both directions, defeat or jump past the patrol, take contact
+  damage, and die/retry. Actual controller checks remain Step 4. Stop here;
+  no Step 4 features have been implemented.
 
 ### 4. Finish the game loop and controls
 
