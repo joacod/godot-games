@@ -34,6 +34,13 @@ collection count, and a pause reminder; short level prompts introduce jumping
 and combat. Mappings live in
 [project.godot](project.godot), under Project Settings → Input Map.
 
+Jump has a 0.12-second grace window after walking off a ledge and a
+0.12-second buffer for presses just before landing. Hold Jump for full height;
+release early for a shorter hop. Each press jumps once. Pause freezes the
+windows; Resume discards a pending jump and requires releasing a held button
+before a fresh press, so controller confirm cannot also launch a jump.
+Death, Retry, and Main Menu clear movement transients.
+
 You start with three health points. Enemy contact costs one point and gives
 one second of invulnerability with visible feedback. Spikes and falling below
 the level kill immediately, even during invulnerability. Each attack deals one
@@ -70,7 +77,7 @@ in the Inspector. Edit the reusable scene or script default to change the base.
 
 | Owner | Editable values and defaults |
 | --- | --- |
-| Player | `walk_speed` 400 px/s; `run_speed` 700 px/s; `jump_velocity` -900 px/s; `deceleration` 3000 px/s²; `max_health` 3; `invulnerability_duration` 1 s; `attack_damage` 1 |
+| Player | `walk_speed` 400 px/s; `run_speed` 700 px/s; `jump_velocity` -900 px/s; `coyote_time` 0.12 s; `jump_buffer_time` 0.12 s; `jump_cut_ratio` 0.45; `deceleration` 3000 px/s²; `max_health` 3; `invulnerability_duration` 1 s; `attack_damage` 1 |
 | Enemy | `max_health` 2; `patrol_speed` 90 px/s; `patrol_left` -90 px; `patrol_right` +90 px; `contact_damage` 1 |
 | Level enemy instance | Patrol offsets overridden to -160 / +160 px from its spawn; uniform scale 0.85 |
 | Run owner (`main.tscn` root) | `fall_kill_y` 1120 px |
@@ -105,7 +112,7 @@ The implementation machine uses
 For changes to gameplay, run the existing focused checks:
 
 ```sh
-for suite in menu_navigation damage_death_retry combat game_loop level_route; do
+for suite in movement menu_navigation damage_death_retry combat game_loop level_route; do
   godot --headless --path 2d-platform --fixed-fps 60 \
     --script "res://tests/$suite.gd" || exit 1
 done
@@ -133,8 +140,9 @@ performed during final verification. No connected gamepad was detected.
 Physical controller testing and the 1–2 minute human pacing target remain
 unconfirmed. The user accepted the original completion plan as done; these
 optional follow-ups do not block the new [demo polish plan](PLAN.md). That plan
-covers a title screen, graphics, mechanics, menus, and a final boss. Steps 1–2
-(title/navigation and world/UI visual identity) are implemented. Steps 3–7 remain pending.
+covers a title screen, graphics, mechanics, menus, and a final boss. Steps 1–3
+(title/navigation, world/UI visual identity, and jump forgiveness/height) are
+implemented. Steps 4–7 remain pending.
 
 Step 1 checks on 2026-10-01 passed startup, the new menu-navigation suite, and
 all four existing gameplay suites. Navigation checks cover keyboard help/back,
@@ -161,3 +169,14 @@ hazard/pickup/exit detection shapes match the pre-step version. Headless checks
 retain the macOS certificate diagnostic without script or scene errors.
 A fresh human traversal and physical gamepad checks remain unverified.
 Sources, atlas layout, and visual-only prop placement are recorded in ASSETS.md.
+
+Step 3 checks on 2026-10-01 passed startup, the new movement suite, and all five
+existing regression suites. Movement checks cover coyote/buffer consumption and
+expiration, held/released jump height, jumping during attacks, paused windows,
+Resume input suppression, death, Retry, and Main Menu/Play resets. At fixed
+60 Hz, full jumps reached about 170 px and early-release jumps about 79 px.
+Both mandatory route traversals, patrol avoidance, optional shelves, and camera
+bounds passed with full jumps held through ascent. The movement suite also
+passed with native Metal/Mobile rendering; this was an automated run, without
+a human feel assessment or physical controller test. Speeds, acceleration,
+deceleration, camera behavior, geometry, and artwork remain unchanged.

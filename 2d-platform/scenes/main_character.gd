@@ -18,6 +18,17 @@ var is_dead = false
 @export var run_speed = 700.0
 ## Upward jump velocity in pixels per second; negative points upward.
 @export var jump_velocity = -900.0
+## Seconds after leaving a ledge during which Jump still works.
+@export var coyote_time = 0.12
+## Seconds a fresh Jump press waits for a landing.
+@export var jump_buffer_time = 0.12
+## Remaining upward speed after releasing Jump early (fraction of full speed).
+@export_range(0.0, 1.0) var jump_cut_ratio = 0.45
+var coyote_remaining = 0.0
+var jump_buffer_remaining = 0.0
+var jump_in_progress = false
+# A menu confirm or held Jump must be released before a new jump request.
+var jump_armed = false
 ## Horizontal slowdown in pixels per second squared (50 per tick at 60 Hz).
 @export var deceleration = 3000.0
 @onready var player = $AnimatedSprite2D
@@ -71,11 +82,13 @@ func _physics_process(delta):
 	else:
 		player.modulate = Color.WHITE
 	handle_gravity(delta)
-	handle_jump()
+	handle_jump(delta)
 	handle_movement(delta)
 	handle_attacks()
 	update_animation()
 	move_and_slide()
+	if is_on_floor():
+		jump_in_progress = false
 	_update_attack_hitbox()
 	# Monitoring stays on so enemies already inside are detected when striking begins.
 	if attack_active:
@@ -114,7 +127,7 @@ func kill():
 	is_dead = true
 	health = 0
 	health_changed.emit(health)
-	velocity = Vector2.ZERO
+	clear_movement_state()
 	is_attacking = false
 	attack_active = false
 	hit_enemies.clear()
@@ -128,9 +141,37 @@ func handle_gravity(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-func handle_jump():
-	if Input.is_action_just_pressed(INPUT_JUMP) and is_on_floor():
+func clear_jump_input():
+	jump_buffer_remaining = 0.0
+	jump_armed = false
+
+func clear_movement_state():
+	clear_jump_input()
+	coyote_remaining = 0.0
+	jump_in_progress = false
+	velocity = Vector2.ZERO
+
+func handle_jump(delta):
+	if is_on_floor() and not jump_in_progress:
+		coyote_remaining = coyote_time
+	else:
+		coyote_remaining = maxf(0.0, coyote_remaining - delta)
+	jump_buffer_remaining = maxf(0.0, jump_buffer_remaining - delta)
+	var jump_held = Input.is_action_pressed(INPUT_JUMP)
+	var jump_pressed = Input.is_action_just_pressed(INPUT_JUMP) and jump_armed
+	if not jump_held:
+		jump_armed = true
+	elif jump_pressed:
+		jump_armed = false
+		jump_buffer_remaining = jump_buffer_time
+	if (jump_pressed or jump_buffer_remaining > 0.0) and (is_on_floor() or coyote_remaining > 0.0) and not jump_in_progress:
 		velocity.y = jump_velocity
+		jump_buffer_remaining = 0.0
+		coyote_remaining = 0.0
+		jump_in_progress = true
+	# Also shorten a buffered jump whose button was released before landing.
+	if jump_in_progress and not jump_held and velocity.y < jump_velocity * jump_cut_ratio:
+		velocity.y = jump_velocity * jump_cut_ratio
 
 # Get the input direction and handle the movement/deceleration.
 func handle_movement(delta):
