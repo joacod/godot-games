@@ -38,13 +38,21 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var last_direction = 1  # 1 for right, -1 for left
 var is_attacking = false
 var attack_direction = 1
-## Damage dealt to each enemy once per swing.
-@export var attack_damage = 1
-# Zero-based inclusive striking frames at the existing 10 fps.
+## Damage dealt once per target by the thrust, quick strike, and heavy uppercut.
+@export var thrust_damage = 1
+@export var quick_damage = 1
+@export var heavy_damage = 2
+# Reach follows the visible extended limb; offset is from the sprite origin.
+const ATTACK_SHAPES = {
+	&"attacking1": Vector3(86, 72, 140),
+	&"attacking2": Vector3(64, 64, 100),
+	&"attacking3": Vector3(66, 76, 200),
+}
+# Zero-based inclusive striking frames; animation playback owns timing.
 const STRIKING_FRAMES = {
 	&"attacking1": Vector2i(4, 4),
 	&"attacking2": Vector2i(2, 2),
-	&"attacking3": Vector2i(2, 3),
+	&"attacking3": Vector2i(3, 3),
 }
 var attack_active = false
 var hit_enemies = {}
@@ -66,6 +74,8 @@ const INPUT_ATTACK3 = "attack3"
 
 func _ready():
 	health = max_health
+	# Each player owns its shape; tuning a swing must not change another instance.
+	$AttackHitbox/CollisionShape2D.shape = $AttackHitbox/CollisionShape2D.shape.duplicate()
 	player.animation_finished.connect(_on_animation_finished)
 	player.frame_changed.connect(_update_attack_hitbox)
 	attack_hitbox.body_entered.connect(_hit_enemy)
@@ -96,7 +106,10 @@ func _physics_process(delta):
 			_hit_enemy(enemy)
 
 func _update_attack_hitbox():
-	attack_hitbox.position.x = player.position.x + attack_direction * 94.0
+	var spec = ATTACK_SHAPES.get(player.animation, Vector3(80, 64, 0))
+	attack_hitbox.position.x = player.position.x + attack_direction * spec.x
+	attack_hitbox.position.y = 24 if player.animation == &"attacking3" else (40 if player.animation == &"attacking1" else 60)
+	$AttackHitbox/CollisionShape2D.shape.size = Vector2(spec.y, 112 if player.animation == &"attacking3" else 80)
 	var frames = STRIKING_FRAMES.get(player.animation, Vector2i(-1, -1))
 	attack_active = is_attacking and not is_dead and player.frame >= frames.x and player.frame <= frames.y
 
@@ -107,7 +120,14 @@ func _hit_enemy(enemy):
 	if hit_enemies.has(id):
 		return
 	hit_enemies[id] = true
-	enemy.take_damage(attack_damage)
+	var damage = thrust_damage
+	if player.animation == &"attacking2":
+		damage = quick_damage
+	elif player.animation == &"attacking3":
+		damage = heavy_damage
+	enemy.take_damage(damage)
+	if enemy.has_method("apply_knockback"):
+		enemy.apply_knockback(attack_direction * ATTACK_SHAPES[player.animation].z)
 
 func take_damage(amount: int = 1):
 	if is_dead or get_tree().paused or invulnerability_remaining > 0.0 or amount <= 0:

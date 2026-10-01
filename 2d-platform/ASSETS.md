@@ -19,11 +19,13 @@ frame and facing right; the script flips it for left-facing movement/attacks.
 | `walk.png` | 1408 × 128 px | 11 | `walking` | 12 | Yes |
 | `Run.png` | 1152 × 128 px | 9 | `running` | 24 | Yes |
 | `Jump.png` | 1408 × 128 px | 11 | `jumping` | 16 | Yes |
-| `Attack_1.png` | 768 × 128 px | 6 | `attacking1` | 10 | No |
-| `Attack_2.png` | 512 × 128 px | 4 | `attacking2` | 10 | No |
-| `Attack_3.png` | 640 × 128 px | 5 | `attacking3` | 10 | No |
+| `Attack_1.png` | 768 × 128 px | 6 | `attacking1` (thrust) | 14 | No |
+| `Attack_2.png` | 512 × 128 px | 4 | `attacking2` (quick) | 16 | No |
+| `Attack_3.png` | 640 × 128 px | 5 | `attacking3` (heavy) | 8 | No |
 
-All frame duration multipliers are 1. Animation names are used by
+Attack 1 and 3 hold their final recovery frame for duration multiplier 2;
+all other multipliers are 1. Sheet pixels, frame order, and origins are unchanged.
+Animation names are used by
 `scenes/main_character.gd`; keep them when replacing art. Attacks must finish
 once because `animation_finished` ends the swing. The sprite autoplays `default`.
 
@@ -49,8 +51,12 @@ transparency. Visible artwork does not automatically change collision.
 | Scene / node | Shape and local placement |
 | --- | --- |
 | Player `CollisionShape2D` | Capsule radius 62 px, height 138 px, center (44, 77) |
-| Player `AttackHitbox/CollisionShape2D` | Rectangle 84 × 80 px, centered in its Area2D; area y=60, x=sprite x ±94 (110 right, -78 left) |
-| Enemy body and `ContactDamage/CollisionShape2D` | Rectangle 60 × 150 px, center (0, -75); enemy origin is at its feet |
+| Player thrust hitbox | Rectangle 72 × 80 px; area y=40, x=sprite x ±86 (102 right, -70 left) |
+| Player quick hitbox | Rectangle 64 × 80 px; area y=60, x=sprite x ±64 (80 right, -48 left) |
+| Player heavy hitbox | Rectangle 76 × 112 px; area y=24, x=sprite x ±66 (82 right, -50 left) |
+| Enemy body | Rectangle 60 × 150 px, center (0, -75); origin at its feet |
+| Enemy `ContactDamage` (awareness only) | Rectangle 340 × 150 px, center (0, -75); never deals contact damage |
+| Enemy `AttackHitbox` | Rectangle 110 × 110 px; center (±78, -75), facing committed during windup |
 | Enemy `FloorAhead` | World ray from (±(32 + patrol_speed × delta), -28) with target offset (0, 40), updated by the patrol script |
 | Hazard `CollisionShape2D` | Rectangle 128 × 32 px, center (0, -16) |
 | Collectible `CollisionShape2D` | Circle radius 24 px at the origin |
@@ -58,22 +64,32 @@ transparency. Visible artwork does not automatically change collision.
 
 The enemy sprite is centered at (0, -128) with a 2× sprite scale. The level's
 enemy instance additionally scales the entire scene to 0.85, including body,
-contact area, ray, and art. Player movement collides with World; attack detection
-detects Enemy. Enemy contact, hazards, pickups, and exit detect Player. Named
+awareness/strike areas, ray, and art. Player movement collides with World;
+attack detection detects Enemy. Enemy awareness/strike areas, hazards, pickups,
+and exit detect Player. Named
 layers and masks are in `project.godot` and the corresponding scenes.
 
 The player's `STRIKING_FRAMES` constant uses zero-based, inclusive indices:
 
-| Animation | Striking frames | Damage window at 10 FPS | Whole swing |
-| --- | --- | --- | --- |
-| `attacking1` | 4 | 0.4–0.5 s | 0.6 s |
-| `attacking2` | 2 | 0.2–0.3 s | 0.4 s |
-| `attacking3` | 2–3 | 0.2–0.4 s | 0.5 s |
+| Input / role | Striking frames | Windup | Active window | Recovery | Whole swing | Damage | Forward edge from sprite origin | Knockback |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Z / thrust (`attacking1`) | 4 | 0.286 s | 0.286–0.357 s | 0.143 s | 0.500 s | 1 | 122 px | 140 px/s |
+| X / quick (`attacking2`) | 2 | 0.125 s | 0.125–0.188 s | 0.063 s | 0.250 s | 1 | 96 px | 100 px/s |
+| C / heavy (`attacking3`) | 3 | 0.375 s | 0.375–0.500 s | 0.250 s | 0.750 s | 2 | 104 px | 200 px/s |
 
-Windup and recovery do no damage. Each enemy can be hit once per swing; facing
-stays fixed while swinging. If the new art strikes on different frames, change
-`STRIKING_FRAMES` and verify animation, area placement, and damage together.
-Changing FPS or frame duration changes the real-time windows in this table.
+The heavy uppercut uses the raised arc on frame 3; frame 2 is now harmless
+windup. Windup and recovery do no damage. Each target can be hit once per
+swing; facing stays fixed while swinging. Hitboxes are mirrored around sprite
+x=16, not the asymmetrically placed body capsule. Each player duplicates its
+attack shape before changing it. If art changes, verify visible poses, shapes,
+`STRIKING_FRAMES`, FPS, and duration multipliers together.
+
+A confirmed hit flashes the enemy and draws a small gold impact burst on the
+incoming side. Surviving enemies enter harmless recovery and receive up to
+0.16 s of horizontal knockback, bounded by patrol endpoints and the ledge ray.
+Maximum unblocked displacement is 16 / 22.4 / 32 px for quick / thrust / heavy.
+The player is not knocked toward hazards.
+
 Recheck jump distances and optional routes after changing movement, gravity,
 or body dimensions; a new silhouette can also make existing gaps harder to read.
 
@@ -135,9 +151,16 @@ Only these unmodified `Gorgon_1` PNGs from the archive are included:
 Each sheet is one row of 128 × 128 px frames, with no padding or spacing and
 duration multipliers of 1. `scenes/enemy.tscn` references these sheets and
 plays them at 10 fps with a 2× scale and nearest-neighbor filtering. Walk
-loops; hurt and death play once. Collision and contact shapes are 60 × 150 px,
-centered 75 px above the enemy's origin at its feet. Recheck these shapes if
-the art changes.
+loops; hurt and death play once. The body remains 60 × 150 px, centered 75 px above the feet. The former
+contact area now only senses nearby players. No enemy sheet or SpriteFrames
+changed in Step 4: the walk pose freezes during a 0.55 s gold windup cue,
+followed by a 0.15 s native-drawn forward swipe and 0.75 s harmless recovery
+marked by a teal dot. Swipe strokes span x=23–133 in the committed facing and
+y=-115 to -40, inside the damage rectangle x=23–133, y=-130 to -20. Each strike
+deals one damage at most once per player, respecting player invulnerability.
+All timers, animation, and knockback freeze on pause. A hit interrupts the
+attack; defeat clears damage and removes the enemy after its death animation.
+No additional assets were downloaded; cues, swipe, and impact are Godot drawing.
 
 The archive's `Licens.txt` points to the
 [CraftPix file license](https://craftpix.net/file-licenses/). The Freebie

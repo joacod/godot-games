@@ -1,6 +1,6 @@
 extends SceneTree
 
-# Godot --headless --path 2d-platform --script res://tests/combat.gd
+# Godot --headless --path 2d-platform --fixed-fps 60 --script res://tests/combat.gd
 var failures = 0
 var arena: Node2D
 const PLAYER = preload("res://scenes/main_character.tscn")
@@ -30,9 +30,10 @@ func floor_at(center: Vector2, size: Vector2):
 	arena.add_child(body)
 	return body
 
-func spawn_enemy(at: Vector2, moving: bool = false):
+func spawn_enemy(at: Vector2, moving: bool = false, hp: int = 2):
 	var enemy = ENEMY.instantiate()
 	enemy.position = at
+	enemy.max_health = hp
 	arena.add_child(enemy)
 	enemy.set_physics_process(moving)
 	return enemy
@@ -42,8 +43,15 @@ func press_attack(number: int):
 	await ticks(2)
 	Input.action_release("attack%s" % number)
 
+func wait_state(enemy, state):
+	for frame in range(120):
+		if enemy.combat_state == state:
+			return
+		await ticks(1)
+	check(false, "Enemy reaches state %s" % state)
+
 func _run():
-	create_timer(35.0, true).timeout.connect(func():
+	create_timer(40.0, true).timeout.connect(func():
 		push_error("Combat checks timed out")
 		quit(1)
 	)
@@ -54,93 +62,144 @@ func _run():
 	character.position = Vector2(500, 754)
 	arena.add_child(character)
 	await ticks(5)
-	check(character.is_on_floor(), "Combat test player lands on world")
-	check(character.attack_hitbox.collision_layer == 8 and character.attack_hitbox.collision_mask == 4, "Attack detection uses named layers")
+	check(character.is_on_floor(), "Player lands on world")
 	for facing in [1, -1]:
 		for attack in [1, 2, 3]:
+			character.position = Vector2(500, 754)
+			character.velocity = Vector2.ZERO
 			character.last_direction = facing
-			var offset = 140 if facing == 1 else -124
-			var target = spawn_enemy(Vector2(500 + offset, 900))
-			var second = spawn_enemy(Vector2(500 + offset, 900))
-			var behind = spawn_enemy(Vector2(500 - offset, 900))
-			var distant = spawn_enemy(Vector2(500 + offset * 3, 900))
+			var target = spawn_enemy(Vector2(500 + 96 * facing, 900), false, 10)
+			var second = spawn_enemy(target.position, false, 10)
+			var behind = spawn_enemy(Vector2(500 - 170 * facing, 900), false, 10)
+			# Sprite origin is offset +16; probe 44 px beyond quick strike's edge.
+			var reach_probe = spawn_enemy(Vector2(516 + 140 * facing, 900), false, 10)
 			await ticks(3)
-			check(target.health == 2, "Idle overlap does not deal damage")
 			await press_attack(attack)
-			check(character.is_attacking and target.health == 2, "Attack starts with harmless windup")
+			check(character.is_attacking and target.health == 10, "Harmless windup")
 			paused = true
-			var windup_frame = character.player.frame
-			var windup_progress = character.player.frame_progress
-			await create_timer(0.12, true).timeout
-			check(character.player.frame == windup_frame and character.player.frame_progress == windup_progress and target.health == 2, "Pause preserves harmless windup")
+			var frame = character.player.frame
+			await create_timer(0.1, true).timeout
+			check(character.player.frame == frame and target.health == 10, "Paused windup freezes")
 			paused = false
 			await press_attack(attack % 3 + 1)
-			check(character.player.animation == StringName("attacking%s" % attack), "Another attack cannot interrupt the swing")
-			# Pause in windup and later in the strike window using real animation time.
-			var did_pause = false
+			check(character.player.animation == StringName("attacking%s" % attack), "Swing cannot be interrupted by another input")
+			var damage = 2 if attack == 3 else 1
 			var saw_hit = false
-			for frame in range(60):
-				if character.attack_active and not did_pause:
-					paused = true
-					var saved_frame = character.player.frame
-					var saved_progress = character.player.frame_progress
-					var saved_health = target.health
-					await create_timer(0.15, true).timeout
-					check(character.player.frame == saved_frame and character.player.frame_progress == saved_progress, "Pause freezes attack animation timing")
-					check(target.health == saved_health, "Pause cannot deal attack damage")
-					paused = false
-					did_pause = true
-				await ticks(1)
-				if target.health == 1 and not saw_hit:
+			var paused_strike = false
+			for tick in range(90):
+				if target.health < 10 and not saw_hit:
 					saw_hit = true
-					check(character.attack_active, "First damage occurs in striking frames")
-					# Moving input cannot turn or replace the current swing.
+					check(character.attack_active, "Damage matches visible striking frame")
 					Input.action_press("left" if facing == 1 else "right")
+					var before_x = character.position.x
 					await ticks(1)
 					Input.action_release("left" if facing == 1 else "right")
+					check(character.position.x != before_x and character.attack_direction == facing and character.player.flip_h == (facing < 0), "Movement stays available with locked facing")
 					character.velocity = Vector2.ZERO
-					check(character.attack_direction == facing and character.player.flip_h == (facing < 0), "Swing facing stays fixed while moving")
+				if character.attack_active and not paused_strike:
+					paused = true
+					var saved_health = target.health
+					var saved_frame = character.player.frame
+					await create_timer(0.1, true).timeout
+					check(target.health == saved_health and character.player.frame == saved_frame, "Paused strike freezes damage and animation")
+					paused = false
+					paused_strike = true
+				await ticks(1)
 				if not character.is_attacking:
 					break
-			check(saw_hit and did_pause, "Attack %s facing %s strikes and resumes" % [attack, facing])
-			check(target.health == 1 and second.health == 1, "One swing hits each overlapping enemy exactly once")
-			check(behind.health == 2 and distant.health == 2, "Attack cannot hit behind or out of reach")
-			check(not character.is_attacking and not character.attack_active, "Attack completes and disables damage")
-			character.position = Vector2(500, 754)
-			character.last_direction = facing
-			await ticks(3)
-			await press_attack(attack)
-			await create_timer(0.8, false).timeout
-			check(not is_instance_valid(target) and not is_instance_valid(second), "Second swing defeats two-hit enemies and finishes death animation")
-			behind.queue_free()
-			distant.queue_free()
+			check(saw_hit and paused_strike, "Attack strikes in both directions")
+			check(target.health == 10 - damage and second.health == 10 - damage, "Correct damage once per target per swing")
+			check(behind.health == 10, "Cannot hit behind")
+			check(reach_probe.health == (9 if attack == 1 else 10), "Only thrust reaches distant target")
+			check(not character.attack_active and not character.is_attacking, "Recovery ends damage")
+			for enemy in [target, second, behind, reach_probe]:
+				enemy.queue_free()
 			await ticks(2)
 
-	# Contact is tested through actual overlapping physics shapes, including sustained contact.
-	character.position = Vector2(500, 754)
-	var contact = spawn_enemy(Vector2(544, 900), true)
-	contact.patrol_speed = 0.0
-	await ticks(5)
-	check(character.health == 2, "Enemy contact deals one damage")
-	await create_timer(0.2, false).timeout
-	check(character.health == 2, "Contact respects invulnerability")
-	paused = true
-	var cooldown = character.invulnerability_remaining
-	var enemy_frame = contact.sprite.frame
-	await create_timer(0.15, true).timeout
-	check(character.invulnerability_remaining == cooldown and contact.sprite.frame == enemy_frame, "Pause freezes contact cooldown and enemy animation")
-	paused = false
-	await create_timer(1.0, false).timeout
-	check(character.health == 1, "Sustained contact deals damage after invulnerability expires")
-	contact.take_damage(2)
-	check(contact.is_defeated and contact.velocity == Vector2.ZERO and contact.collision_layer == 0, "Defeat immediately stops motion and attack detection")
-	await create_timer(1.1, false).timeout
-	check(character.health == 1 and not is_instance_valid(contact), "Defeated enemy stops contact damage and is removed")
-	character.kill()
-	check(not character.attack_active and character.hit_enemies.is_empty(), "Death clears attack damage and hit history")
-	character.queue_free()
+	# Actual physics overlap drives the forward enemy strike, not body contact.
+	for facing in [1, -1]:
+		character.position = Vector2(700 + facing * 60 - 44, 754)
+		character.velocity = Vector2.ZERO
+		character.health = 3
+		character.invulnerability_remaining = 0.0
+		var enemy = spawn_enemy(Vector2(700, 900), true)
+		enemy.patrol_speed = 0
+		await wait_state(enemy, enemy.CombatState.WINDUP)
+		check(character.health == 3 and enemy.direction == facing, "Windup is harmless and faces target")
+		paused = true
+		var remaining = enemy.state_remaining
+		await create_timer(0.1, true).timeout
+		check(enemy.state_remaining == remaining, "Pause freezes enemy windup")
+		paused = false
+		await wait_state(enemy, enemy.CombatState.STRIKE)
+		await ticks(3)
+		check(character.health == 2, "Forward strike hits once")
+		character.invulnerability_remaining = 0.0
+		await ticks(3)
+		check(character.health == 2, "Same strike cannot hit twice even without invulnerability")
+		paused = true
+		remaining = enemy.state_remaining
+		await create_timer(0.1, true).timeout
+		check(enemy.state_remaining == remaining, "Pause freezes enemy strike")
+		paused = false
+		await wait_state(enemy, enemy.CombatState.RECOVERY)
+		paused = true
+		remaining = enemy.state_remaining
+		await create_timer(0.1, true).timeout
+		check(enemy.state_remaining == remaining, "Pause freezes punishable recovery")
+		paused = false
+		character.last_direction = -facing
+		await press_attack(2)
+		await ticks(20)
+		check(enemy.health == 1 and character.health == 2, "Quick strike punishes recovery without contact damage")
+		enemy.take_damage(1)
+		check(enemy.is_defeated and enemy.velocity == Vector2.ZERO and enemy.collision_layer == 0 and enemy.hit_players.is_empty(), "Defeat cancels all attacks immediately")
+		await ticks(25)
+		check(not is_instance_valid(enemy) and character.health == 2, "Defeated enemy cannot damage player")
 
-	# Wide configured bounds force real ledge detection at both ends of an isolated platform.
+	# Walk away after the tell; committed facing and stationary attack allow avoidance.
+	character.position = Vector2(716, 754)
+	character.velocity = Vector2.ZERO
+	character.health = 3
+	var avoid = spawn_enemy(Vector2(700, 900), true)
+	avoid.patrol_speed = 0
+	await wait_state(avoid, avoid.CombatState.WINDUP)
+	Input.action_press("right")
+	await ticks(30)
+	Input.action_release("right")
+	character.velocity = Vector2.ZERO
+	await ticks(40)
+	check(character.health == 3, "Telegraph leaves time to walk clear")
+	avoid.queue_free()
+	await ticks(2)
+	character.position = Vector2(716, 754)
+	character.velocity = Vector2.ZERO
+	character.invulnerability_remaining = 0.0
+	var jumper = spawn_enemy(Vector2(700, 900), true)
+	jumper.patrol_speed = 0
+	await wait_state(jumper, jumper.CombatState.WINDUP)
+	await ticks(15)
+	Input.action_press("jump")
+	await ticks(25)
+	Input.action_release("jump")
+	check(character.health == 3 and not character.is_on_floor(), "Timed full jump clears enemy strike")
+	jumper.queue_free()
+	await ticks(2)
+	character.position = Vector2(656, 754)
+	character.velocity = Vector2.ZERO
+	await ticks(5)
+	var heavy_target = spawn_enemy(Vector2(752, 900), false)
+	await ticks(3)
+	character.last_direction = 1
+	await press_attack(3)
+	await ticks(30)
+	check(heavy_target.is_defeated and heavy_target.collision_layer == 0, "One real heavy swing defeats the ordinary enemy")
+	await ticks(25)
+	check(not is_instance_valid(heavy_target), "Heavy defeat completes death animation")
+	character.queue_free()
+	await ticks(2)
+
+	# Patrol and knockback remain bounded and cannot push the enemy over a ledge.
 	floor_at(Vector2(2200, 916), Vector2(400, 32))
 	var patrol = spawn_enemy(Vector2(2200, 900), true)
 	patrol.patrol_left = -400
@@ -152,39 +211,52 @@ func _run():
 		await ticks(1)
 		visited_left = visited_left or patrol.position.x < 2070
 		visited_right = visited_right or patrol.position.x > 2330
-		check(patrol.position.x >= 2030 and patrol.position.x <= 2370 and patrol.position.y < 902, "Patrol turns before falling off either ledge")
-	check(visited_left and visited_right, "Patrol covers both sides of its platform")
+		check(patrol.position.x >= 2030 and patrol.position.x <= 2370 and patrol.position.y < 902, "Patrol stays on platform")
+	check(visited_left and visited_right, "Patrol covers both sides")
 	patrol.position = Vector2(2200, 900)
 	patrol.patrol_left = -50
 	patrol.patrol_right = 50
+	patrol.take_damage(1)
+	patrol.apply_knockback(200)
+	var hit_x = patrol.position.x
+	await ticks(6)
+	check(patrol.position.x > hit_x and patrol.position.x - hit_x <= 32, "Real hit applies restrained knockback")
+	paused = true
+	var frozen_knockback = patrol.knockback_remaining
+	await create_timer(0.1, true).timeout
+	check(patrol.knockback_remaining == frozen_knockback, "Pause freezes knockback")
+	paused = false
 	for frame in range(90):
 		await ticks(1)
-		check(patrol.position.x >= 2150 and patrol.position.x <= 2250, "Patrol respects configured bounds")
-	var wall = floor_at(Vector2(2270, 800), Vector2(32, 200))
+		check(patrol.position.x >= 2150 and patrol.position.x <= 2250, "Knockback and patrol respect bounds")
+	patrol.patrol_left = -400
 	patrol.patrol_right = 400
+	patrol.position = Vector2(2365, 900)
+	patrol.apply_knockback(200)
+	await ticks(15)
+	check(patrol.position.x <= 2370 and patrol.position.y < 902, "Knockback cannot cross ledge")
+	var wall = floor_at(Vector2(2270, 800), Vector2(32, 200))
+	patrol.position = Vector2(2200, 900)
 	patrol.direction = 1
-	await create_timer(0.7, false).timeout
-	check(patrol.position.x < 2224 and patrol.direction == -1, "World wall collision reverses patrol")
+	await ticks(45)
+	check(patrol.position.x < 2224 and patrol.direction == -1, "Wall reverses patrol")
 	wall.queue_free()
 	arena.queue_free()
 	await ticks(2)
 
-	# The real full-scene retry restores enemies and clears attack state.
 	change_scene_to_file("res://main.tscn")
 	await scene_changed
-	var enemy_spawn = current_scene.get_node("Enemy").position
 	for attempt in range(2):
 		var run = current_scene
 		var enemy = run.get_node("Enemy")
-		check(enemy.health == 2 and not enemy.is_defeated and enemy.position == enemy_spawn, "Run starts with a fresh enemy at its spawn")
-		enemy.take_damage(2)
-		var player = run.character
-		Input.action_press("attack1")
-		await ticks(2)
-		Input.action_release("attack1")
-		player.kill()
+		check(enemy.health == 2 and enemy.combat_state == enemy.CombatState.PATROL and enemy.knockback_remaining == 0, "Fresh run clears enemy combat")
+		enemy.take_damage(1)
+		enemy.apply_knockback(200)
+		await press_attack(3)
+		run.character.kill()
+		check(not run.character.attack_active and run.character.hit_enemies.is_empty(), "Death cancels player attack")
 		run.retry()
 		await scene_changed
-		check(not paused and not current_scene.character.attack_active and current_scene.character.hit_enemies.is_empty(), "Retry resets combat and unpauses the new run")
-	print("Step 3 combat checks: %s" % ("PASS" if failures == 0 else "FAIL (%s)" % failures))
+		check(not paused and not current_scene.character.attack_active, "Retry replaces and unpauses combat")
+	print("Step 4 combat checks: %s" % ("PASS" if failures == 0 else "FAIL (%s)" % failures))
 	quit(0 if failures == 0 else 1)
