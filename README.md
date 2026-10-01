@@ -14,7 +14,8 @@ Different games created with [Godot Engine](https://godotengine.org/), some of t
 
 ## 🕹️ Games
 
-- 2D Platform: classic platform game (In progress...)
+- [2D Platform](2d-platform/README.md): one playable Godot 4.7 platformer level
+  with optional combat and collectibles, hazards, a clear exit, pause, and full-level retry.
 
 ## ☕️ Did you like the project?
 
