@@ -26,6 +26,17 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var last_direction = 1  # 1 for right, -1 for left
 var is_attacking = false
 var attack_direction = 1
+## Damage dealt to each enemy once per swing.
+@export var attack_damage = 1
+# Zero-based inclusive striking frames at the existing 10 fps.
+const STRIKING_FRAMES = {
+	&"attacking1": Vector2i(4, 4),
+	&"attacking2": Vector2i(2, 2),
+	&"attacking3": Vector2i(2, 3),
+}
+var attack_active = false
+var hit_enemies = {}
+@onready var attack_hitbox = $AttackHitbox
 
 # Animation states
 enum Animations {DEFAULT, WALKING, RUNNING, JUMPING, ATTACKING1, ATTACKING2, ATTACKING3}
@@ -44,6 +55,8 @@ const INPUT_ATTACK3 = "attack3"
 func _ready():
 	health = max_health
 	player.animation_finished.connect(_on_animation_finished)
+	player.frame_changed.connect(_update_attack_hitbox)
+	attack_hitbox.body_entered.connect(_hit_enemy)
 
 # This function runs on every physics frame
 # at a constant rate (usually 60 times per second)
@@ -62,6 +75,25 @@ func _physics_process(delta):
 	handle_attacks()
 	update_animation()
 	move_and_slide()
+	_update_attack_hitbox()
+	# Monitoring stays on so enemies already inside are detected when striking begins.
+	if attack_active:
+		for enemy in attack_hitbox.get_overlapping_bodies():
+			_hit_enemy(enemy)
+
+func _update_attack_hitbox():
+	attack_hitbox.position.x = player.position.x + attack_direction * 94.0
+	var frames = STRIKING_FRAMES.get(player.animation, Vector2i(-1, -1))
+	attack_active = is_attacking and not is_dead and player.frame >= frames.x and player.frame <= frames.y
+
+func _hit_enemy(enemy):
+	if not attack_active or is_dead or get_tree().paused or not enemy.has_method("take_damage"):
+		return
+	var id = enemy.get_instance_id()
+	if hit_enemies.has(id):
+		return
+	hit_enemies[id] = true
+	enemy.take_damage(attack_damage)
 
 func take_damage(amount: int = 1):
 	if is_dead or invulnerability_remaining > 0.0 or amount <= 0:
@@ -81,6 +113,8 @@ func kill():
 	health = 0
 	velocity = Vector2.ZERO
 	is_attacking = false
+	attack_active = false
+	hit_enemies.clear()
 	invulnerability_remaining = 0.0
 	player.modulate = Color.WHITE
 	player.stop()
@@ -122,12 +156,14 @@ func handle_attacks():
 		return
 	is_attacking = true
 	attack_direction = last_direction
+	hit_enemies.clear()
 
 func _on_animation_finished():
 	if is_dead:
 		return
 	if is_attacking:
 		is_attacking = false
+		attack_active = false
 		handle_movement_animations()
 		update_animation()
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cklx3ai2go6q7"]
+[gd_scene load_steps=10 format=3 uid="uid://cklx3ai2go6q7"]
 
 [ext_resource type="Texture2D" uid="uid://dqnc863esgvd1" path="res://Tileset.png" id="2_4rmy6"]
 [ext_resource type="PackedScene" uid="uid://c62b2vf5owq8q" path="res://scenes/main_character.tscn" id="3_ivxs8"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scenes/run_state.gd" id="5_run"]
 [ext_resource type="PackedScene" path="res://scenes/hazard.tscn" id="6_hazard"]
 [ext_resource type="PackedScene" path="res://scenes/death_ui.tscn" id="7_death_ui"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="8_enemy"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dcf4v"]
 texture = ExtResource("2_4rmy6")
@@ -2115,3 +2116,6 @@ script = ExtResource("4_camera")
 position = Vector2(600, 864)
 
 [node name="DeathUI" parent="." instance=ExtResource("7_death_ui")]
+
+[node name="Enemy" parent="." instance=ExtResource("8_enemy")]
+position = Vector2(390, 864)

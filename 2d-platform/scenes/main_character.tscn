@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://c62b2vf5owq8q"]
+[gd_scene load_steps=66 format=3 uid="uid://c62b2vf5owq8q"]
 
 [ext_resource type="Script" path="res://scenes/main_character.gd" id="1_enuf8"]
 [ext_resource type="Texture2D" uid="uid://bbmakvtmfmnaw" path="res://player_sprites/Idle.png" id="2_6wqso"]
@@ -429,6 +429,9 @@ animations = [{
 radius = 62.0
 height = 138.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
+size = Vector2(84, 80)
+
 [node name="CharacterBody2D" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 1
@@ -445,3 +448,12 @@ frame_progress = 0.5044
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(44, 77)
 shape = SubResource("CapsuleShape2D_qk7mk")
+
+[node name="AttackHitbox" type="Area2D" parent="."]
+position = Vector2(110, 60)
+collision_layer = 8
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox"]
+shape = SubResource("RectangleShape2D_attack")
