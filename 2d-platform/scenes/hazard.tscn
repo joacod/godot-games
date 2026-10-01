@@ -13,7 +13,27 @@ script = ExtResource("1_hazard")
 
 [node name="Spikes" type="Polygon2D" parent="."]
 polygon = PackedVector2Array(-64, 0, -48, -32, -32, 0, -16, -32, 0, 0, 16, -32, 32, 0, 48, -32, 64, 0)
-color = Color(0.9, 0.25, 0.2, 1)
+color = Color(0.95, 0.70, 0.52, 1)
+
+[node name="DangerBase" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-64, -6, 64, -6, 64, 0, -64, 0)
+color = Color(0.65, 0.22, 0.20, 1)
+
+[node name="Facet0" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-48, -32, -32, -6, -48, -6)
+color = Color(0.68, 0.39, 0.35, 1)
+
+[node name="Facet1" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-16, -32, 0, -6, -16, -6)
+color = Color(0.68, 0.39, 0.35, 1)
+
+[node name="Facet2" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(16, -32, 32, -6, 16, -6)
+color = Color(0.68, 0.39, 0.35, 1)
+
+[node name="Facet3" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(48, -32, 64, -6, 48, -6)
+color = Color(0.68, 0.39, 0.35, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -16)

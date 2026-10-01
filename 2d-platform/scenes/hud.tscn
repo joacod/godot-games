@@ -1,17 +1,20 @@
-[gd_scene format=3]
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Theme" path="res://scenes/menu_theme.tres" id="1_theme"]
 
 [node name="HUD" type="CanvasLayer"]
 layer = 5
 
-[node name="Margin" type="MarginContainer" parent="."]
+[node name="Margin" type="PanelContainer" parent="."]
 offset_left = 32.0
 offset_top = 24.0
+theme = ExtResource("1_theme")
 mouse_filter = 2
 
-[node name="Info" type="VBoxContainer" parent="Margin"]
+[node name="Info" type="HBoxContainer" parent="Margin"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 28
 
 [node name="Health" type="Label" parent="Margin/Info"]
 layout_mode = 2
@@ -23,10 +26,8 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "Collected: 0"
 
-[node name="Controls" type="Label" parent="Margin/Info"]
+[node name="PauseHint" type="Label" parent="Margin/Info"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
-text = "Keyboard: ←/→ move · ↑ jump · Shift run · Z/X/C attacks · Esc pause
-Gamepad: D-pad / left stick move · A (south) jump · LB run
-X (west) / Y (north) / B (east) attacks · Start pause
-Menus: ↑/↓ or D-pad / left stick · Enter / Space / A confirm"
+theme_override_colors/font_color = Color(0.64, 0.74, 0.72, 1)
+text = "Esc / Start: pause"

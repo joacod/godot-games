@@ -3,6 +3,7 @@
 Texture references live directly in [scenes/main_character.tscn](scenes/main_character.tscn),
 [scenes/enemy.tscn](scenes/enemy.tscn), and [main.tscn](main.tscn).
 The following dimensions come from the PNGs and current scene resources.
+Step 2 adds the fortress assets and native drawing described below.
 
 ## Player sprite sheets
 
@@ -30,7 +31,10 @@ once because `animation_finished` ends the swing. The sprite autoplays `default`
 
 `Tileset.png` is 496 × 304 px: 31 columns × 19 rows of 16 × 16 px cells with
 zero margins and separation. `main.tscn` embeds a TileSet with a 16 × 16 px
-tile size and a TileSetAtlasSource using this PNG at source ID 0.
+tile size and a TileSetAtlasSource at source ID 0. The visual-identity pass
+now references `fortress_art/masonry.svg` instead of this PNG; the original
+PNG stays untouched. The SVG preserves the 496 × 304 px atlas extent and
+paints the four used cells with alternating stone, moss caps, and cracks.
 The current TileMap uses atlas coordinates (7, 10), (8, 10), (7, 11), and
 (8, 11), counted from the top-left at (0, 0). These cells have full-cell
 collision polygons with corners (-8, -8), (8, -8), (8, 8), and (-8, 8).
@@ -143,6 +147,54 @@ this document records the source. The assets are third-party artwork under
 that license, not original repository artwork. Keep their use within the game;
 do not resell or provide them as a standalone asset pack. Other characters,
 unused animations, PSD source files, and promotional files are not included.
+
+## Fortress visual identity
+
+Step 2 uses a night palette: blue charcoal backgrounds, moss-capped gray stone,
+parchment text, gold focus and gems, warm spike tips, and a teal exit arrow.
+The shared `scenes/menu_theme.tres` retains Godot's bundled default font across
+menus, HUD, prompts, and exit labels; no external font or font dependency is added.
+Button states share their content margins so focus and hover do not shift layout.
+
+`scenes/fortress_background.tscn` / `fortress_background.gd` draw the sky, stepped
+moon, clouds, masonry seams, windows, and two fortress silhouettes using native
+Godot primitives. Gameplay uses a screen-filling CanvasLayer at layer -10;
+only horizontal camera motion drives cloud/fortress offsets (0.025, 0.06, 0.14).
+The title reuses the scene with camera following disabled. Background colors
+stay dimmer than playable surfaces. Decoration has no collision or gameplay
+state; pause freezes camera-driven updates. No animation timing was added.
+
+`fortress_art/masonry.svg` is new geometric artwork written for this project.
+It retains the original 16 px atlas grid and used coordinates (7, 10), (8, 10),
+(7, 11), (8, 11). Tile positions and full-cell collision polygons are unchanged.
+The cap is at the tile's actual top edge; transparent unused cells add no art
+in gaps. `Tileset.png` remains available as the original visual reference.
+No player/enemy SpriteFrames, attack frames, or detection shapes changed.
+
+The four unmodified props in `fortress_art/` come from CraftPix's
+[Free Medieval Tileset Pixel Art Pack](https://craftpix.net/freebies/free-medieval-tileset-pixel-art-pack/),
+downloaded through the browser on 2026-10-01:
+
+| Included file | Archive path | PNG size | Use |
+| --- | --- | --- | --- |
+| `torch.png` | `PNG/Objects/torch.png` | 32 × 32 px | 3× torches on visible decorative mounts |
+| `barrel.png` | `PNG/Objects/barrel.png` | 32 × 32 px | 3× barrels at the start and exit approach |
+| `shield.png` | `PNG/Objects/shield.png` | 64 × 64 px | 2× shield on a post near the first optional gem |
+| `window.png` | `PNG/Objects/window.png` | 64 × 64 px | 2× window on the exit's ruined pier |
+
+`main.tscn` places these behind the player, enemy, and TileMap with nearest
+filtering. They are scenery, not interactive items or landing surfaces.
+Only these used PNGs and the archive's `License.txt` were included. The archive,
+Unity package, unused props/tiles, and promotional artwork are not included.
+The archive license points to the [CraftPix file license](https://craftpix.net/file-licenses/),
+whose Freebie Products section permits use and modification in game projects
+and distribution of games using the assets. Credit is optional; this record
+preserves provenance. These props remain third-party artwork under that license.
+
+The spike faces/base, faceted gold gem, and framed teal exit are native scene
+polygons. Their outer extents match the existing 128 × 32 px hazard rectangle,
+24 px pickup radius, and 80 × 128 px exit rectangle. Inner decoration adds no
+collision; the lethal spike area still covers the whole spike strip.
 
 ## Existing art
 
