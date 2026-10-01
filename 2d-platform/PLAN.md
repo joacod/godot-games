@@ -1,7 +1,9 @@
 # Complete one playable platformer level
 
 Status: Step 1 complete; runtime checks and rendered frame inspection passed,
-and manual validation was reported by the user. Steps 2–7 have not started.
+and manual validation was reported by the user. Step 2 is complete; runtime
+checks and rendered frame inspection passed, and manual validation was reported
+by the user. Steps 3–7 have not started.
 
 ## Goal
 
@@ -120,6 +122,60 @@ Implementation and verification (2026-10-01):
 
 Acceptance: hazards and falls consistently cause death; retry creates a clean
 run without leftover velocity, attacks, or invulnerability.
+
+Implementation and verification (2026-10-01):
+
+- `project.godot` names physics layers World (1), Player (2), Enemy (3),
+  Attack detection (4), Pickups (5), and Hazards (6). Only World, Player, and
+  Hazards are used now: the player is on layer 2 and collides with World;
+  hazards are on layer 6 and detect Player. Existing tiles remain on World.
+- `scenes/main_character.gd` starts with three health points, exposes
+  `max_health` and `invulnerability_duration` (1 s), and provides
+  `take_damage(amount)` for Step 3 contact damage. Ordinary hits tint the
+  sprite red and blink during invulnerability. Physics time drives the
+  countdown, so it freezes when the tree is paused. Non-positive damage and
+  hits during invulnerability are ignored.
+- `kill()` bypasses invulnerability, emits death once, stops movement and
+  animation, and clears attacks and invulnerability. No enemy or attack
+  damage logic was added; those remain Step 3.
+- `scenes/hazard.tscn` and `scenes/hazard.gd` provide a reusable lethal
+  `Area2D`, with a 128×32 px collision rectangle and visible red spikes.
+  `main.tscn` places one at (600, 864) on the existing starting platform.
+  Final hazard placement and art tuning remain Step 5.
+- `scenes/run_state.gd` is the single run transition owner. Falling below
+  `fall_kill_y` (1120 px), at any horizontal position, kills the player.
+  Death pauses the entire gameplay tree and shows `scenes/death_ui.tscn`.
+  Its Retry and Quit buttons remain active while paused; Retry has initial
+  focus. Retry guards duplicate requests and defers a whole-scene reload,
+  restoring the initial scene state. Quit closes the game.
+- Verification commands from the repository root (Godot 4.7.2):
+
+  ```sh
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+    --log-file /tmp/godot-platform-step2-check.log --quit-after 120
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+    --log-file /tmp/godot-platform-step2-tests.log \
+    --script res://tests/damage_death_retry.gd
+  git diff --check
+  ```
+
+- Startup passed with no script/scene errors. Focused runtime checks passed
+  for initial health, collision masks, ordinary damage, invulnerability and
+  its expiration, paused countdown, feedback reset, health depletion,
+  duplicate death rejection, frozen movement, initial menu focus, actual
+  spike overlap and falls during invulnerability, three full scene retries,
+  spawn/velocity/health/combat resets, and the connected Quit button.
+  Sandboxed headless runs retain the previously observed macOS
+  `get_system_ca_certificates` error.
+- Native Metal/Mobile rendering exited 0 without errors. Captured frames
+  were inspected for visible spike placement, damage tint, and centered
+  death UI with visible Retry focus. Static frames and runtime checks do
+  not establish continuous animation, keyboard/mouse usability, or game feel.
+- Manual acceptance: the user reported manual testing of Step 2 on
+  2026-10-01. Step 2 is complete based on that report and the runtime checks
+  above. Individual manual scenarios and input devices were not separately
+  recorded. Explicit gamepad mappings and actual controller checks remain
+  Step 4. Step 3 has not started.
 
 ### 3. Make combat playable
 

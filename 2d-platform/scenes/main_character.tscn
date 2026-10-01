@@ -430,6 +430,8 @@ radius = 62.0
 height = 138.0
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
 script = ExtResource("1_enuf8")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
