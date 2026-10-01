@@ -79,6 +79,8 @@ func resume():
 	if state != RunState.PAUSED:
 		return
 	pause_ui.hide()
+	# Discard pre-pause requests and the controller A used to activate Resume.
+	character.clear_jump_input()
 	state = RunState.PLAYING
 	get_tree().paused = false
 
@@ -87,6 +89,7 @@ func retry():
 		return
 	var previous_state = state
 	state = RunState.RETRYING
+	character.clear_movement_state()
 	# Reload outside physics callbacks, replacing the entire run, not just the player.
 	_reload_level.call_deferred(previous_state)
 
@@ -105,6 +108,7 @@ func main_menu():
 		return
 	var previous_state = state
 	state = RunState.RETRYING
+	character.clear_movement_state()
 	_open_main_menu.call_deferred(previous_state)
 
 func _open_main_menu(previous_state):

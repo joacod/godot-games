@@ -1,7 +1,7 @@
 # Polish the platformer into a complete demo
 
 Status: the original playable-level plan is complete and accepted by the user
-on 2026-10-01. This is the new active plan. Steps 1–2 are implemented; Steps 3–7 have not started.
+on 2026-10-01. This is the new active plan. Steps 1–3 are implemented; Steps 4–7 have not started.
 
 ## Goal
 
@@ -199,7 +199,7 @@ remaining bugs; do not use a headless result as evidence of gameplay feel.
 
 - [x] 1. Landing screen and menu navigation
 - [x] 2. World and UI visual identity
-- [ ] 3. Movement and camera feel
+- [x] 3. Movement and camera feel
 - [ ] 4. Distinct attacks and readable combat
 - [ ] 5. Refreshed level, arena, and boss retry point
 - [ ] 6. Final boss and demo ending
@@ -249,6 +249,33 @@ remaining bugs; do not use a headless result as evidence of gameplay feel.
   macOS certificate diagnostic without script/scene errors.
 - Remaining live checks: fresh human route/menu playthrough and physical gamepad.
   Step 3 has not started. No branch, commit, push, PR, or publication performed.
+
+### Step 3 implementation record — 2026-10-01
+
+- Added exported `coyote_time` and `jump_buffer_time` (both 0.12 s), plus
+  `jump_cut_ratio` (0.45) in `scenes/main_character.gd`. Each request is consumed
+  once; holding Jump cannot repeat on landing or create an extra midair jump.
+  Early release also shortens a buffered jump released before touchdown.
+- Windows freeze with pausable gameplay. Resume clears pending input and
+  requires release before a fresh press, preventing controller confirm from
+  jumping. Death, Retry, and Main Menu clear movement transients; a new player
+  ignores a jump held across navigation until release.
+- Added `tests/movement.gd`; adapted `tests/level_route.gd` to hold full jumps
+  through ascent. Updated README and this record. Speeds, acceleration,
+  deceleration, camera script/bounds, geometry, combat, art, scenes, input
+  bindings, engine, and renderer are untouched. No evidence justified further
+  speed or camera tuning without a human feel check.
+- Godot 4.7.2 startup and all six suites passed: movement, menu navigation,
+  damage/death/retry, combat, game loop, and level route. At fixed 60 Hz, full
+  jumps reached 169.6 px and early-release jumps 79.2 px. Walking/running routes,
+  patrol phases, optional shelves/returns, and camera-bound checks passed.
+  Movement checks also passed in native Metal/Mobile rendering. Headless runs
+  retain the known macOS certificate diagnostic without script/scene errors.
+  `git diff --check` passed.
+- Remaining live checks: human short/full-jump feel, fresh route playthrough,
+  and physical gamepad. Native movement verification was automated, without
+  visual inspection or a human playtest. Step 4 has not started. No assets,
+  branches, commits, pushes, PRs, or publication performed.
 
 ## Out of scope
 

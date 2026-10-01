@@ -60,6 +60,9 @@ func _run():
 			var center = character.position.x + 44.0
 			if surface_index + 1 < route.size() and center >= route[surface_index + 1].start and character.is_on_floor() and absf(character.position.y + 146.0 - route[surface_index + 1].top) < 4.0:
 				surface_index += 1
+			# Hold through ascent to exercise full jumps, then release for the next.
+			if character.velocity.y >= 0.0:
+				Input.action_release("jump")
 			var jump_now = false
 			var enemy = run.get_node("Enemy")
 			# A walking player can fight, or use the displayed run input to clear
@@ -84,7 +87,6 @@ func _run():
 				Input.action_press("jump")
 				jumps += 1
 			await tick()
-			Input.action_release("jump")
 			elapsed_ticks += 1
 			if elapsed_ticks % 120 == 0:
 				var camera = character.get_node("Camera2D")
@@ -120,9 +122,9 @@ func _run():
 			await tick()
 		Input.action_press("jump")
 		await tick()
-		Input.action_release("jump")
 		for i in range(50):
 			await tick()
+		Input.action_release("jump")
 		check(character.health == 3 and character.position.x + 44.0 > enemy.position.x + 100.0, "Run jump clears patrol phase %s without contact damage" % [phase])
 		release_inputs()
 	# Each optional shelf is reachable by a run/jump from the preceding platform.
@@ -142,9 +144,9 @@ func _run():
 		Input.action_press("run")
 		Input.action_press("jump")
 		await tick()
-		Input.action_release("jump")
 		for i in range(39):
 			await tick()
+		Input.action_release("jump")
 		Input.action_release("right")
 		for i in range(15):
 			await tick()
