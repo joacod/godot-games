@@ -4,7 +4,9 @@ Status: Step 1 complete; runtime checks and rendered frame inspection passed,
 and manual validation was reported by the user. Step 2 is complete; runtime
 checks and rendered frame inspection passed, and manual validation was reported
 by the user. Step 3 is implemented; runtime checks and rendered frame inspection
-passed, with manual combat playtesting pending. Steps 4–7 have not started.
+passed, with manual combat playtesting pending. Step 4 is implemented; runtime
+checks and rendered frame inspection passed, with manual gameplay and physical
+controller validation pending. Steps 5–7 have not started.
 
 ## Goal
 
@@ -271,6 +273,66 @@ Implementation and verification (2026-10-01):
 
 Acceptance: collect, pause/resume, die/retry, and win/retry all work. Menus are
 usable without a mouse. Winning and dying cannot trigger competing screens.
+
+Implementation and verification (2026-10-01):
+
+- `scenes/collectible.tscn` / `.gd` add a reusable gold gem on Pickups
+  (layer 5), detecting only Player. Actual overlap collects once, removes the
+  gem, and emits `collected`. `scenes/exit.tscn` / `.gd` add a reusable green
+  doorway marked EXIT that detects Player and emits `reached`. Two provisional
+  gems and an exit are instanced in `main.tscn`; final placement remains Step 5.
+  Winning requires neither every gem nor enemy defeat.
+- `scenes/hud.tscn` displays health, collected count, and actual keyboard,
+  controller, and menu controls. The player's `health_changed` signal updates
+  the HUD. Analog movement retains partial speed, with facing normalized to
+  left/right so partial stick input does not shrink the attack's reach.
+- `scenes/run_state.gd` remains the transition owner, adding PAUSED and WON.
+  Gameplay children pause; the owner and menus can process while paused.
+  Pause freezes movement, enemy animation, attacks, and invulnerability.
+  `scenes/pause_ui.tscn` provides Resume, Retry, and Quit; `scenes/win_ui.tscn`
+  provides collected count, Retry, and Quit. Both match the existing death UI.
+  Resume initially has visible focus on pause, and Retry on win/death.
+  The first terminal transition wins; paused/terminal runs reject competing
+  screens and player damage. All three menus share guarded whole-scene Retry,
+  resetting health, enemies, pickups, count, motion, and combat state.
+- `project.godot` preserves keyboard movement (left/right arrows), jump (up),
+  run (Shift), and attacks (Z/X/C); adds Esc pause; and explicitly maps D-pad
+  or left stick movement, A/south jump, LB run, X/west attack 1, Y/north attack 2,
+  B/east attack 3, and Start pause. Menus use arrows, D-pad, or left stick;
+  Enter/Space/A confirm. Controller A is explicitly added to `ui_accept`;
+  this project's engine defaults included only keyboard Confirm events.
+- Verification commands from the repository root (Godot 4.7.2):
+
+  ```sh
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+    --log-file /tmp/godot-platform-step4-startup.log --quit-after 120
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+    --log-file /tmp/godot-platform-step4-tests.log --script res://tests/game_loop.gd
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+    --log-file /tmp/godot-platform-step4-damage.log \
+    --script res://tests/damage_death_retry.gd
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+    --log-file /tmp/godot-platform-step4-combat.log --script res://tests/combat.gd
+  git diff --check
+  ```
+
+- Startup and all three suites passed, exit 0, with no script/scene errors.
+  The new suite checks real pickup and exit overlaps, HUD updates, optional
+  collection/combat, frozen strike timing and cooldown, keyboard and synthetic
+  controller menu navigation/confirmation, displayed gamepad bindings, analog
+  facing, competing pause/death/win rejection, and full retries from all three
+  menus. Existing damage/death/retry and combat regression suites pass.
+  Headless runs retain the previously observed macOS certificate error.
+- Native Metal/Mobile rendering exited 0 without errors. Temporary scripted
+  frames in `/tmp` were inspected for HUD/control readability, visible gem/exit,
+  and centered pause/win menus with initial focus. Static frames and synthetic
+  input events do not establish continuous gameplay feel or physical gamepad
+  behavior. Manual acceptance remains pending: collect, pause during a swing,
+  resume, die/retry, reach the exit/win/retry, navigate menus without a mouse,
+  and try all displayed bindings on an actual controller when available.
+- Existing level geometry, camera, art, enemy/hazard scenes, death UI, renderer,
+  viewport settings, and README files remain unchanged. Stop after Step 4;
+  level tuning, documentation preparation, and final delivery remain Steps 5–7.
 
 ### 5. Build and tune the cohesive level
 

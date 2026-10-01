@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cklx3ai2go6q7"]
+[gd_scene load_steps=15 format=3 uid="uid://cklx3ai2go6q7"]
 
 [ext_resource type="Texture2D" uid="uid://dqnc863esgvd1" path="res://Tileset.png" id="2_4rmy6"]
 [ext_resource type="PackedScene" uid="uid://c62b2vf5owq8q" path="res://scenes/main_character.tscn" id="3_ivxs8"]
@@ -8,6 +8,12 @@
 [ext_resource type="PackedScene" path="res://scenes/hazard.tscn" id="6_hazard"]
 [ext_resource type="PackedScene" path="res://scenes/death_ui.tscn" id="7_death_ui"]
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="8_enemy"]
+
+[ext_resource type="PackedScene" path="res://scenes/collectible.tscn" id="9_collectible"]
+[ext_resource type="PackedScene" path="res://scenes/exit.tscn" id="10_exit"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="11_hud"]
+[ext_resource type="PackedScene" path="res://scenes/pause_ui.tscn" id="12_pause_ui"]
+[ext_resource type="PackedScene" path="res://scenes/win_ui.tscn" id="13_win_ui"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dcf4v"]
 texture = ExtResource("2_4rmy6")
@@ -2119,3 +2125,20 @@ position = Vector2(600, 864)
 
 [node name="Enemy" parent="." instance=ExtResource("8_enemy")]
 position = Vector2(390, 864)
+
+[node name="Collectibles" type="Node2D" parent="."]
+
+[node name="Gem1" parent="Collectibles" instance=ExtResource("9_collectible")]
+position = Vector2(250, 812)
+
+[node name="Gem2" parent="Collectibles" instance=ExtResource("9_collectible")]
+position = Vector2(1490, 588)
+
+[node name="Exit" parent="." instance=ExtResource("10_exit")]
+position = Vector2(1950, 848)
+
+[node name="HUD" parent="." instance=ExtResource("11_hud")]
+
+[node name="PauseUI" parent="." instance=ExtResource("12_pause_ui")]
+
+[node name="WinUI" parent="." instance=ExtResource("13_win_ui")]

@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 signal died
+signal health_changed(value)
 
 ## Health restored at the start of every run.
 @export var max_health = 3
@@ -96,9 +97,10 @@ func _hit_enemy(enemy):
 	enemy.take_damage(attack_damage)
 
 func take_damage(amount: int = 1):
-	if is_dead or invulnerability_remaining > 0.0 or amount <= 0:
+	if is_dead or get_tree().paused or invulnerability_remaining > 0.0 or amount <= 0:
 		return
 	health = maxi(0, health - amount)
+	health_changed.emit(health)
 	if health == 0:
 		kill()
 	else:
@@ -107,10 +109,11 @@ func take_damage(amount: int = 1):
 
 func kill():
 	# Lethal hazards bypass invulnerability; emit exactly once.
-	if is_dead:
+	if is_dead or get_tree().paused:
 		return
 	is_dead = true
 	health = 0
+	health_changed.emit(health)
 	velocity = Vector2.ZERO
 	is_attacking = false
 	attack_active = false
@@ -137,7 +140,7 @@ func handle_movement(delta):
 		speed = run_speed
 	if direction != 0:
 		velocity.x = direction * speed
-		last_direction = direction
+		last_direction = signf(direction)
 	else:
 		velocity.x = move_toward(velocity.x, 0, deceleration * delta)
 
