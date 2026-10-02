@@ -1,42 +1,42 @@
 extends CharacterBody2D
 
-signal health_changed(value)
+signal health_changed(value: int)
 signal defeated
 
-@export var max_health = 12
-@export var attack_damage = 1
-@export var idle_duration = 0.7
-@export var sweep_telegraph = 0.7
-@export var sweep_duration = 0.22
-@export var wave_telegraph = 1.0
-@export var wave_duration = 2.2
-@export var wave_speed = 650.0
-@export var recovery_duration = 1.2
-@export var phase_two_recovery = 0.85
+@export var max_health: int = 12
+@export var attack_damage: int = 1
+@export var idle_duration: float = 0.7
+@export var sweep_telegraph: float = 0.7
+@export var sweep_duration: float = 0.22
+@export var wave_telegraph: float = 1.0
+@export var wave_duration: float = 2.2
+@export var wave_speed: float = 650.0
+@export var recovery_duration: float = 1.2
+@export var phase_two_recovery: float = 0.85
 
 enum CombatState {IDLE, TELEGRAPH, ATTACK, RECOVERY, DEFEATED}
 enum Attack {SWEEP, SHOCKWAVE}
-var combat_state = CombatState.IDLE
-var attack = Attack.SWEEP
-var state_remaining = 0.0
-var health = 0
-var active = false
-var is_defeated = false
-var facing = -1
-var hurt_remaining = 0.0
-var hit_players = {}
-var wave_hits = {}
+var combat_state: CombatState = CombatState.IDLE
+var attack: Attack = Attack.SWEEP
+var state_remaining: float = 0.0
+var health: int = 0
+var active: bool = false
+var is_defeated: bool = false
+var facing: int = -1
+var hurt_remaining: float = 0.0
+var hit_players: Dictionary[int, bool] = {}
+var wave_hits: Dictionary[int, bool] = {}
 var target
-@onready var sprite = $AnimatedSprite2D
-@onready var sweep = $Sweep
-@onready var waves = [$LeftWave, $RightWave]
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var sweep: Area2D = $Sweep
+@onready var waves: Array[Area2D] = [$LeftWave, $RightWave]
 
-func _ready():
+func _ready() -> void:
 	health = max_health
 	for wave in waves:
 		wave.hide()
 
-func start_encounter(character):
+func start_encounter(character) -> void:
 	if active or is_defeated:
 		return
 	target = character
@@ -44,7 +44,7 @@ func start_encounter(character):
 	state_remaining = idle_duration
 	health_changed.emit(health)
 
-func _physics_process(delta):
+func _physics_process(delta: float) -> void:
 	if not active or is_defeated:
 		return
 	hurt_remaining = maxf(0.0, hurt_remaining - delta)
@@ -83,7 +83,7 @@ func _physics_process(delta):
 					_damage_overlaps(wave, wave_hits)
 	queue_redraw()
 
-func _begin_telegraph():
+func _begin_telegraph() -> void:
 	combat_state = CombatState.TELEGRAPH
 	state_remaining = sweep_telegraph if attack == Attack.SWEEP else wave_telegraph
 	# Commit facing before the tell; the sweep never tracks a dodging player.
@@ -93,7 +93,7 @@ func _begin_telegraph():
 	hit_players.clear()
 	wave_hits.clear()
 
-func _damage_overlaps(area, hits):
+func _damage_overlaps(area: Area2D, hits: Dictionary[int, bool]) -> void:
 	for body in area.get_overlapping_bodies():
 		if get_tree().paused or not active:
 			return
@@ -101,7 +101,7 @@ func _damage_overlaps(area, hits):
 			hits[body.get_instance_id()] = true
 			body.take_damage(attack_damage)
 
-func take_damage(amount: int = 1):
+func take_damage(amount: int = 1) -> void:
 	if not active or is_defeated or get_tree().paused or amount <= 0:
 		return
 	health = maxi(0, health - amount)
@@ -117,7 +117,7 @@ func take_damage(amount: int = 1):
 		defeated.emit()
 	queue_redraw()
 
-func stop_encounter():
+func stop_encounter() -> void:
 	active = false
 	state_remaining = 0.0
 	hurt_remaining = 0.0
@@ -126,14 +126,14 @@ func stop_encounter():
 		sprite.pause()
 	queue_redraw()
 
-func _clear_attacks():
+func _clear_attacks() -> void:
 	hit_players.clear()
 	wave_hits.clear()
 	for wave in waves:
 		wave.hide()
 		wave.position.x = 0
 
-func _draw():
+func _draw() -> void:
 	if is_defeated:
 		return
 	# A stone-gold crown distinguishes the guardian from the ordinary Gorgon.

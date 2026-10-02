@@ -3,6 +3,11 @@
 Status: the original playable-level plan is complete and accepted by the user
 on 2026-10-01. This is the new active plan. Steps 1–6 are implemented; Step 7 has not started.
 
+The user confirmed on 2026-10-02 that the human playthrough is complete.
+Earlier implementation records retain their historical live-check gaps.
+The separately approved code cleanup is recorded below; it does not change
+the numbered-step status.
+
 ## Goal
 
 Turn the existing level into a cohesive demo with stronger graphics, responsive
@@ -386,6 +391,61 @@ remaining bugs; do not use a headless result as evidence of gameplay feel.
 - Remaining live checks: human boss feel/readability, full manual run, and a
   physical gamepad. Step 7 has not started. No branch, commit, push, PR, or
   publication performed.
+
+### Skill/MCP cleanup record — 2026-10-02
+
+- Applied the approved cleanup using `godot-gdscript-patterns` and the Godot
+  MCP. Confirmed Godot 4.7.2 before project operations. The user confirmed
+  that the human playthrough is complete; physical gamepad testing remains
+  unconfirmed. This cleanup does not mark the separately numbered Step 7 done.
+- Added explicit scalar, enum, signal, built-in node, and callback types in
+  `scenes/main_character.gd`, `enemy.gd`, `boss.gd`, `run_state.gd`, `title.gd`,
+  `fortress_background.gd`, `level_camera.gd`, `hazard.gd`, `collectible.gd`, and
+  `exit.gd`. Kept existing names and dynamic gameplay-script interfaces.
+  Cached the player's per-instance rectangle shape and removed its commented
+  legacy implementation. Lethal damage now emits `health_changed(0)` once;
+  `tests/damage_death_retry.gd` checks signal counts for ordinary damage,
+  ignored damage, repeated death, spikes, and falls.
+- Made the background's integer quotient explicit without changing seam
+  placement. Removed the unused .NET assembly setting from `project.godot`.
+  Added the boss suite to the README's regression loop, refreshed the root
+  README's demo description, and recorded current verification here and in
+  the game README. The existing skill and MCP configuration need no changes.
+- Native capture initially timed out waiting for `frame_post_draw` on static
+  defeat screens. Corrected `tests/boss.gd` to settle process frames and call
+  `RenderingServer.force_draw(false)` for capture. The original 90-second
+  timeout is unchanged. Final native checks passed and all five captured
+  states were inspected, including crown and restored-HUD pixel assertions.
+- Verification: startup and all eight focused headless suites passed; the
+  updated damage and boss suites were rerun after their final changes. MCP
+  launch, debug output, and stop passed with native Metal/Mobile rendering and
+  an empty errors list. `git diff --check`, local Markdown link targets, and
+  tracked UID coverage for all 18 scripts passed. Headless checks retain the
+  macOS certificate diagnostic. Native shell checks required permission to
+  run outside the sandbox so window/Metal initialization could succeed.
+- Commands from the repository root:
+
+  ```sh
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+    --log-file /private/tmp/godot-cleanup-startup.log --quit-after 120
+  for suite in movement menu_navigation damage_death_retry combat game_loop level_route arena_retry boss; do
+    /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+      --log-file "/private/tmp/godot-cleanup-$suite.log" --fixed-fps 60 \
+      --script "res://tests/$suite.gd" || exit 1
+  done
+  mkdir -p /private/tmp/godot-cleanup-native-captures
+  BOSS_CAPTURE_DIR=/private/tmp/godot-cleanup-native-captures \
+    /Applications/Godot.app/Contents/MacOS/Godot --path 2d-platform \
+    --log-file /private/tmp/godot-cleanup-boss-native-final.log \
+    --disable-vsync --fixed-fps 60 --script res://tests/boss.gd
+  git diff --check
+  ```
+
+- Scene files, level geometry, sprites, ASSETS.md, input bindings, engine,
+  renderer, skill/MCP configuration, and script UIDs are intentionally
+  untouched. No dependencies, migrations, branches, commits, pushes, PRs, or
+  publication were performed. Asset provenance and distribution work remain
+  separately scoped follow-ups.
 
 ## Out of scope
 

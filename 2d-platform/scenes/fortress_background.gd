@@ -3,15 +3,15 @@ extends Control
 
 # Screen-filling decoration. Only the horizontal camera position drives parallax;
 # it never changes the camera, gameplay geometry, or any timing windows.
-@export var follow_camera = false
-var camera_x = 0.0
+@export var follow_camera: bool = false
+var camera_x: float = 0.0
 
-func _ready():
+func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	resized.connect(queue_redraw)
 	set_process(follow_camera)
 
-func _process(_delta):
+func _process(_delta: float) -> void:
 	var camera = get_viewport().get_camera_2d()
 	if camera:
 		var next_x = camera.get_screen_center_position().x
@@ -19,7 +19,7 @@ func _process(_delta):
 			camera_x = next_x
 			queue_redraw()
 
-func _draw():
+func _draw() -> void:
 	draw_set_transform(Vector2.ZERO, 0.0, size / Vector2(1920, 1080))
 	draw_rect(Rect2(0, 0, 1920, 1080), Color("101723"))
 	for row in range(12):
@@ -38,7 +38,7 @@ func _draw():
 	_draw_towers(0.06, 480, Color("263441"), Color("30414b"))
 	_draw_towers(0.14, 640, Color("192630"), Color("2b3d44"))
 
-func _draw_towers(speed: float, spacing: int, stone: Color, trim: Color):
+func _draw_towers(speed: float, spacing: int, stone: Color, trim: Color) -> void:
 	var cycle = floori(camera_x * speed / spacing)
 	for i in range(-1, 6):
 		var x = i * spacing - fposmod(camera_x * speed, float(spacing))
@@ -55,7 +55,7 @@ func _draw_towers(speed: float, spacing: int, stone: Color, trim: Color):
 			draw_rect(Rect2(x + 80, window_y + 4, 8, 36), Color("253641"))
 		for seam_y in range(top + 48, 1080, 64):
 			draw_rect(Rect2(x + 32, seam_y, 112, 2), stone.darkened(0.12))
-			draw_rect(Rect2(x + 48 + posmod(seam_y / 64, 2) * 48, seam_y, 2, 24), trim.darkened(0.15))
+			draw_rect(Rect2(x + 48 + posmod(floori(seam_y / 64.0), 2) * 48, seam_y, 2, 24), trim.darkened(0.15))
 		# Broken distant curtain walls stay much darker than landing surfaces.
 		draw_rect(Rect2(x + 176, top + 224, spacing - 176, 1080), stone)
 		for brick in range(3):

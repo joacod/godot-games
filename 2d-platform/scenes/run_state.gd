@@ -2,21 +2,21 @@ extends Node
 
 
 # Falling past this horizontal line is lethal at any x position.
-@export var fall_kill_y = 1120.0
+@export var fall_kill_y: float = 1120.0
 enum RunState {PLAYING, DEAD, RETRYING, PAUSED, WON}
-var state = RunState.PLAYING
-var collected_count = 0
-var arena_entered = false
-var arena_entry_count = 0
-var boss_defeated = false
+var state: RunState = RunState.PLAYING
+var collected_count: int = 0
+var arena_entered: bool = false
+var arena_entry_count: int = 0
+var boss_defeated: bool = false
 @onready var character = $CharacterBody2D
-@onready var death_ui = $DeathUI
-@onready var pause_ui = $PauseUI
-@onready var win_ui = $WinUI
-@onready var hud = $HUD
+@onready var death_ui: CanvasLayer = $DeathUI
+@onready var pause_ui: CanvasLayer = $PauseUI
+@onready var win_ui: CanvasLayer = $WinUI
+@onready var hud: CanvasLayer = $HUD
 @onready var boss = $Boss
 
-func _ready():
+func _ready() -> void:
 	# Only this transition owner and menus run while gameplay is paused.
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	for child in get_children():
@@ -38,7 +38,7 @@ func _ready():
 	_update_health(character.health)
 	_update_count()
 
-func _on_arena_entered(body):
+func _on_arena_entered(body) -> void:
 	if body != character or arena_entered or state != RunState.PLAYING or character.is_dead:
 		return
 	arena_entered = true
@@ -50,23 +50,23 @@ func _on_arena_entered(body):
 	_bound_arena()
 	_start_boss()
 
-func _bound_arena():
+func _bound_arena() -> void:
 	# Entry detection starts beyond the player's radius, clear of the closing wall.
 	$ArenaBoundary/CollisionShape2D.set_deferred("disabled", false)
 	$ArenaGate.show()
 	character.get_node("Camera2D").limit_left = int($ArenaBoundary.position.x - 16)
 	character.get_node("Camera2D")._fit_viewport()
 
-func _start_boss():
+func _start_boss() -> void:
 	$BossHUD.show()
 	$BossHUD/Panel/Info/Health.max_value = boss.max_health
 	boss.start_encounter(character)
 
-func _update_boss_health(value):
+func _update_boss_health(value: int) -> void:
 	$BossHUD/Panel/Info/Health.value = value
 	$BossHUD/Panel/Info/Name.text = "GUARDIAN · PHASE 2" if value <= boss.max_health / 2.0 else "COURTYARD GUARDIAN"
 
-func _on_boss_defeated():
+func _on_boss_defeated() -> void:
 	if state != RunState.PLAYING or character.is_dead or boss_defeated:
 		return
 	boss_defeated = true
@@ -78,7 +78,7 @@ func _on_boss_defeated():
 	$Exit.unlock()
 	$RouteSigns/Arena.text = "GUARDIAN DEFEATED\nExit open →"
 
-func _unhandled_input(event):
+func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause") and not event.is_echo():
 		if state == RunState.PLAYING:
 			state = RunState.PAUSED
@@ -89,23 +89,23 @@ func _unhandled_input(event):
 			resume()
 		get_viewport().set_input_as_handled()
 
-func _physics_process(_delta):
+func _physics_process(_delta: float) -> void:
 	if state == RunState.PLAYING and character.global_position.y > fall_kill_y:
 		character.kill()
 
-func _update_health(value):
+func _update_health(value: int) -> void:
 	hud.get_node("Margin/Info/Health").text = "Health: %s / %s" % [value, character.max_health]
 
-func _update_count():
+func _update_count() -> void:
 	hud.get_node("Margin/Info/Count").text = "Collected: %s" % collected_count
 
-func _on_collected():
+func _on_collected() -> void:
 	if state != RunState.PLAYING:
 		return
 	collected_count += 1
 	_update_count()
 
-func _on_exit_reached():
+func _on_exit_reached() -> void:
 	if state != RunState.PLAYING or character.is_dead or not boss_defeated:
 		return
 	boss.stop_encounter()
@@ -115,7 +115,7 @@ func _on_exit_reached():
 	win_ui.show()
 	win_ui.get_node("Overlay/Panel/Buttons/Retry").grab_focus()
 
-func _on_player_died():
+func _on_player_died() -> void:
 	if state != RunState.PLAYING:
 		return
 	boss.stop_encounter()
@@ -124,7 +124,7 @@ func _on_player_died():
 	death_ui.show()
 	death_ui.get_node("Overlay/Panel/Buttons/Retry").grab_focus()
 
-func resume():
+func resume() -> void:
 	if state != RunState.PAUSED:
 		return
 	pause_ui.hide()
@@ -133,7 +133,7 @@ func resume():
 	state = RunState.PLAYING
 	get_tree().paused = false
 
-func retry():
+func retry() -> void:
 	if state not in [RunState.DEAD, RunState.PAUSED, RunState.WON]:
 		return
 	var previous_state = state
@@ -143,7 +143,7 @@ func retry():
 	# Reload outside physics callbacks, replacing the entire run, not just the player.
 	_reload_level.call_deferred(previous_state)
 
-func _reload_level(previous_state):
+func _reload_level(previous_state: RunState) -> void:
 	# Reload detaches this node immediately; retain the tree before that happens.
 	var tree = get_tree()
 	# A completion's Play Again always starts fresh. Only pause/death use entry.
@@ -160,7 +160,7 @@ func _reload_level(previous_state):
 		return
 	tree.paused = false
 
-static func _restore_arena(tree, entry_count):
+static func _restore_arena(tree: SceneTree, entry_count: int) -> void:
 	# Static callback survives the old run being freed by the scene transition.
 	var run = tree.current_scene
 	run.arena_entered = true
@@ -182,14 +182,14 @@ static func _restore_arena(tree, entry_count):
 	camera.reset_smoothing()
 	camera.force_update_scroll()
 
-func _redraw_hud():
+func _redraw_hud() -> void:
 	# Let the restored controls finish their first draws before refreshing them.
 	await RenderingServer.frame_post_draw
 	await RenderingServer.frame_post_draw
 	for control in hud.find_children("*", "Control"):
 		control.queue_redraw()
 
-func main_menu():
+func main_menu() -> void:
 	if state not in [RunState.DEAD, RunState.PAUSED, RunState.WON]:
 		return
 	var previous_state = state
@@ -198,7 +198,7 @@ func main_menu():
 	boss.stop_encounter()
 	_open_main_menu.call_deferred(previous_state)
 
-func _open_main_menu(previous_state):
+func _open_main_menu(previous_state: RunState) -> void:
 	var tree = get_tree()
 	var error = tree.change_scene_to_file("res://scenes/title.tscn")
 	if error != OK:
@@ -207,5 +207,5 @@ func _open_main_menu(previous_state):
 		return
 	tree.paused = false
 
-func _quit():
+func _quit() -> void:
 	get_tree().quit()
