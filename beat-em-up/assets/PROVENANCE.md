@@ -70,3 +70,32 @@ animation preview, not foot-sliding acceptance for locomotion.
 
 For unresolved coverage and proposed adaptations, see
 [the asset brief](../ASSETS.md#step-01-decisions-and-gaps).
+
+## Step 02 movement subset
+
+On 2026-10-02, imported `1 Biker/Biker_jump.png` from the original hero ZIP in
+Downloads as `hero/jump.png`, with unchanged pixels and the same hero license
+record. It is 192 × 48: four 48 × 48 frames, indexed 0–3. The player's independent
+`scenes/player/movement_frames.tres` reuses the recorded idle and locomotion
+sheets and adds semantic `jump`. Jump frames do not advance by FPS: the movement
+script selects frame 1 while rising faster than 60 px/s, frame 2 near the apex,
+and frame 3 while descending faster than 60 px/s. Frame 0 is not used in the
+current jump presentation. All use the existing (14, 48) anchor and 2× scale.
+This does not establish air-attack or recovery animation coverage.
+
+The original preview is now `scenes/sample/street_sample.tscn`, unchanged from
+its former `main.tscn` contents. The new movement street places two copies of
+the same backdrop/road composite across a 1280-pixel test area, mirroring the
+right copy horizontally to join matching edge pixels. Source pixels are unchanged;
+this is a test street with repeated/mirrored scenery, not final level art.
+
+Two additional free archives were downloaded through signed-in Chrome for review:
+
+- `craftpix-net-796772-free-extra-animations-for-cyberpunk-characters.zip` from
+  [Free Extra Animations for Cyberpunk Characters](https://craftpix.net/freebies/free-extra-animations-for-cyberpunk-characters/).
+- `craftpix-net-412866-free-factory-boss-enemies-asset-pack-for-cyberpunk.zip` from
+  [Free Factory Boss Enemies Asset Pack for Cyberpunk](https://craftpix.net/freebies/free-factory-boss-enemies-asset-pack-for-cyberpunk/).
+
+These remain in Downloads; no files from either archive were imported into this
+project. They establish only the asset-review observations in the asset brief.
+No purchase or new license grant is asserted by this review.

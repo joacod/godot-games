@@ -1,6 +1,6 @@
 # Asset brief and candidate sources
 
-**Status: Step 01 sample imported, 2026-10-02.** Biker, seaport enemy 1, and a
+**Status: Step 02 uses the existing free assets, 2026-10-02.** Biker, seaport enemy 1, and a
 street backdrop are in the project. The acquisition record and exact sample
 mapping are in [asset provenance](assets/PROVENANCE.md). Other entries below
 remain candidates, not verified animation coverage.
@@ -15,22 +15,30 @@ remain candidates, not verified animation coverage.
   ranged characters, drones, and a robot dog; this archive does not establish
   two standing melee silhouettes. The bruiser remains unselected.
 - Both inspected actor archives have hurt/death, but no dedicated get-up.
-  Biker has jump poses but no dedicated air attack. Proposed adaptations,
-  awaiting user review: trim the second punch into one strike; use the kick as
+  Biker has jump poses but no dedicated air attack. Approved direction for later
+  mechanics: trim the second punch into one strike; use the kick as
   the finisher and air attack; use non-disintegrating death/fall frames for
   knockdown and reverse the fall into recovery. Validate these visually when
-  implementing the owning mechanics. No adaptation is silently approved here.
-- The optional extra-animation pack is only page-reviewed; its listed fall and
-  walk motions do not establish an air kick or get-up. The factory boss is also
-  only page-reviewed; inspect its archive before selecting sweep/charge poses.
+  implementing the owning mechanics. These are approved adaptations, not yet
+  implemented or visually accepted combat/recovery animations.
+- The free extra-animation and factory-boss archives were inspected before Step
+  02. Extra motions provide walk and airborne fall/landing poses, but no dedicated
+  air attack or get-up. Toxic Enforcer has readable melee punches, running poses,
+  and a non-disintegrating death; punch/run are proposed sweep/charge mappings.
+  The already-downloaded Cyborg has an armored silhouette and an unarmed punch,
+  making it a bruiser candidate. Neither candidate is imported into gameplay;
+  scale, attack/recovery presentation, and final cast fit remain to be validated
+  in Steps 04/06. No paid pack is selected.
 - The street sample composites City1 Bright sky, buildings, rear wall and road,
   omitting oversized foreground props and the obscuring front wall. A mirrored
   road strip extends the floor. This is a single sample, not a verified tiling
   level. Its illustrative ground band is Y=238–316; bounds arrive in Step 02.
 
-Before Step 02, resolve the proposed hero/recovery adaptations and the missing
-bruiser/boss coverage by approval of a concrete mapping or further pack review.
-The sample can be reviewed now, but complete cast acceptance remains pending.
+On 2026-10-02 the user chose to keep the free assets already available and make
+adjustments for missing motions later. This resolves the asset decision needed
+to proceed with Step 02; complete cast and adaptation acceptance remain pending
+in the owning mechanics. Step 02 imports only the original Biker jump sheet and
+uses its poses for ascent/apex/descent; it retains the existing locomotion sheet.
 
 ## Direction and shortlist
 
