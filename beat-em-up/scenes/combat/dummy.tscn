@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="SpriteFrames" path="res://scenes/combat/dummy_frames.tres" id="1"]
+
+[ext_resource type="Script" path="res://scenes/combat/dummy.gd" id="2"]
+
+[node name="Dummy" type="CharacterBody2D"]
+script = ExtResource("2")
+max_health = 120
+team = 1
+invulnerability_duration = 0.0
+knockback_speed = 30.0
+
+[node name="Shadow" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-20, 0, -12, -5, 12, -5, 20, 0, 12, 5, -12, 5)
+color = Color(0, 0, 0, 0.35)
+
+[node name="Visual" type="Node2D" parent="."]
+scale = Vector2(-2, 2)
+
+[node name="Sprite" type="AnimatedSprite2D" parent="Visual"]
+sprite_frames = ExtResource("1")
+animation = &"idle"
+autoplay = "idle"
+centered = false
+offset = Vector2(-21, -48)
+
+[node name="Anchor" type="Line2D" parent="."]
+points = PackedVector2Array(-5, 0, 5, 0, 0, 0, 0, -4, 0, 4)
+width = 1.0
+default_color = Color(0.5, 0.95, 0.85, 0.8)

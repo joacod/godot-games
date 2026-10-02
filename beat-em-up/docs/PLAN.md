@@ -26,15 +26,16 @@ cuts, not claims that the game reproduces every Final Fight mechanic.
 
 Step 01's free-asset adaptations are approved for continued implementation;
 their final visual fit remains pending in the owning mechanics. Step 02 is
-implemented with hands-on/controller validation pending. Steps 03–09 are
-**not started**. Steps depend on the preceding step. They can be
-requested individually, but are not independent implementations.
+accepted after user-reported manual testing. Step 03 is also accepted after
+user-reported manual testing. Steps 04–09 are **not started**. Steps depend
+on the preceding step. They can be requested individually, but are not independent
+implementations.
 
 | Step | Deliverable | Playable milestone |
 | --- | --- | --- |
 | [01 — Foundation and asset fit](steps/01-foundation.md) | Implemented; free-asset adaptations approved, final art fit pending | Street sample boots; see validation record |
-| [02 — Movement and depth](steps/02-movement.md) | Implemented; hands-on/controller validation pending | Bounded movement/jump test street; see validation record |
-| [03 — Combat](steps/03-combat.md) | Attacks, damage, reactions | Combo and jump-attack a dummy |
+| [02 — Movement and depth](steps/02-movement.md) | Accepted after user-reported manual testing | Bounded movement/jump test street; see validation record |
+| [03 — Combat](steps/03-combat.md) | Accepted after user-reported manual testing | Combo and jump-attack a dummy; see validation record |
 | [04 — Enemies](steps/04-enemies.md) | Two behaviors and fair crowd combat | Win or lose a small fight |
 | [05 — Level and encounters](steps/05-level.md) | Route, waves, gates, run state | Clear the street to the boss entrance |
 | [06 — Boss and completion](steps/06-boss.md) | Boss, victory/death/retry | Complete the entire game loop |

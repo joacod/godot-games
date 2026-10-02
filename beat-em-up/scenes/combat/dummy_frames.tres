@@ -1,0 +1,90 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/enemy/idle.png" id="enemy/idle"]
+
+[ext_resource type="Texture2D" path="res://assets/enemy/attack.png" id="enemy/attack"]
+
+[ext_resource type="Texture2D" path="res://assets/enemy/hurt.png" id="enemy/hurt"]
+
+[ext_resource type="Texture2D" path="res://assets/enemy/fall.png" id="enemy/fall"]
+
+[sub_resource type="AtlasTexture" id="idle_0"]
+atlas = ExtResource("enemy/idle")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="idle_1"]
+atlas = ExtResource("enemy/idle")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="idle_2"]
+atlas = ExtResource("enemy/idle")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="idle_3"]
+atlas = ExtResource("enemy/idle")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="attack_0"]
+atlas = ExtResource("enemy/attack")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="attack_1"]
+atlas = ExtResource("enemy/attack")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="attack_2"]
+atlas = ExtResource("enemy/attack")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="attack_3"]
+atlas = ExtResource("enemy/attack")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="attack_4"]
+atlas = ExtResource("enemy/attack")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="attack_5"]
+atlas = ExtResource("enemy/attack")
+region = Rect2(240, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="hurt_0"]
+atlas = ExtResource("enemy/hurt")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="hurt_1"]
+atlas = ExtResource("enemy/hurt")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="fall_0"]
+atlas = ExtResource("enemy/fall")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="fall_1"]
+atlas = ExtResource("enemy/fall")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="fall_2"]
+atlas = ExtResource("enemy/fall")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="get_up_0"]
+atlas = ExtResource("enemy/fall")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="get_up_1"]
+atlas = ExtResource("enemy/fall")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="get_up_2"]
+atlas = ExtResource("enemy/fall")
+region = Rect2(96, 0, 48, 48)
+
+[resource]
+animations = [
+{"frames": [{"duration": 1.0, "texture": SubResource("idle_0")}, {"duration": 1.0, "texture": SubResource("idle_1")}, {"duration": 1.0, "texture": SubResource("idle_2")}, {"duration": 1.0, "texture": SubResource("idle_3")}], "loop": true, "name": &"idle", "speed": 6},
+{"frames": [{"duration": 1.0, "texture": SubResource("attack_0")}, {"duration": 1.0, "texture": SubResource("attack_1")}, {"duration": 1.0, "texture": SubResource("attack_2")}, {"duration": 1.0, "texture": SubResource("attack_3")}, {"duration": 1.0, "texture": SubResource("attack_4")}, {"duration": 1.0, "texture": SubResource("attack_5")}], "loop": false, "name": &"attack", "speed": 10},
+{"frames": [{"duration": 1.0, "texture": SubResource("hurt_0")}, {"duration": 1.0, "texture": SubResource("hurt_1")}], "loop": false, "name": &"hurt", "speed": 8.3333},
+{"frames": [{"duration": 1.0, "texture": SubResource("fall_0")}, {"duration": 1.0, "texture": SubResource("fall_1")}, {"duration": 1.0, "texture": SubResource("fall_2")}], "loop": false, "name": &"fall", "speed": 10},
+{"frames": [{"duration": 1.0, "texture": SubResource("get_up_0")}, {"duration": 1.0, "texture": SubResource("get_up_1")}, {"duration": 1.0, "texture": SubResource("get_up_2")}], "loop": false, "name": &"get_up", "speed": 10},
+]
