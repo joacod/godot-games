@@ -12,6 +12,9 @@ Prioritize complete, understandable gameplay over frameworks or speculative reus
   worktree changes. Avoid new dependencies and unrelated refactors.
 - Keep each game's configured Godot version and renderer unless a requested fix
   requires a change. Use GDScript for `2d-platform`.
+- For `2d-platform`, use Godot 4.7 (development checks use 4.7.2) and the Mobile
+  renderer. See [the project README](2d-platform/README.md) for setup and validation
+  commands and [project.godot](2d-platform/project.godot) for engine settings.
 - Track Godot-generated `.gd.uid` files alongside their scripts. Include a new
   script's UID in the same commit once Godot generates it. Before committing,
   check for missing or untracked UIDs for scripts in scope; do not ignore these
