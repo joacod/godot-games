@@ -12,6 +12,20 @@ Prioritize complete, understandable gameplay over frameworks or speculative reus
   worktree changes. Avoid new dependencies and unrelated refactors.
 - Keep each game's configured Godot version and renderer unless a requested fix
   requires a change. Use GDScript for `2d-platform`.
+- Use Godot 4.7 for all current and future projects in this repository;
+  development checks use 4.7.2. Confirm that skills and MCP tools use this engine
+  version before running project operations. Read each project's README and
+  `project.godot` for setup, validation commands, and renderer settings.
+- Consult [godot-gdscript-patterns](.agents/skills/godot-gdscript-patterns/SKILL.md)
+  on demand for relevant GDScript, scene architecture, game state, or performance
+  work. Repository and project constraints take precedence over its generic
+  Godot 4.x examples; use only patterns needed for the requested task.
+- For all games, look for suitable assets on [CraftPix](https://craftpix.net/)
+  before creating replacements. Prefer free assets or assets already available
+  through the user's account. Agents may browse and download using the user's
+  logged-in session through computer use or equivalent browser tools. If that
+  capability is unavailable, describe the needed asset, style, and format so the
+  user can find and download it.
 - Track Godot-generated `.gd.uid` files alongside their scripts. Include a new
   script's UID in the same commit once Godot generates it. Before committing,
   check for missing or untracked UIDs for scripts in scope; do not ignore these
