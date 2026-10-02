@@ -4,10 +4,11 @@ A single-player, one-level street brawler inspired by Final Fight, in developmen
 Build a complete, enjoyable game first; make later art swaps straightforward
 through ordinary Godot scenes and Inspector values.
 
-**Status: Step 05 level and encounters accepted after user-reported manual testing.**
+**Status: Step 06 boss and completion implemented; manual validation pending.**
 F5 opens a title with Play, Controls, and Quit. Play starts a fresh street route:
 safe entrance → two grunts → connecting stretch → two grunts followed by a
-grunt/bruiser wave → sealed boss entrance. The boss arrives in Step 06.
+grunt/bruiser wave → locked final arena with Toxic Enforcer → victory.
+Step 05 was accepted after user-reported manual testing.
 Steps 02–04 were accepted after user-reported manual testing.
 
 ## Open and run
@@ -16,8 +17,7 @@ Import `project.godot` into Godot **4.7.2**, then press **F5**. The independent
 project uses GDScript and the Compatibility renderer. The logical viewport is
 640 × 360, displayed in a 1280 × 720 window with nearest filtering and preserved
 aspect ratio. Cyan crosses still mark actor ground anchors; the outlined strip
-marks walkable ground. Amber lines show locked encounter gates; the red line
-marks the sealed boss entrance. Jumping cannot bypass movement bounds.
+marks walkable ground. Amber lines show locked encounter and boss-arena gates. Jumping cannot bypass movement bounds.
 
 From the repository root on this Mac:
 
@@ -32,6 +32,12 @@ to queue the next, up to three. Holding Attack does not repeat. Jump then attack
 performs one air kick, which can hit only near the ground. Change depth or move
 behind an enemy's committed tell to avoid its strike. Bruisers have a longer tell
 and knock the hero down. Body contact does no damage.
+
+The boss alternates a short sweep and a straight charge. Yellow ground markings
+and SWEEP/CHARGE labels show the committed lane; change depth or jump above the
+hit band to avoid it. OPEN marks recovery. Boss hits reduce health without
+cancelling committed attacks or knocking it down. Its health appears in the HUD.
+Defeat it to reach Victory after its death sequence; Play Again starts a fresh run.
 
 Escape/Start opens pause with Resume, Retry, Main Menu, and Quit. Zero health
 opens Game Over with Retry, Main Menu, and Quit. Navigate menus with arrows/D-pad,
@@ -63,14 +69,16 @@ The original automatic art preview is preserved at
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/combat_test.gd
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/enemies_test.gd
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/level_test.gd
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/boss_test.gd
 git diff --check
 ```
 
 The regression commands check movement, combat, crowd commitments, encounter
-waves/gates, menu input, and whole-run reset. Earlier suites retain their original
+waves/gates, boss attack/death rules, result precedence, menu input, and whole-run reset. Earlier suites retain their original
 test scenes. Synthetic controller events do not establish hardware support.
 See the [Step 05 record](docs/steps/05-level.md#completion-record) for route tuning,
-automated results, rendered observations, and remaining hands-on checks.
+automated results and rendered observations. The [Step 06 record](docs/steps/06-boss.md#completion-record)
+covers boss tuning, completion/reset checks, and pending hands-on acceptance.
 
 ## Start here
 

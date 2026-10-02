@@ -1,6 +1,6 @@
 # Asset brief and candidate sources
 
-**Status: Step 04 uses the existing free assets and approved adaptations, 2026-10-02.** Biker, seaport enemy 1, and a
+**Status: Step 06 imports Toxic Enforcer from the reviewed free boss pack, 2026-10-02.** Biker, seaport enemy 1, and a
 street backdrop are in the project. The acquisition record and exact sample
 mapping are in [asset provenance](assets/PROVENANCE.md). Other entries below
 remain candidates, not verified animation coverage.
@@ -27,7 +27,7 @@ remain candidates, not verified animation coverage.
   air attack or get-up. Toxic Enforcer has readable melee punches, running poses,
   and a non-disintegrating death; punch/run are proposed sweep/charge mappings.
   The already-downloaded Cyborg has an armored silhouette and an unarmed punch,
-  making it a bruiser candidate. Step 04 imports Cyborg; Toxic Enforcer remains outside gameplay;
+  making it a bruiser candidate. Step 04 imports Cyborg; Step 06 imports Toxic Enforcer for the boss;
   scale, attack/recovery presentation, and final cast fit remain to be validated
   in Steps 04/06. No paid pack is selected.
 - The street sample composites City1 Bright sky, buildings, rear wall and road,
@@ -116,3 +116,11 @@ silhouette differs from the seaport grunts without recoloring. The punch uses
 source frame 4 for contact; fall uses intact frames 0–3 and reverse recovery.
 The user accepted Step 04 after manual testing. Detailed motion/device observations
 were not supplied; final cast and art-replacement acceptance remain in Step 09.
+
+Step 06 imports only Toxic Enforcer Idle/Run/Attack/Prepare/Hurt/Death. The punch
+maps to sweep (contact frame 3); Prepare maps to a stationary charge tell, Run to
+its straight active movement, and intact Death frames to defeat. The 96 × 96
+frames display at 2×, with foot offset (-48, -96). Native staged rendering was
+inspected; attack readability, balance, and final cast acceptance remain pending
+hands-on play. No new pack, paid asset, replacement artwork, or other boss was added.
+See [Step 06](docs/steps/06-boss.md#boss-tuning-and-animation-mapping).

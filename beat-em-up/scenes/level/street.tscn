@@ -70,6 +70,19 @@ flip_h = true
 flip_v = true
 
 
+[node name="StreetEnd" type="Sprite2D" parent="Scenery"]
+position = Vector2(2560, -60)
+scale = Vector2(0.33333334, 0.33333334)
+texture = ExtResource("2")
+centered = false
+
+[node name="RoadEnd" type="Sprite2D" parent="Scenery"]
+position = Vector2(2560, 300)
+scale = Vector2(0.33333334, 0.33333334)
+texture = SubResource("RoadExtension")
+centered = false
+flip_v = true
+
 [node name="Boundaries" type="Node2D" parent="."]
 z_index = 1
 
@@ -81,7 +94,7 @@ position = Vector2(160, 278)
 position = Vector2(320, 180)
 limit_left = 0
 limit_top = 0
-limit_right = 2560
+limit_right = 3200
 limit_bottom = 360
 process_callback = 0
 [node name="FirstFight" type="Node2D" parent="."]

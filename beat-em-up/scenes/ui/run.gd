@@ -2,7 +2,7 @@ extends Node
 ## Owns one whole run and the minimal keyboard/controller menu flow.
 
 const STREET = preload("res://scenes/level/street.tscn")
-enum State { TITLE, CONTROLS, PLAYING, PAUSED, DEAD }
+enum State { TITLE, CONTROLS, PLAYING, PAUSED, DEAD, VICTORY }
 var state: State = State.TITLE
 var street: Node2D
 var overlay: CanvasLayer
@@ -48,19 +48,22 @@ func _process(_delta: float) -> void:
 	if is_instance_valid(street):
 		hud.text = "HERO %d/%d    %s\nEscape / Start: pause" % [street.player.health,
 			street.player.max_health, street.prompt]
+		if is_instance_valid(street.boss):
+			hud.text = "HERO %d/%d    BOSS %d/%d\n%s" % [street.player.health,
+				street.player.max_health, street.boss.health, street.boss.max_health, street.prompt]
 
 
 func _show_menu(next_state: State) -> void:
 	state = next_state
-	get_tree().paused = state == State.PAUSED or state == State.DEAD
+	get_tree().paused = state in [State.PAUSED, State.DEAD, State.VICTORY]
 	for child in items.get_children():
 		items.remove_child(child)
 		child.queue_free()
 	panel.show()
 	heading = Label.new()
 	heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	heading.text = {State.TITLE: "BEAT 'EM UP — STEP 05", State.CONTROLS: "CONTROLS",
-		State.PAUSED: "PAUSED", State.DEAD: "GAME OVER"}[state]
+	heading.text = {State.TITLE: "BEAT 'EM UP", State.CONTROLS: "CONTROLS",
+		State.PAUSED: "PAUSED", State.DEAD: "GAME OVER", State.VICTORY: "VICTORY"}[state]
 	items.add_child(heading)
 	match state:
 		State.TITLE:
@@ -73,10 +76,10 @@ func _show_menu(next_state: State) -> void:
 			controls.add_theme_font_size_override("font_size", 13)
 			items.add_child(controls)
 			_button("Back", main_menu)
-		State.PAUSED, State.DEAD:
+		State.PAUSED, State.DEAD, State.VICTORY:
 			if state == State.PAUSED:
 				_button("Resume", resume_run)
-			_button("Retry", start_run)
+			_button("Play Again" if state == State.VICTORY else "Retry", start_run)
 			_button("Main Menu", main_menu)
 			_button("Quit", func() -> void: get_tree().quit())
 	for child in items.get_children():
@@ -106,10 +109,17 @@ func start_run() -> void:
 	_remove_run()
 	street = STREET.instantiate()
 	add_child(street)
-	street.hero_died.connect(func() -> void: _show_menu(State.DEAD))
+	street.hero_died.connect(_finish_run.bind(State.DEAD))
+	street.won.connect(_finish_run.bind(State.VICTORY))
 	state = State.PLAYING
 	panel.hide()
 	street.player.require_input_release()
+
+
+func _finish_run(result: State) -> void:
+	if state not in [State.PLAYING, State.PAUSED]:
+		return
+	_show_menu(State.DEAD if street.player.health == 0 else result)
 
 
 func main_menu() -> void:

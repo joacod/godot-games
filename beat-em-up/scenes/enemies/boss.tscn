@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="SpriteFrames" path="res://scenes/enemies/boss_frames.tres" id="1"]
+
+[ext_resource type="Script" path="res://scenes/enemies/boss.gd" id="2"]
+
+[node name="Boss" type="CharacterBody2D"]
+script = ExtResource("2")
+max_health = 240
+team = 1
+invulnerability_duration = 0.0
+knockback_speed = 0.0
+
+[node name="Shadow" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-20, 0, -12, -5, 12, -5, 20, 0, 12, 5, -12, 5)
+color = Color(0, 0, 0, 0.35)
+
+[node name="Visual" type="Node2D" parent="."]
+scale = Vector2(-2, 2)
+
+[node name="Sprite" type="AnimatedSprite2D" parent="Visual"]
+sprite_frames = ExtResource("1")
+animation = &"idle"
+autoplay = "idle"
+centered = false
+offset = Vector2(-48, -96)
+
+[node name="Anchor" type="Line2D" parent="."]
+points = PackedVector2Array(-5, 0, 5, 0, 0, 0, 0, -4, 0, 4)
+width = 1.0
+default_color = Color(0.5, 0.95, 0.85, 0.8)
+
+[node name="Tell" type="Label" parent="."]
+offset_left = -80.0
+offset_top = -116.0
+offset_right = 80.0
+offset_bottom = -96.0
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1

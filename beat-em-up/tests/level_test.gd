@@ -82,7 +82,7 @@ func _test() -> void:
 	_check(second.finished and street.active == null, "final scheduled enemies unlock second arena")
 	hero.position.x = 2300
 	street._update_progress()
-	_check(street.reached_entrance and street.prompt.contains("SEALED"), "route ends at explicitly unfinished boss entrance")
+	_check(street.reached_entrance and is_instance_valid(street.boss), "route reaches a locked boss arena")
 	for encounter_index in [0, 1]:
 		run.start_run()
 		await _frames(1)

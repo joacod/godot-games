@@ -28,7 +28,7 @@ Step 01's free-asset adaptations are approved for continued implementation;
 their final visual fit remains pending in the owning mechanics. Step 02 is
 accepted after user-reported manual testing. Step 03 is also accepted after
 user-reported manual testing. Step 04 is accepted after user-reported manual testing.
-Step 05 is accepted after user-reported manual testing. Steps 06–09 are
+Step 05 is accepted after user-reported manual testing. Step 06 is implemented, pending manual validation. Steps 07–09 are
 **not started**. Steps depend on the preceding step. They can be requested individually, but are not independent
 implementations.
 
@@ -39,7 +39,7 @@ implementations.
 | [03 — Combat](steps/03-combat.md) | Accepted after user-reported manual testing | Combo and jump-attack a dummy; see validation record |
 | [04 — Enemies](steps/04-enemies.md) | Accepted after user-reported manual testing | Mixed fight with two grunts and one bruiser |
 | [05 — Level and encounters](steps/05-level.md) | Accepted after user-reported manual testing | Clear the street to the boss entrance |
-| [06 — Boss and completion](steps/06-boss.md) | Boss, victory/death/retry | Complete the entire game loop |
+| [06 — Boss and completion](steps/06-boss.md) | Implemented; manual validation pending | Boss and complete result/reset loop; see validation record |
 | [07 — Props and recovery](steps/07-props.md) | Breakable, food, encounter balance | Use recovery along the finished route |
 | [08 — Presentation](steps/08-presentation.md) | Final art, sound, menus, feedback | Play a coherent polished level |
 | [09 — Acceptance and art swap](steps/09-acceptance.md) | Full regression and replacement proof | Verified game with practical editing notes |
