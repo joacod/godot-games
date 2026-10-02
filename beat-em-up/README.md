@@ -4,20 +4,20 @@ A single-player, one-level street brawler inspired by Final Fight, in developmen
 Build a complete, enjoyable game first; make later art swaps straightforward
 through ordinary Godot scenes and Inspector values.
 
-**Status: Step 04 enemies accepted after user-reported manual testing.**
-Steps 02 and 03 were accepted after user-reported manual testing. The test street
-now opens a live fight against two grunts and a slower, tougher Cyborg bruiser.
-Attacks have visible tells and at most two enemies commit simultaneously.
-Defeat the group or lose all health, then retry with R/controller Back.
+**Status: Step 05 level and encounters accepted after user-reported manual testing.**
+F5 opens a title with Play, Controls, and Quit. Play starts a fresh street route:
+safe entrance → two grunts → connecting stretch → two grunts followed by a
+grunt/bruiser wave → sealed boss entrance. The boss arrives in Step 06.
+Steps 02–04 were accepted after user-reported manual testing.
 
 ## Open and run
 
 Import `project.godot` into Godot **4.7.2**, then press **F5**. The independent
 project uses GDScript and the Compatibility renderer. The logical viewport is
 640 × 360, displayed in a 1280 × 720 window with nearest filtering and preserved
-aspect ratio. Cyan crosses mark ground anchors; the outlined strip limits the
-hero's feet. Walk around the dummy to inspect depth sorting, then jump
-to check that the shadow and sorting stay at ground level.
+aspect ratio. Cyan crosses still mark actor ground anchors; the outlined strip
+marks walkable ground. Amber lines show locked encounter gates; the red line
+marks the sealed boss entrance. Jumping cannot bypass movement bounds.
 
 From the repository root on this Mac:
 
@@ -27,18 +27,22 @@ From the repository root on this Mac:
 ```
 
 Move with WASD/arrows or the controller's left stick/D-pad. Jump with Space or
-the south face button. Escape/Start pauses and resumes; Enter/south also resumes
-while paused. R/Back resets the test street; J/west also resets while paused.
-J/west attacks. Press again near the end of each strike to queue the next,
-up to three; holding does not repeat. Space/south followed by J/west performs one
-air kick, which can hit only near the ground. Change depth or move behind an
-enemy's committed tell to avoid its strike. Grunts strike faster; the armored
-bruiser has a longer tell and knocks the hero down. Body contact does no damage.
-R/Back restores the whole fight, including after victory, death, or pause.
-The header shows health and the number of reserved enemy attack slots.
+the south face button. J/west attacks; press again near the end of each strike
+to queue the next, up to three. Holding Attack does not repeat. Jump then attack
+performs one air kick, which can hit only near the ground. Change depth or move
+behind an enemy's committed tell to avoid its strike. Bruisers have a longer tell
+and knock the hero down. Body contact does no damage.
 
-The Step 03 dummy remains available at `scenes/combat/combat_street.tscn` (F6).
-In that scene K/north triggers a normal strike and L/right shoulder a knockdown.
+Escape/Start opens pause with Resume, Retry, Main Menu, and Quit. Zero health
+opens Game Over with Retry, Main Menu, and Quit. Navigate menus with arrows/D-pad,
+confirm with Enter/south, and use Escape/east to go back from Controls or resume.
+Retry restarts the entire route; there are no checkpoints. R/Back and the test
+strike bindings are inactive in the main game.
+
+The old test scenes retain their original controls when opened with F6:
+`scenes/level/movement_street.tscn`, `scenes/combat/combat_street.tscn`, and
+`scenes/enemies/fight_street.tscn`. They still use R/Back to reset. The combat dummy
+also accepts K/north for a normal strike and L/right shoulder for a knockdown.
 
 The movement-stick deadzone is 0.25. After boot, resume, or reset, release held
 controls before fresh movement/jump input. Close the window to exit.
@@ -58,14 +62,15 @@ The original automatic art preview is preserved at
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/movement_test.gd
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/combat_test.gd
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/enemies_test.gd
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/level_test.gd
 git diff --check
 ```
 
-The regression commands check movement, combat and crowd commitments/reset.
-Movement and combat suites open their original test scenes. Synthetic controller
-events do not establish hardware support. See the
-[Step 04 record](docs/steps/04-enemies.md#completion-record) for tuning, automated
-results, rendered observations, and remaining hands-on checks.
+The regression commands check movement, combat, crowd commitments, encounter
+waves/gates, menu input, and whole-run reset. Earlier suites retain their original
+test scenes. Synthetic controller events do not establish hardware support.
+See the [Step 05 record](docs/steps/05-level.md#completion-record) for route tuning,
+automated results, rendered observations, and remaining hands-on checks.
 
 ## Start here
 

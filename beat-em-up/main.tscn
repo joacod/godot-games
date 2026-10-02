@@ -1,5 +1,5 @@
 [gd_scene load_steps=2 format=3]
-
-[ext_resource type="PackedScene" path="res://scenes/enemies/fight_street.tscn" id="1"]
-
-[node name="Main" instance=ExtResource("1")]
+[ext_resource type="Script" path="res://scenes/ui/run.gd" id="1"]
+[node name="Main" type="Node"]
+process_mode = 3
+script = ExtResource("1")
