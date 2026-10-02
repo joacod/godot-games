@@ -3,8 +3,9 @@
 This repository contains small Godot games for learning and experimentation.
 Prioritize complete, understandable gameplay over frameworks or speculative reuse.
 
-- Read the relevant project, scenes, scripts, and plan before editing. For
-  `2d-platform`, use [the completion plan](2d-platform/PLAN.md).
+- Read the relevant project, scenes, and scripts before editing. For
+  `2d-platform`, use [the game README](2d-platform/README.md) and
+  [the art reference](2d-platform/ASSETS.md).
 - If requirements are unclear, ask before coding. Explain the approach and wait
   for confirmation before non-trivial features, architecture changes, or broad rewrites.
 - When asked for a numbered step, complete only that step and report its validation.

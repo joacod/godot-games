@@ -1,29 +1,23 @@
-<div align="center">
+# Godot Games
 
-# 👾 Godot Games 👾
+Small games built with [Godot Engine](https://godotengine.org/) for learning
+and experimentation. Each game is a separate Godot project.
 
-[![Godot Engine](https://img.shields.io/badge/GODOT-%23FFFFFF.svg?style=for-the-badge&logo=godot-engine)](https://godotengine.org/)
-[![Itch.io](https://img.shields.io/badge/Itch-%23FF0B34.svg?style=for-the-badge&logo=Itch.io&logoColor=white)](https://itch.io/)
-[![Steam](https://img.shields.io/badge/steam-%23000000.svg?style=for-the-badge&logo=steam&logoColor=white)](https://store.steampowered.com/)
+## Games
 
-</div>
+- [2D Platform](2d-platform/README.md): a ruined-fortress platformer demo with
+  forgiving jumps, three attacks, optional gems, and a final guardian.
+  Includes a title screen, pause, level and arena retries, and a demo ending.
 
-## 👋 Introduction
+## Play and develop
 
-Different games created with [Godot Engine](https://godotengine.org/), some of them when they are ready will be published on [Itch.io](https://itch.io/) and/or [Steam](https://store.steampowered.com/)
+Use Godot 4.7; development checks use 4.7.2. Import a game's `project.godot`
+in the Godot Project Manager, open it, and press **F5** to play.
+Each game's README covers controls, editing locations, and validation.
 
-## 🕹️ Games
+## Publishing destinations
 
-- [2D Platform](2d-platform/README.md): a Godot 4.7 platformer demo with a title
-  screen, a ruined-fortress level, optional combat and gems, and a final guardian.
-  Includes forgiving jumps, three distinct attacks, pause, level and arena
-  retries, and a demo-complete ending. The local completion plan is finished;
-  physical gamepad testing and distribution remain follow-ups.
+Games may be published here when ready:
 
-## ☕️ Did you like the project?
-
-You can colaborate with me giving a star ⭐️ to the project or
-
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/joacod)
-
-Thanks! 😃
+- [Itch.io](https://itch.io/)
+- [Steam](https://store.steampowered.com/)
