@@ -24,12 +24,13 @@ cuts, not claims that the game reproduces every Final Fight mechanic.
 
 ## Sequence and status
 
-All steps are **not started**. Steps depend on the preceding step. They can be
+Step 01 is implemented with asset adaptations pending review. Steps 02–09 are
+**not started**. Steps depend on the preceding step. They can be
 requested individually, but are not independent implementations.
 
 | Step | Deliverable | Playable milestone |
 | --- | --- | --- |
-| [01 — Foundation and asset fit](steps/01-foundation.md) | Project, art sample, conventions | Boot a representative street sample |
+| [01 — Foundation and asset fit](steps/01-foundation.md) | Implemented; asset adaptations pending review | Street sample boots; see validation record |
 | [02 — Movement and depth](steps/02-movement.md) | Player, bounds, camera, jump | Move and jump correctly in a test street |
 | [03 — Combat](steps/03-combat.md) | Attacks, damage, reactions | Combo and jump-attack a dummy |
 | [04 — Enemies](steps/04-enemies.md) | Two behaviors and fair crowd combat | Win or lose a small fight |

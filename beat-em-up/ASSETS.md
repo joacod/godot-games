@@ -1,8 +1,36 @@
 # Asset brief and candidate sources
 
-**Status: shortlist only, researched 2026-10-02.** No assets have been downloaded,
-licensed for this repository, imported, or visually tested. Product descriptions
-are evidence of candidates, not proof that an archive meets every animation need.
+**Status: Step 01 sample imported, 2026-10-02.** Biker, seaport enemy 1, and a
+street backdrop are in the project. The acquisition record and exact sample
+mapping are in [asset provenance](assets/PROVENANCE.md). Other entries below
+remain candidates, not verified animation coverage.
+
+## Step 01 decisions and gaps
+
+- Biker supplies idle/run, an unarmed punch (`attack1`), a double punch
+  (`attack2`), and a kick (misleadingly named `punch`). The source `attack3`
+  contains an energy weapon and is excluded. The sample displays the unmodified
+  double-punch sheet; it is not yet a one-strike combo implementation.
+- Seaport enemy 1 supplies idle/walk and a melee attack. Other entries include
+  ranged characters, drones, and a robot dog; this archive does not establish
+  two standing melee silhouettes. The bruiser remains unselected.
+- Both inspected actor archives have hurt/death, but no dedicated get-up.
+  Biker has jump poses but no dedicated air attack. Proposed adaptations,
+  awaiting user review: trim the second punch into one strike; use the kick as
+  the finisher and air attack; use non-disintegrating death/fall frames for
+  knockdown and reverse the fall into recovery. Validate these visually when
+  implementing the owning mechanics. No adaptation is silently approved here.
+- The optional extra-animation pack is only page-reviewed; its listed fall and
+  walk motions do not establish an air kick or get-up. The factory boss is also
+  only page-reviewed; inspect its archive before selecting sweep/charge poses.
+- The street sample composites City1 Bright sky, buildings, rear wall and road,
+  omitting oversized foreground props and the obscuring front wall. A mirrored
+  road strip extends the floor. This is a single sample, not a verified tiling
+  level. Its illustrative ground band is Y=238–316; bounds arrive in Step 02.
+
+Before Step 02, resolve the proposed hero/recovery adaptations and the missing
+bruiser/boss coverage by approval of a concrete mapping or further pack review.
+The sample can be reviewed now, but complete cast acceptance remains pending.
 
 ## Direction and shortlist
 
