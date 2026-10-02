@@ -1,6 +1,6 @@
 # Asset brief and candidate sources
 
-**Status: Step 03 uses the existing free assets and approved adaptations, 2026-10-02.** Biker, seaport enemy 1, and a
+**Status: Step 04 uses the existing free assets and approved adaptations, 2026-10-02.** Biker, seaport enemy 1, and a
 street backdrop are in the project. The acquisition record and exact sample
 mapping are in [asset provenance](assets/PROVENANCE.md). Other entries below
 remain candidates, not verified animation coverage.
@@ -13,7 +13,7 @@ remain candidates, not verified animation coverage.
   double-punch sheet; it is not yet a one-strike combo implementation.
 - Seaport enemy 1 supplies idle/walk and a melee attack. Other entries include
   ranged characters, drones, and a robot dog; this archive does not establish
-  two standing melee silhouettes. The bruiser remains unselected.
+  two standing melee silhouettes. Step 04 uses the armored Cyborg from the already-acquired hero pack as the bruiser.
 - Both inspected actor archives have hurt/death, but no dedicated get-up.
   Biker has jump poses but no dedicated air attack. Approved direction for later
   mechanics: trim the second punch into one strike; use the kick as
@@ -27,7 +27,7 @@ remain candidates, not verified animation coverage.
   air attack or get-up. Toxic Enforcer has readable melee punches, running poses,
   and a non-disintegrating death; punch/run are proposed sweep/charge mappings.
   The already-downloaded Cyborg has an armored silhouette and an unarmed punch,
-  making it a bruiser candidate. Neither candidate is imported into gameplay;
+  making it a bruiser candidate. Step 04 imports Cyborg; Toxic Enforcer remains outside gameplay;
   scale, attack/recovery presentation, and final cast fit remain to be validated
   in Steps 04/06. No paid pack is selected.
 - The street sample composites City1 Bright sky, buildings, rear wall and road,
@@ -110,3 +110,9 @@ archives. Gameplay trims the second punch, maps the kick to finisher/air attack,
 and selects intact fall frames with reverse recovery. See the exact frame mapping
 and phase timing in [Step 03](docs/steps/03-combat.md#combat-tuning-and-animation-mapping).
 No new pack, replacement artwork, paid asset, or extra-animation import was needed.
+
+Step 04 imports Cyborg idle/run/attack1/hurt/death as the bruiser. Its armored
+silhouette differs from the seaport grunts without recoloring. The punch uses
+source frame 4 for contact; fall uses intact frames 0–3 and reverse recovery.
+The user accepted Step 04 after manual testing. Detailed motion/device observations
+were not supplied; final cast and art-replacement acceptance remain in Step 09.
