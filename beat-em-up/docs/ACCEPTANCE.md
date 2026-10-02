@@ -1,8 +1,11 @@
 # Validation and final acceptance
 
 Step 01 import/startup and sample checks are recorded in its
-[completion record](steps/01-foundation.md#completion-record). The gameplay and
-final acceptance checks below remain pending. Keep automated results separate from visual, input, controller,
+[completion record](steps/01-foundation.md#completion-record). Step 02 movement
+regressions and rendered observations are in its
+[completion record](steps/02-movement.md#completion-record); hands-on/controller
+acceptance remains pending. The remaining gameplay and final acceptance checks
+below remain pending. Keep automated results separate from visual, input, controller,
 and audio observations. A missing controller leaves controller acceptance pending.
 
 ## Engine and startup
@@ -23,8 +26,11 @@ before substituting it for `godot`. Inspect logs for script, resource, and scene
 errors even if the process exits zero. Check new scripts have generated `.gd.uid`
 files. A headless check establishes loading, not successful gameplay or rendering.
 
-No test runner exists for this game yet. Add small deterministic Godot tests as
-relevant mechanics arrive; document their actual commands in the owning step.
+Step 02 adds a focused SceneTree regression script, without an external test
+runner. Run it with `--fixed-fps 60 --script res://tests/movement_test.gd` and the
+same binary, `--headless`, and `--path beat-em-up` flags as above. Add small
+deterministic Godot tests as relevant mechanics arrive; document their actual
+commands in the owning step.
 Do not invent a passing suite or add an external test dependency by default.
 
 ## Focused automated regressions

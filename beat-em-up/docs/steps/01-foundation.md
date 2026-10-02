@@ -1,8 +1,8 @@
 # Step 01 — Foundation and asset fit
 
-Status: foundation implemented; final asset-fit acceptance pending. Implementation
-was authorized with “go” on 2026-10-02. Proposed animation adaptations still need
-review; Step 02 has not started.
+Status: foundation implemented; free-asset adaptations approved for continued
+implementation, final asset-fit acceptance pending. Implementation was authorized
+with “go” on 2026-10-02. See the follow-up decision below for Step 02's prerequisite.
 
 ## Outcome
 
@@ -104,6 +104,19 @@ The [asset brief](../../ASSETS.md#step-01-decisions-and-gaps) records the propos
 frame adaptations and the remaining cast review. These require resolution before
 Step 02, so this step is not marked fully accepted. No gameplay requirement was
 removed to conceal an animation gap.
+
+### Follow-up asset decision for Step 02
+
+On 2026-10-02 the user rejected paid replacements and authorized keeping the free
+assets already available, with later adjustments for missing motions. The free
+extra-animation and factory-boss archives were inspected; neither a dedicated
+hero air attack nor get-up was found in the extra pack. Biker pose/frame adaptations
+are approved for later implementation, with Cyborg and Toxic Enforcer as reviewed
+bruiser/boss candidates. See the updated [asset brief](../../ASSETS.md).
+
+This user decision authorizes Step 02 to proceed without claiming complete cast
+acceptance. Validate combat/recovery adaptations when those mechanics are built;
+the historical Step 01 startup and visual results above remain foundation evidence.
 
 ### Intentionally untouched
 
