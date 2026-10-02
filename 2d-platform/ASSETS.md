@@ -3,7 +3,7 @@
 Texture references live directly in [scenes/main_character.tscn](scenes/main_character.tscn),
 [scenes/enemy.tscn](scenes/enemy.tscn), and [main.tscn](main.tscn).
 The following dimensions come from the PNGs and current scene resources.
-The completed demo uses the fortress assets and native drawing described below.
+The demo uses the fortress assets and native drawing described below.
 
 ## Player sprite sheets
 
@@ -33,8 +33,8 @@ once because `animation_finished` ends the swing. The sprite autoplays `default`
 
 `Tileset.png` is 496 × 304 px: 31 columns × 19 rows of 16 × 16 px cells with
 zero margins and separation. `main.tscn` embeds a TileSet with a 16 × 16 px
-tile size and a TileSetAtlasSource at source ID 0. The visual-identity pass
-now references `fortress_art/masonry.svg` instead of this PNG; the original
+tile size and a TileSetAtlasSource at source ID 0. The current atlas
+references `fortress_art/masonry.svg` instead of this PNG; the original
 PNG stays untouched. The SVG preserves the 496 × 304 px atlas extent and
 paints the four used cells with alternating stone, moss caps, and cracks.
 The current TileMap uses atlas coordinates (7, 10), (8, 10), (7, 11), and
@@ -151,16 +151,16 @@ Only these unmodified `Gorgon_1` PNGs from the archive are included:
 Each sheet is one row of 128 × 128 px frames, with no padding or spacing and
 duration multipliers of 1. `scenes/enemy.tscn` references these sheets and
 plays them at 10 fps with a 2× scale and nearest-neighbor filtering. Walk
-loops; hurt and death play once. The body remains 60 × 150 px, centered 75 px above the feet. The former
-contact area now only senses nearby players. No enemy sheet or SpriteFrames
-changed in Step 4: the walk pose freezes during a 0.55 s gold windup cue,
+loops; hurt and death play once. The body is 60 × 150 px, centered 75 px above
+the feet. The contact area only senses nearby players. The walk pose freezes
+during a 0.55 s gold windup cue,
 followed by a 0.15 s native-drawn forward swipe and 0.75 s harmless recovery
 marked by a teal dot. Swipe strokes span x=23–133 in the committed facing and
 y=-115 to -40, inside the damage rectangle x=23–133, y=-130 to -20. Each strike
 deals one damage at most once per player, respecting player invulnerability.
 All timers, animation, and knockback freeze on pause. A hit interrupts the
 attack; defeat clears damage and removes the enemy after its death animation.
-No additional assets were downloaded; cues, swipe, and impact are Godot drawing.
+Cues, swipe, and impact use native Godot drawing.
 
 The archive's `Licens.txt` points to the
 [CraftPix file license](https://craftpix.net/file-licenses/). The Freebie
@@ -173,7 +173,7 @@ unused animations, PSD source files, and promotional files are not included.
 
 ## Fortress visual identity
 
-Step 2 uses a night palette: blue charcoal backgrounds, moss-capped gray stone,
+The game uses a night palette: blue charcoal backgrounds, moss-capped gray stone,
 parchment text, gold focus and gems, warm spike tips, and a teal exit arrow.
 The shared `scenes/menu_theme.tres` retains Godot's bundled default font across
 menus, HUD, prompts, and exit labels; no external font or font dependency is added.
@@ -187,12 +187,11 @@ The title reuses the scene with camera following disabled. Background colors
 stay dimmer than playable surfaces. Decoration has no collision or gameplay
 state; pause freezes camera-driven updates. No animation timing was added.
 
-`fortress_art/masonry.svg` is new geometric artwork written for this project.
+`fortress_art/masonry.svg` is geometric artwork written for this project.
 It retains the original 16 px atlas grid and used coordinates (7, 10), (8, 10),
 (7, 11), (8, 11). Tile positions and full-cell collision polygons are unchanged.
 The cap is at the tile's actual top edge; transparent unused cells add no art
 in gaps. `Tileset.png` remains available as the original visual reference.
-No player/enemy SpriteFrames, attack frames, or detection shapes changed.
 
 The four unmodified props in `fortress_art/` come from CraftPix's
 [Free Medieval Tileset Pixel Art Pack](https://craftpix.net/freebies/free-medieval-tileset-pixel-art-pack/),
@@ -222,17 +221,14 @@ collision; the lethal spike area still covers the whole spike strip.
 ## Existing art
 
 The existing `player_sprites/` and `Tileset.png` files are unchanged. Their
-original source and license have not been established in this step.
+original source and license have not been established.
 
-## Refreshed route and courtyard
+## Route and courtyard
 
-Step 5 reuses all existing textures and SpriteFrames; no assets were downloaded.
-The masonry atlas and its full-cell collisions are unchanged, while occupied
-cells now form a 11,280 px-wide route with nine main floor stretches, two
-optional shelves at y=608, and a continuous final approach/courtyard floor at
-y=864. The useful opening platforms remain. Main gaps are 96–160 px wide;
-upward steps are at most 128 px. Repositioned patrol, spikes, gems, prompts,
-and props follow the shorter route. Reusable detection shapes are unchanged.
+Occupied masonry atlas cells form an 11,280 px-wide route with nine main floor
+stretches, two optional shelves at y=608, and a continuous final approach/courtyard
+floor at y=864. Main gaps are 96–160 px wide; upward steps are at most 128 px.
+Patrol, spikes, gems, prompts, and props follow the route.
 
 The final courtyard spans x=9152–11264, with native Polygon2D stone piers,
 dark arched recesses, masonry courses, and a teal banner using the existing
@@ -241,14 +237,13 @@ entry boundary at x=9152 closes only after the player's capsule has cleared
 it; the right edge uses the level's existing full-height wall treatment.
 The entry Area2D detects only Player across the level height, so jumping
 through entry cannot skip the retry point. The safe retry origin is (9360, 718).
-The exit sits at (10992, 800); Step 6 seals it until guardian defeat.
+The exit sits at (10992, 800) and stays sealed until guardian defeat.
 
 ## Courtyard guardian and boss gates
 
-Step 6 adds no downloaded artwork. `scenes/boss.tscn` reuses the existing
-128 × 128 Gorgon Walk/Hurt/Dead atlas frames and their existing frame order;
-the player and ordinary enemy SpriteFrames remain unchanged. The guardian
-uses the standing Walk frame at 2.5× scale, teal tint, a native gold crown,
+`scenes/boss.tscn` reuses the existing 128 × 128 Gorgon Walk/Hurt/Dead
+atlas frames and their frame order. The guardian uses the standing Walk frame
+at 2.5× scale, teal tint, a native gold crown,
 hit flash/impact rays, and the three-frame Dead animation at 10 FPS. This
 retains the existing creature silhouette; the crown and size distinguish it.
 The original Gorgon source/license remains as documented above.
@@ -276,20 +271,6 @@ so crossing both cannot cause a second hit in the same attack.
 Native effects use fortress gold for tells and pale teal for attacks/recovery.
 A compact bottom-centred health bar uses the shared menu theme and announces
 phase two. Gates use the existing 32 px stone boundary shape. The entry gate
-closes safely after entry as before; a second gate at x=10848 blocks the exit
+closes safely after entry; a second gate at x=10848 blocks the exit
 and opens on defeat. The locked exit hides its arrow, darkens its opening,
-and reads SEALED; defeat restores the teal arrow and EXIT label. Existing
-terrain, hazard/pickup shapes, player/enemy sheets, and camera bounds are
-unchanged. No new third-party assets or license claims are introduced.
-
-## Final visual verification
-
-Step 7 on 2026-10-02 reused all existing assets, SpriteFrames, collision data,
-and the shared theme. Native Metal/Mobile frames were inspected for title/help,
-the opening level, pause/death, guardian tells and waves, arena retry,
-defeat/open-exit, and Demo Complete. The help and opening sign now distinguish
-optional patrol combat from the required guardian; help also explains arena
-Retry. A deferred redraw restores the player HUD after title/menu scene
-replacement as well as arena retry. Native pixel checks cover both paths.
-No art replacements, downloads, hitbox changes, or new fonts were needed.
-Existing unresolved player/tileset provenance remains unchanged.
+and reads SEALED; defeat restores the teal arrow and EXIT label.
