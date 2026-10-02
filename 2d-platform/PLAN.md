@@ -1,7 +1,7 @@
 # Polish the platformer into a complete demo
 
 Status: the original playable-level plan is complete and accepted by the user
-on 2026-10-01. This is the new active plan. Steps 1–5 are implemented; Steps 6–7 have not started.
+on 2026-10-01. This is the new active plan. Steps 1–6 are implemented; Step 7 has not started.
 
 ## Goal
 
@@ -202,7 +202,7 @@ remaining bugs; do not use a headless result as evidence of gameplay feel.
 - [x] 3. Movement and camera feel
 - [x] 4. Distinct attacks and readable combat
 - [x] 5. Refreshed level, arena, and boss retry point
-- [ ] 6. Final boss and demo ending
+- [x] 6. Final boss and demo ending
 - [ ] 7. Complete-demo polish and verification
 
 ### Step 1 implementation record — 2026-10-01
@@ -342,6 +342,50 @@ remaining bugs; do not use a headless result as evidence of gameplay feel.
 - Remaining live checks: human route pacing/combat playthrough and physical
   gamepad. The courtyard has no boss yet; Step 6 has not started. No branch,
   commit, push, PR, or publication performed.
+
+### Step 6 implementation record — 2026-10-02
+
+- Added dedicated `scenes/boss.tscn` / `boss.gd` and generated UID. The
+  courtyard guardian reuses Gorgon art with a larger silhouette, teal tint,
+  native gold crown, hit flash, and a compact teal/gold health bar. No assets
+  were downloaded and no dependencies were added.
+- Boss uses idle → telegraph → attack → recovery → idle, with terminal defeat.
+  It alternates a committed close sweep and two jumpable ground shockwaves.
+  All windows remain vulnerable through the existing player damage contract;
+  hits flash without interrupting its tells. Default health is 12, damage 1,
+  tells are 0.7/1.0 s, and recovery shortens from 1.2 to 0.85 s at half health.
+  Pause freezes all state/animation/wave timing. Death and navigation clear it.
+- `run_state.gd` starts the boss on entry and arena retry, owns the boss health
+  UI and gate opening, and rejects completion until defeat. The exit has a
+  sealed marker and a second physical gate. Defeat clears attacks, opens both
+  gates, and unlocks the exit; reaching it shows Demo Complete with collected
+  count, Play Again, Main Menu, and Quit. Retry replaces the boss, waves, bar,
+  and gates with full health and the existing entry gem snapshot.
+- Updated `main.tscn`, exit script, completion title, README, ASSETS, and this
+  record. Added `tests/boss.gd` and generated UID. Adapted navigation/game-loop/
+  arena-retry suites for the required boss defeat; route checks stop at entry
+  and the boss suite covers the encounter/exit. Player movement/combat, ordinary
+  enemy, route terrain, hazard/pickup scenes, sprite sheets, shared theme,
+  startup/input settings, camera script/bounds, engine, renderer, and root
+  README are intentionally untouched. Root description/final polish stay in Step 7.
+- Passed startup and all eight focused headless suites with Godot 4.7.2.
+  Boss checks cover physical entry, each player attack in both directions,
+  once-per-swing damage, sweep commitment/retreat, both damaging and jumpable
+  wave directions, pause in every combat state, phase-two timing, death cleanup,
+  retry resets, physical exit blocking, one defeat, unlocked exit traversal,
+  terminal completion, and fresh Play Again. An input-driven fight defeats both
+  phases without taking damage. Walking/running route and existing regressions
+  pass. Headless import generated both new UIDs; the sandbox still prevents
+  saving user editor settings and emits the known macOS certificate diagnostic.
+- Native Metal/Mobile boss checks also passed, including the input-driven
+  fight. Inspected sweep tell, travelling waves/jump, settled arena retry,
+  defeated/open-exit, and Demo Complete frames. Corrected the missing crown
+  vertices and default gray health-bar styling found during inspection; native
+  pixel checks verify the crown and restored player HUD. `git diff --check`
+  passed and every script has its UID.
+- Remaining live checks: human boss feel/readability, full manual run, and a
+  physical gamepad. Step 7 has not started. No branch, commit, push, PR, or
+  publication performed.
 
 ## Out of scope
 

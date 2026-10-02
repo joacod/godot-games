@@ -81,6 +81,8 @@ func _run():
 			run.character.kill()
 			menu = run.death_ui
 		else:
+			run._on_arena_entered(run.character)
+			run.boss.take_damage(run.boss.max_health)
 			run._on_exit_reached()
 			menu = run.win_ui
 		check(paused and menu.visible, "%s menu pauses the level" % ending)
@@ -102,6 +104,8 @@ func _run():
 	Input.parse_input_event(pad)
 	await scene_changed
 	var run = current_scene
+	run._on_arena_entered(run.character)
+	run.boss.take_damage(run.boss.max_health)
 	run._on_exit_reached()
 	run.win_ui.get_node("Overlay/Panel/Buttons/MainMenu").pressed.emit()
 	await scene_changed

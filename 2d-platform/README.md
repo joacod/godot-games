@@ -1,9 +1,8 @@
 # 2D Platform
 
 A small Godot platformer for learning and experimentation. Jump across one
-concise level, fight or avoid a patrol, collect two optional gems, and reach
-the EXIT in a bounded fortress courtyard. The exit stays open until the boss
-is added in the next plan step.
+concise level, fight or avoid a patrol, collect two optional gems, defeat the
+courtyard guardian, and reach the unlocked EXIT to complete the demo.
 The world and menus share a night fortress style with layered silhouettes,
 moss-capped stone, gold focus, and a teal exit marker.
 
@@ -53,10 +52,11 @@ two-health enemy takes two light hits or one heavy hit. Confirmed hits flash,
 show a small burst, interrupt enemy attacks, and push surviving enemies a
 short distance without crossing patrol bounds or ledges. Movement and jumping remain
 available during a swing, its facing stays fixed, and another attack cannot
-interrupt it. Neither defeating the enemy nor collecting gems is required to win.
+interrupt it. Neither defeating the patrol nor collecting gems is required to win; the final
+guardian is required.
 
 Pause freezes gameplay and offers Resume, Retry, Main Menu, and Quit. Death
-shows Retry, Main Menu, and Quit; win shows Play Again, Main Menu, Quit, and
+shows Retry, Main Menu, and Quit; Demo Complete shows Play Again, Main Menu, Quit, and
 the collected count.
 Main Menu discards the current run and clears pause. Play always starts fresh.
 Menus have visible initial focus and work without a mouse. Before courtyard
@@ -69,6 +69,25 @@ cannot be collected again. Play Again and Main Menu/Play discard this entry
 point and start a fresh level. The entry point lasts only for the current
 session; no progress is saved. Quit closes the running game.
 
+## Courtyard guardian
+
+Entry starts a 12-health guardian encounter and shows a compact health bar.
+The guardian alternates a close sweep and a ground shockwave. A gold sweep
+rectangle marks the committed side and reach: step away or cross behind it.
+The ground-line tell signals two low waves travelling away from the guardian;
+jump over them. Body contact is harmless. Gold tells last 0.7 seconds for the
+sweep and 1 second for the wave. A teal dot marks recovery, giving time to
+punish with the existing attacks. All states are vulnerable; hits flash but do
+not cancel the attack or change its committed facing. Below half health, the
+bar announces phase two and recovery shortens from 1.2 to 0.85 seconds; tells,
+damage, and wave speed stay unchanged.
+
+Both courtyard gates stay closed during the encounter. Pause freezes tells,
+strikes, recovery, and travelling waves. Death clears active attacks; arena
+Retry restores the guardian, health bar, gates, full player health, and entry
+gem count. Defeat clears attacks and opens the gates and exit. Reach the exit
+to show Demo Complete; defeating the guardian alone does not end the run.
+
 ## Find and edit the game
 
 | File or folder | Edit here |
@@ -80,6 +99,7 @@ session; no progress is saved. Quit closes the running game.
 | [scenes/main_character.tscn](scenes/main_character.tscn) | Player SpriteFrames, atlas references, body collision, and attack area |
 | [scenes/main_character.gd](scenes/main_character.gd) | Player movement, health, invulnerability, damage, and striking frames |
 | [scenes/enemy.tscn](scenes/enemy.tscn) / [enemy.gd](scenes/enemy.gd) | Enemy art, awareness/strike shapes, telegraph/recovery, health, patrol, and ledge probe |
+| [scenes/boss.tscn](scenes/boss.tscn) / [boss.gd](scenes/boss.gd) | Guardian art, sweep/wave states, damage, and exported health/timings |
 | [scenes/run_state.gd](scenes/run_state.gd) | Death, fall threshold, pause, win, count, level/arena retry, and Main Menu navigation |
 | [scenes/level_camera.gd](scenes/level_camera.gd) | Camera fitting for an expanded viewport |
 | [scenes/hazard.tscn](scenes/hazard.tscn), [collectible.tscn](scenes/collectible.tscn), [exit.tscn](scenes/exit.tscn) | Reusable spikes, gems, and goal, each with its matching `.gd` script |
@@ -94,6 +114,7 @@ in the Inspector. Edit the reusable scene or script default to change the base.
 | Player | `walk_speed` 400 px/s; `run_speed` 700 px/s; `jump_velocity` -900 px/s; `coyote_time` 0.12 s; `jump_buffer_time` 0.12 s; `jump_cut_ratio` 0.45; `deceleration` 3000 px/s²; `max_health` 3; `invulnerability_duration` 1 s; `thrust_damage` 1; `quick_damage` 1; `heavy_damage` 2 |
 | Enemy | `max_health` 2; `patrol_speed` 90 px/s; `patrol_left` -90 px; `patrol_right` +90 px; `attack_damage` 1; `windup_duration` 0.55 s; `strike_duration` 0.15 s; `recovery_duration` 0.75 s |
 | Level enemy instance | Patrol offsets overridden to -160 / +160 px from its spawn; uniform scale 0.85 |
+| Boss | `max_health` 12; `attack_damage` 1; `idle_duration` 0.7 s; `sweep_telegraph` 0.7 s; `sweep_duration` 0.22 s; `wave_telegraph` 1 s; `wave_duration` 2.2 s; `wave_speed` 650 px/s; `recovery_duration` 1.2 s; `phase_two_recovery` 0.85 s |
 | Run owner (`main.tscn` root) | `fall_kill_y` 1120 px |
 | Project Settings → Physics → 2D | `default_gravity` 2500 px/s² |
 | Player's Camera2D in `main.tscn` | Bounds left 0, top 0, right 11280, bottom 1080 px |
@@ -156,10 +177,10 @@ performed during final verification. No connected gamepad was detected.
 Physical controller testing and the 1–2 minute human pacing target remain
 unconfirmed. The user accepted the original completion plan as done; these
 optional follow-ups do not block the new [demo polish plan](PLAN.md). That plan
-covers a title screen, graphics, mechanics, menus, and a final boss. Steps 1–5
+covers a title screen, graphics, mechanics, menus, and a final boss. Steps 1–6
 (title/navigation, world/UI visual identity, jump forgiveness/height,
-distinct attacks/readable combat, and the refreshed route/arena retry point)
-are implemented. Steps 6–7 remain pending.
+distinct attacks/readable combat, refreshed route/arena retry point, and final
+boss/demo ending) are implemented. Step 7 remains pending.
 
 Step 1 checks on 2026-10-01 passed startup, the new menu-navigation suite, and
 all four existing gameplay suites. Navigation checks cover keyboard help/back,
@@ -219,3 +240,25 @@ Walking and running traversals, patrol phases, both optional shelves, and camera
 bounds passed. Native Metal/Mobile frames were inspected for the start, gem,
 patrol, spikes, approach, courtyard, and wide/tall arena-retry views. Human
 route pacing, combat feel, and physical gamepad checks remain unverified.
+
+Step 6 checks on 2026-10-02 passed startup and all eight focused suites using
+Godot 4.7.2. The new boss suite checks physical arena entry, sealed exit,
+all player attacks in both directions with one hit per swing, committed sweep
+facing and walking avoidance, both wave directions with actual jumping,
+pause in telegraph/attack/recovery and projectile motion, phase-two timing,
+death cleanup, retry health/bar/gates, single defeat, physical exit blocking,
+unlocked exit traversal, Demo Complete, and fresh Play Again. An input-driven
+fight defeats both phases without damage using approach/recovery attacks,
+sweep retreat, and full jumps over waves.
+The route suite now checks reaching the boss entry; encounter and completion
+checks live in the boss suite. Native Metal/Mobile boss checks, including the
+input-driven fight, also passed. Inspected tell, wave/jump, arena retry,
+defeat/open-exit, and completion frames; native pixel checks verify the crown
+and restored HUD. `git diff --check` passed. Human fight feel and physical
+gamepad checks remain pending. Step 7 has not started.
+
+Run the boss checks with:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform --fixed-fps 60 --script res://tests/boss.gd
+```
