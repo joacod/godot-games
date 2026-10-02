@@ -96,8 +96,8 @@ Two additional free archives were downloaded through signed-in Chrome for review
 - `craftpix-net-412866-free-factory-boss-enemies-asset-pack-for-cyberpunk.zip` from
   [Free Factory Boss Enemies Asset Pack for Cyberpunk](https://craftpix.net/freebies/free-factory-boss-enemies-asset-pack-for-cyberpunk/).
 
-These remain in Downloads; no files from either archive were imported into this
-project. They establish only the asset-review observations in the asset brief.
+At that review, no files from either archive were imported into this
+project. Step 06 later imports the boss subset below from the restored Downloads archive. They establish only the asset-review observations in the asset brief.
 No purchase or new license grant is asserted by this review.
 
 ## Step 03 combat subset
@@ -138,3 +138,28 @@ Grunt resources reuse the existing seaport files, including the full walk sheet
 at 10 FPS; feet offset (-21, -48) and 2× scale are unchanged. Their fall/get-up
 mapping remains 2,3,4 / 4,3,2. Attack contact is index 4, recovery index 5 for both
 types. Source pixels are unchanged; phase timing is independent of sheet FPS.
+
+## Step 06 boss subset
+
+On 2026-10-02, the user restored the original reviewed archives to Downloads.
+Copied unchanged PNGs from `craftpix-net-412866-free-factory-boss-enemies-asset-pack-for-cyberpunk.zip`:
+
+| Source within archive | Local destination |
+| --- | --- |
+| `1/Idle.png` | `boss/idle.png` |
+| `1/Run.png` | `boss/move.png` |
+| `1/Attack.png` | `boss/sweep.png` |
+| `1/Prepare.png` | `boss/prepare.png` |
+| `1/Hurt.png` | `boss/hurt.png` |
+| `1/Death.png` | `boss/fall.png` |
+
+Publisher: CraftPix.net; pack: [Free Factory Boss Enemies Asset Pack for Cyberpunk](https://craftpix.net/freebies/free-factory-boss-enemies-asset-pack-for-cyberpunk/).
+No individual artist or standalone license file is present in this archive.
+[Boss source record](licenses/boss.txt) records the product and official terms;
+it is an authored provenance note, not a supplied license. The official
+[Freebie Products terms](https://craftpix.net/file-licenses/) were reviewed again
+on this date. They allow use/modification in personal and commercial game projects,
+with restrictions on resale or redistribution of the artwork itself. No purchase
+or publication occurred. Other bosses, projectiles, fonts, and unused motions are
+excluded. Sprite mappings and active windows are recorded in
+[Step 06](../docs/steps/06-boss.md#boss-tuning-and-animation-mapping).

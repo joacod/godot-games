@@ -2,8 +2,11 @@ extends Node2D
 ## Street progression is independent of the title/pause run owner.
 
 signal hero_died
+signal won
 
-const ROUTE_BOUNDS := Rect2(48, 242, 2416, 70)
+const ROUTE_BOUNDS := Rect2(48, 242, 2672, 70)
+const BOSS_BOUNDS := Rect2(2180, 242, 540, 70)
+const BOSS = preload("res://scenes/enemies/boss.tscn")
 
 @onready var player: CharacterBody2D = $Actors/Player
 @onready var camera: Camera2D = $Camera
@@ -11,6 +14,8 @@ const ROUTE_BOUNDS := Rect2(48, 242, 2416, 70)
 var active: Node2D
 var prompt: String = "Move →  J: combo   Space: jump"
 var reached_entrance: bool = false
+var boss: CharacterBody2D
+var completed: bool = false
 
 
 func _ready() -> void:
@@ -31,6 +36,10 @@ func _physics_process(_delta: float) -> void:
 
 
 func _update_progress() -> void:
+	if reached_entrance:
+		player.ground_bounds = BOSS_BOUNDS
+		camera.position.x = BOSS_BOUNDS.get_center().x
+		return
 	if active == null:
 		for encounter in encounters:
 			if not encounter.started and player.position.x >= encounter.arena_bounds.position.x + 60.0:
@@ -48,10 +57,19 @@ func _update_progress() -> void:
 			if not encounter.started:
 				player.ground_bounds.size.x = encounter.arena_bounds.end.x - ROUTE_BOUNDS.position.x
 				break
-		camera.position.x = clampf(player.position.x, 320.0, 2240.0)
-		if encounters[1].finished and player.position.x >= 2300.0:
+		camera.position.x = clampf(player.position.x, 320.0, 2880.0)
+		if encounters[1].finished and player.position.x >= BOSS_BOUNDS.position.x + 60.0:
 			reached_entrance = true
-			prompt = "BOSS ENTRANCE SEALED — boss arrives in Step 06"
+			player.ground_bounds = BOSS_BOUNDS
+			player.position = player.position.clamp(BOSS_BOUNDS.position, BOSS_BOUNDS.end)
+			camera.position.x = BOSS_BOUNDS.get_center().x
+			boss = BOSS.instantiate()
+			boss.position = Vector2(2660, 278)
+			boss.ground_bounds = BOSS_BOUNDS
+			boss.target = player
+			$Actors.add_child(boss)
+			boss.defeat_finished.connect(_boss_defeated)
+			prompt = "Change depth to evade — punish OPEN recovery"
 	$Boundaries.queue_redraw()
 
 
@@ -67,7 +85,18 @@ func _hero_died() -> void:
 	for encounter in encounters:
 		for enemy in encounter.enemies:
 			enemy.cancel_attack()
+	if is_instance_valid(boss):
+		boss.cancel_attack()
 	hero_died.emit()
+
+
+func _boss_defeated() -> void:
+	if completed or player.health == 0:
+		return
+	completed = true
+	player.cancel_attack()
+	prompt = "STREET CLEARED"
+	won.emit()
 
 
 func _draw_boundaries() -> void:
@@ -76,4 +105,6 @@ func _draw_boundaries() -> void:
 		if encounter == active:
 			for x in [encounter.arena_bounds.position.x, encounter.arena_bounds.end.x]:
 				$Boundaries.draw_line(Vector2(x, 220), Vector2(x, 318), Color(1, 0.7, 0.2), 5.0)
-	$Boundaries.draw_line(Vector2(2464, 210), Vector2(2464, 318), Color(0.8, 0.3, 0.3), 8.0)
+	if reached_entrance:
+		for x in [BOSS_BOUNDS.position.x, BOSS_BOUNDS.end.x]:
+			$Boundaries.draw_line(Vector2(x, 220), Vector2(x, 318), Color(1, 0.7, 0.2), 5.0)
