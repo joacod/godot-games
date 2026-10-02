@@ -1,7 +1,7 @@
 extends SceneTree
 ## Run with --headless --path beat-em-up --fixed-fps 60 --script res://tests/movement_test.gd.
 
-const STREET = preload("res://main.tscn")
+const STREET = preload("res://scenes/level/movement_street.tscn")
 const MOVE_ACTIONS = ["move_left", "move_right", "move_up", "move_down"]
 
 var _checks: int = 0

@@ -8,7 +8,10 @@ Step 02 after manual testing on 2026-10-02. Step 03 combat
 regressions and rendered observations are recorded in its
 [completion record](steps/03-combat.md#completion-record); the user also reported
 manual testing and accepted Step 03 on 2026-10-02. No controller model or detailed
-device results were supplied. The remaining gameplay and final acceptance checks
+device results were supplied. Step 04 automated regressions and native rendered observations are recorded in
+its [completion record](steps/04-enemies.md#completion-record); the user confirmed manual testing
+and accepted Step 04 on 2026-10-02. No detailed device results were supplied;
+physical controller acceptance remains pending. The remaining gameplay and final acceptance checks
 below remain pending. Keep automated results separate from visual, input, controller,
 and audio observations. A missing controller leaves controller acceptance pending.
 

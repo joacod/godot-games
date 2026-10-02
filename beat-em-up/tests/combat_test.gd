@@ -1,7 +1,7 @@
 extends SceneTree
 ## Deterministic combat plus mapped input/pause regressions, without external runner.
 
-const STREET = preload("res://main.tscn")
+const STREET = preload("res://scenes/combat/combat_street.tscn")
 const DUMMY = preload("res://scenes/combat/dummy.tscn")
 var _checks: int = 0
 var _failures: int = 0

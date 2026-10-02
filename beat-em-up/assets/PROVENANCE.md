@@ -121,3 +121,20 @@ get-up reverses 4, 3, 2. Hurt uses indices 0, 1 for both.
 These are selected frames, not edited source pixels. Actual contact windows and
 phase-driven frame selection are in the
 [Step 03 record](../docs/steps/03-combat.md#combat-tuning-and-animation-mapping).
+
+## Step 04 ordinary enemies
+
+On 2026-10-02 imported unchanged PNGs from the already-acquired hero pack's
+`3 Cyborg/` directory in `/private/tmp/beat-assets/hero`: `Cyborg_idle.png`,
+`Cyborg_run.png`, `Cyborg_attack1.png`, `Cyborg_hurt.png`, `Cyborg_death.png` →
+`bruiser/idle.png`, `move.png`, `attack.png`, `hurt.png`, `fall.png` respectively.
+The existing [hero license record](licenses/hero.txt) applies. No new download,
+purchase, image editing, or license assertion. All frames are 48 × 48, displayed
+at 2× with sprite offset (-14, -48). Idle/move loop at 6/10 FPS; attack/hurt/fall
+and reverse get-up are driven by state timing. All idle/run/punch/hurt source
+frames are mapped; fall uses 0–3, get-up 3–0. The 6-frame punch contacts at index 4.
+
+Grunt resources reuse the existing seaport files, including the full walk sheet
+at 10 FPS; feet offset (-21, -48) and 2× scale are unchanged. Their fall/get-up
+mapping remains 2,3,4 / 4,3,2. Attack contact is index 4, recovery index 5 for both
+types. Source pixels are unchanged; phase timing is independent of sheet FPS.

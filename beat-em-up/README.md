@@ -4,11 +4,11 @@ A single-player, one-level street brawler inspired by Final Fight, in developmen
 Build a complete, enjoyable game first; make later art swaps straightforward
 through ordinary Godot scenes and Inspector values.
 
-**Status: Step 03 combat accepted after user-reported manual testing.**
-Step 02 was manually tested and accepted by the user. The bounded test street now
-has a three-hit combo, one attack per jump, damage/reactions, a stationary combat
-dummy, health/phase readout, and pause/reset. Enemy AI and encounters are not yet
-implemented.
+**Status: Step 04 enemies accepted after user-reported manual testing.**
+Steps 02 and 03 were accepted after user-reported manual testing. The test street
+now opens a live fight against two grunts and a slower, tougher Cyborg bruiser.
+Attacks have visible tells and at most two enemies commit simultaneously.
+Defeat the group or lose all health, then retry with R/controller Back.
 
 ## Open and run
 
@@ -31,11 +31,14 @@ the south face button. Escape/Start pauses and resumes; Enter/south also resumes
 while paused. R/Back resets the test street; J/west also resets while paused.
 J/west attacks. Press again near the end of each strike to queue the next,
 up to three; holding does not repeat. Space/south followed by J/west performs one
-air kick, which can hit only near the ground. Stand just left of the dummy in its
-depth lane: K/north triggers its normal incoming strike; L/right shoulder triggers
-a knockdown strike. Both have a visible windup and fixed left-facing reach.
-R/Back restores both actors and their health, including after death. The dummy
-stays dead until reset. The header shows health and the hero's combat phase.
+air kick, which can hit only near the ground. Change depth or move behind an
+enemy's committed tell to avoid its strike. Grunts strike faster; the armored
+bruiser has a longer tell and knocks the hero down. Body contact does no damage.
+R/Back restores the whole fight, including after victory, death, or pause.
+The header shows health and the number of reserved enemy attack slots.
+
+The Step 03 dummy remains available at `scenes/combat/combat_street.tscn` (F6).
+In that scene K/north triggers a normal strike and L/right shoulder a knockdown.
 
 The movement-stick deadzone is 0.25. After boot, resume, or reset, release held
 controls before fresh movement/jump input. Close the window to exit.
@@ -54,13 +57,14 @@ The original automatic art preview is preserved at
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --quit-after 120
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/movement_test.gd
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/combat_test.gd
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/enemies_test.gd
 git diff --check
 ```
 
-The movement and combat regression commands check bounds/jump/camera/input and
-hit eligibility/combo/reactions/pause/reset respectively. Synthetic controller
+The regression commands check movement, combat and crowd commitments/reset.
+Movement and combat suites open their original test scenes. Synthetic controller
 events do not establish hardware support. See the
-[Step 03 record](docs/steps/03-combat.md#completion-record) for tuning, automated
+[Step 04 record](docs/steps/04-enemies.md#completion-record) for tuning, automated
 results, rendered observations, and remaining hands-on checks.
 
 ## Start here

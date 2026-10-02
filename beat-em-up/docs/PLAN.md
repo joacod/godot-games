@@ -27,7 +27,7 @@ cuts, not claims that the game reproduces every Final Fight mechanic.
 Step 01's free-asset adaptations are approved for continued implementation;
 their final visual fit remains pending in the owning mechanics. Step 02 is
 accepted after user-reported manual testing. Step 03 is also accepted after
-user-reported manual testing. Steps 04–09 are **not started**. Steps depend
+user-reported manual testing. Step 04 is accepted after user-reported manual testing. Steps 05–09 are **not started**. Steps depend
 on the preceding step. They can be requested individually, but are not independent
 implementations.
 
@@ -36,7 +36,7 @@ implementations.
 | [01 — Foundation and asset fit](steps/01-foundation.md) | Implemented; free-asset adaptations approved, final art fit pending | Street sample boots; see validation record |
 | [02 — Movement and depth](steps/02-movement.md) | Accepted after user-reported manual testing | Bounded movement/jump test street; see validation record |
 | [03 — Combat](steps/03-combat.md) | Accepted after user-reported manual testing | Combo and jump-attack a dummy; see validation record |
-| [04 — Enemies](steps/04-enemies.md) | Two behaviors and fair crowd combat | Win or lose a small fight |
+| [04 — Enemies](steps/04-enemies.md) | Accepted after user-reported manual testing | Mixed fight with two grunts and one bruiser |
 | [05 — Level and encounters](steps/05-level.md) | Route, waves, gates, run state | Clear the street to the boss entrance |
 | [06 — Boss and completion](steps/06-boss.md) | Boss, victory/death/retry | Complete the entire game loop |
 | [07 — Props and recovery](steps/07-props.md) | Breakable, food, encounter balance | Use recovery along the finished route |
