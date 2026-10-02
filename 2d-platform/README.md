@@ -166,6 +166,27 @@ available; injected input checks cannot establish device behavior.
 
 ## Validation status and limits
 
+The demo completion plan is complete locally as of 2026-10-02. Step 7 passed
+startup and all eight focused suites with Godot 4.7.2. Native Metal/Mobile
+movement, combat, route, arena retry, menu navigation, and boss checks passed.
+Inspected title/help, opening level, pause/death, boss tell/wave, retry,
+defeat/open-exit, and completion frames. Fixed the missing player HUD after
+title → Play and corrected help/opening prompts for the required guardian and
+arena Retry. Native pixel checks now cover HUD visibility after every tested
+Main Menu/Play cycle, alongside the existing arena-retry checks.
+
+The navigation suite also checks returning to Main Menu from pause/death
+while boss waves are active, freeing the old boss/projectiles, and starting a
+fresh run with reset gates, bar, and entry state. Local documentation targets,
+tracked script UIDs, and `git diff --check` passed. Headless checks retain the
+known macOS certificate diagnostic; final native checks reported no errors.
+This session used automated input and rendered inspection, not a fresh human
+playthrough. The user's earlier human acceptance remains recorded below.
+Physical gamepad behavior remains unverified. See the
+[Step 7 record](PLAN.md#step-7-implementation-record--2026-10-02) for commands.
+
+### Earlier verification records
+
 The user confirmed on 2026-10-02 that the human playthrough is complete. The
 earlier records below retain the validation limits at the time of each step;
 their human-playthrough follow-ups are superseded by this confirmation.
@@ -195,7 +216,7 @@ optional follow-ups do not block the new [demo polish plan](PLAN.md). That plan
 covers a title screen, graphics, mechanics, menus, and a final boss. Steps 1–6
 (title/navigation, world/UI visual identity, jump forgiveness/height,
 distinct attacks/readable combat, refreshed route/arena retry point, and final
-boss/demo ending) are implemented. Step 7 remains pending.
+boss/demo ending) are implemented. Step 7's final verification is recorded above.
 
 Step 1 checks on 2026-10-01 passed startup, the new menu-navigation suite, and
 all four existing gameplay suites. Navigation checks cover keyboard help/back,

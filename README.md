@@ -16,7 +16,9 @@ Different games created with [Godot Engine](https://godotengine.org/), some of t
 
 - [2D Platform](2d-platform/README.md): a Godot 4.7 platformer demo with a title
   screen, a ruined-fortress level, optional combat and gems, and a final guardian.
-  Includes pause, level and arena retries, and a demo-complete ending.
+  Includes forgiving jumps, three distinct attacks, pause, level and arena
+  retries, and a demo-complete ending. The local completion plan is finished;
+  physical gamepad testing and distribution remain follow-ups.
 
 ## ☕️ Did you like the project?
 
