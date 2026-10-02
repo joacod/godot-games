@@ -53,6 +53,7 @@ func _run():
 		var passing_enemy = false
 		var jumps = 0
 		var elapsed_ticks = 0
+		var lowest_health = character.health
 		Input.action_press("right")
 		if running:
 			Input.action_press("run")
@@ -88,6 +89,7 @@ func _run():
 				jumps += 1
 			await tick()
 			elapsed_ticks += 1
+			lowest_health = mini(lowest_health, character.health)
 			if elapsed_ticks % 120 == 0:
 				var camera = character.get_node("Camera2D")
 				camera.force_update_scroll()
@@ -97,7 +99,7 @@ func _run():
 		print("Finish position %s, surface %s / %s" % [character.position, surface_index, route.size()])
 		release_inputs()
 		check(run.state == run.RunState.WON, "%s route reaches the real exit without teleporting" % ("Running" if running else "Walking"))
-		check(character.health == 3, "The enemy and spikes can be avoided without damage")
+		check(lowest_health == 3, "The enemy and spikes can be avoided without damage before entry healing")
 		check(run.collected_count == 0, "Elevated gems are optional")
 		check(surface_index == route.size() - 1, "Every mandatory platform was traversed")
 		print("%s traversal: %.1f simulated seconds, %s jumps, health %s" % ["Run" if running else "Walk with run jump past patrol", elapsed_ticks / 60.0, jumps, character.health])
@@ -160,5 +162,5 @@ func _run():
 			await tick()
 		check(character.is_on_floor() and character.health == 3 and absf(character.position.y + 146.0 - 864.0) < 4.0, "Optional shelf returns safely to the main route")
 		release_inputs()
-	print("Step 5 level route checks: %s" % ("PASS" if failures == 0 else "FAIL (%s)" % failures))
+	print("Level route checks: %s" % ("PASS" if failures == 0 else "FAIL (%s)" % failures))
 	quit(0 if failures == 0 else 1)

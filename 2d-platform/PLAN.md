@@ -1,7 +1,7 @@
 # Polish the platformer into a complete demo
 
 Status: the original playable-level plan is complete and accepted by the user
-on 2026-10-01. This is the new active plan. Steps 1–4 are implemented; Steps 5–7 have not started.
+on 2026-10-01. This is the new active plan. Steps 1–5 are implemented; Steps 6–7 have not started.
 
 ## Goal
 
@@ -201,7 +201,7 @@ remaining bugs; do not use a headless result as evidence of gameplay feel.
 - [x] 2. World and UI visual identity
 - [x] 3. Movement and camera feel
 - [x] 4. Distinct attacks and readable combat
-- [ ] 5. Refreshed level, arena, and boss retry point
+- [x] 5. Refreshed level, arena, and boss retry point
 - [ ] 6. Final boss and demo ending
 - [ ] 7. Complete-demo polish and verification
 
@@ -305,6 +305,43 @@ remaining bugs; do not use a headless result as evidence of gameplay feel.
 - Remaining live checks: human attack tradeoffs/combat feel, fresh full route,
   and physical gamepad. Step 5 has not started. No branch, commit, push, PR,
   or publication performed.
+
+### Step 5 implementation record — 2026-10-01
+
+- Condensed `main.tscn` from 24,768 to 11,280 px wide, retaining useful opening
+  geometry and arranging nine main stretches around forgiving gaps, both optional
+  gem shelves, one teaching patrol, readable spikes, and a courtyard approach.
+  Repositioned existing instances/props and prompts. Added a 2,112 px-wide
+  courtyard with decorative piers, arches, banner, and an entry boundary.
+- `run_state.gd` now records entry once, restores full health, bounds the arena,
+  and reloads pause/death retries at a safe arena spawn with the entry count.
+  Scene replacement clears combat/movement state; approach gems cannot be
+  collected again. Before entry, Retry still starts the level. Completion's
+  button reads Play Again and starts fresh; Main Menu/Play clears entry state.
+  The temporary exit remains completable. No autoload or persistent saves.
+- Added `tests/arena_retry.gd` and its generated UID. Strengthened the route
+  suite to track damage before entry healing. Updated README, ASSETS, and this
+  record. Movement, player/enemy combat, input mappings, title/help, shared theme,
+  reusable hazard/pickup/exit scenes, texture atlases/SpriteFrames, engine, and
+  renderer are untouched. No assets or dependencies were added.
+- Godot 4.7.2 startup and all seven focused suites passed: movement, navigation,
+  damage/death/retry, combat, game loop, route, and arena retry. Walking/running
+  routes, patrol phases, optional shelf returns, and camera bounds passed.
+  Arena checks also passed with native Metal/Mobile rendering and exercise
+  real entry/collection physics, 0/1/2 gem snapshots, repeated death/pause
+  retries, safe bounds/spawn, clean transients, held confirm,
+  temporary exit, Play Again, and Main Menu/Play resets.
+- Native Metal/Mobile start/gem/patrol/spikes/approach/courtyard and wide/tall
+  arena-retry frames were inspected. Corrected a floating barrel and courtyard
+  draw order found during inspection. Added a one-time HUD redraw after arena
+  restoration to fix missing native HUD draw lists, with a native pixel check.
+  `git diff --check` passed. Headless runs retain the known macOS certificate
+  diagnostic; editor import generated the
+  UID but could not save user editor settings under the sandbox. No scene/script
+  errors occurred.
+- Remaining live checks: human route pacing/combat playthrough and physical
+  gamepad. The courtyard has no boss yet; Step 6 has not started. No branch,
+  commit, push, PR, or publication performed.
 
 ## Out of scope
 
