@@ -57,7 +57,7 @@ func _run():
 		Input.action_press("right")
 		if running:
 			Input.action_press("run")
-		while run.state == run.RunState.PLAYING and elapsed_ticks < 9000:
+		while run.state == run.RunState.PLAYING and not run.arena_entered and elapsed_ticks < 9000:
 			var center = character.position.x + 44.0
 			if surface_index + 1 < route.size() and center >= route[surface_index + 1].start and character.is_on_floor() and absf(character.position.y + 146.0 - route[surface_index + 1].top) < 4.0:
 				surface_index += 1
@@ -98,7 +98,7 @@ func _run():
 				check(camera_center.x - half_view.x >= camera.limit_left - 1.0 and camera_center.x + half_view.x <= camera.limit_right + 1.0 and camera_center.y - half_view.y >= camera.limit_top - 1.0 and camera_center.y + half_view.y <= camera.limit_bottom + 1.0, "Camera rectangle stays inside the level throughout traversal")
 		print("Finish position %s, surface %s / %s" % [character.position, surface_index, route.size()])
 		release_inputs()
-		check(run.state == run.RunState.WON, "%s route reaches the real exit without teleporting" % ("Running" if running else "Walking"))
+		check(run.arena_entered and run.state == run.RunState.PLAYING, "%s route reaches the boss entry without teleporting" % ("Running" if running else "Walking"))
 		check(lowest_health == 3, "The enemy and spikes can be avoided without damage before entry healing")
 		check(run.collected_count == 0, "Elevated gems are optional")
 		check(surface_index == route.size() - 1, "Every mandatory platform was traversed")

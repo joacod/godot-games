@@ -8,11 +8,13 @@ var state = RunState.PLAYING
 var collected_count = 0
 var arena_entered = false
 var arena_entry_count = 0
+var boss_defeated = false
 @onready var character = $CharacterBody2D
 @onready var death_ui = $DeathUI
 @onready var pause_ui = $PauseUI
 @onready var win_ui = $WinUI
 @onready var hud = $HUD
+@onready var boss = $Boss
 
 func _ready():
 	# Only this transition owner and menus run while gameplay is paused.
@@ -29,6 +31,8 @@ func _ready():
 	pause_ui.get_node("Overlay/Panel/Buttons/Resume").pressed.connect(resume)
 	for pickup in $Collectibles.get_children():
 		pickup.collected.connect(_on_collected)
+	boss.health_changed.connect(_update_boss_health)
+	boss.defeated.connect(_on_boss_defeated)
 	$Exit.reached.connect(_on_exit_reached)
 	$ArenaEntry.body_entered.connect(_on_arena_entered)
 	_update_health(character.health)
@@ -44,6 +48,7 @@ func _on_arena_entered(body):
 	character.player.modulate = Color.WHITE
 	character.health_changed.emit(character.health)
 	_bound_arena()
+	_start_boss()
 
 func _bound_arena():
 	# Entry detection starts beyond the player's radius, clear of the closing wall.
@@ -51,6 +56,27 @@ func _bound_arena():
 	$ArenaGate.show()
 	character.get_node("Camera2D").limit_left = int($ArenaBoundary.position.x - 16)
 	character.get_node("Camera2D")._fit_viewport()
+
+func _start_boss():
+	$BossHUD.show()
+	$BossHUD/Panel/Info/Health.max_value = boss.max_health
+	boss.start_encounter(character)
+
+func _update_boss_health(value):
+	$BossHUD/Panel/Info/Health.value = value
+	$BossHUD/Panel/Info/Name.text = "GUARDIAN · PHASE 2" if value <= boss.max_health / 2.0 else "COURTYARD GUARDIAN"
+
+func _on_boss_defeated():
+	if state != RunState.PLAYING or character.is_dead or boss_defeated:
+		return
+	boss_defeated = true
+	$BossHUD.hide()
+	$ExitBoundary/CollisionShape2D.set_deferred("disabled", true)
+	$ArenaBoundary/CollisionShape2D.set_deferred("disabled", true)
+	$ExitGate.hide()
+	$ArenaGate.hide()
+	$Exit.unlock()
+	$RouteSigns/Arena.text = "GUARDIAN DEFEATED\nExit open →"
 
 func _unhandled_input(event):
 	if event.is_action_pressed("pause") and not event.is_echo():
@@ -80,8 +106,9 @@ func _on_collected():
 	_update_count()
 
 func _on_exit_reached():
-	if state != RunState.PLAYING or character.is_dead:
+	if state != RunState.PLAYING or character.is_dead or not boss_defeated:
 		return
+	boss.stop_encounter()
 	state = RunState.WON
 	get_tree().paused = true
 	win_ui.get_node("Overlay/Panel/Buttons/Count").text = "Collected: %s" % collected_count
@@ -91,6 +118,7 @@ func _on_exit_reached():
 func _on_player_died():
 	if state != RunState.PLAYING:
 		return
+	boss.stop_encounter()
 	state = RunState.DEAD
 	get_tree().paused = true
 	death_ui.show()
@@ -111,6 +139,7 @@ func retry():
 	var previous_state = state
 	state = RunState.RETRYING
 	character.clear_movement_state()
+	boss.stop_encounter()
 	# Reload outside physics callbacks, replacing the entire run, not just the player.
 	_reload_level.call_deferred(previous_state)
 
@@ -139,6 +168,7 @@ static func _restore_arena(tree, entry_count):
 	run.collected_count = entry_count
 	run.character.position = run.get_node("ArenaSpawn").position
 	run._bound_arena()
+	run._start_boss()
 	# All gems are before the boundary. Remove even uncollected ones to prevent
 	# a restored count from ever being increased by replaying the approach.
 	for pickup in run.get_node("Collectibles").get_children():
@@ -165,6 +195,7 @@ func main_menu():
 	var previous_state = state
 	state = RunState.RETRYING
 	character.clear_movement_state()
+	boss.stop_encounter()
 	_open_main_menu.call_deferred(previous_state)
 
 func _open_main_menu(previous_state):

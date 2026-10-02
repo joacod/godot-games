@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cklx3ai2go6q7"]
+[gd_scene load_steps=26 format=3 uid="uid://cklx3ai2go6q7"]
 
 [ext_resource type="Texture2D" path="res://fortress_art/masonry.svg" id="2_4rmy6"]
 [ext_resource type="PackedScene" uid="uid://c62b2vf5owq8q" path="res://scenes/main_character.tscn" id="3_ivxs8"]
@@ -21,6 +21,19 @@
 [ext_resource type="Texture2D" path="res://fortress_art/barrel.png" id="17_barrel"]
 [ext_resource type="Texture2D" path="res://fortress_art/shield.png" id="18_shield"]
 [ext_resource type="Texture2D" path="res://fortress_art/window.png" id="19_window"]
+
+[ext_resource type="PackedScene" path="res://scenes/boss.tscn" id="21_boss"]
+
+[sub_resource type="StyleBoxFlat" id="BossHealthBackground"]
+bg_color = Color(0.07, 0.12, 0.16, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.48, 0.43, 0.29, 1)
+
+[sub_resource type="StyleBoxFlat" id="BossHealthFill"]
+bg_color = Color(0.45, 0.8, 0.78, 1)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dcf4v"]
 texture = ExtResource("2_4rmy6")
@@ -2162,6 +2175,7 @@ position = Vector2(8048, 560)
 
 [node name="Exit" parent="." instance=ExtResource("10_exit")]
 position = Vector2(10992, 800)
+unlocked = false
 
 [node name="HUD" parent="." instance=ExtResource("11_hud")]
 
@@ -2358,7 +2372,8 @@ offset_bottom = 384.0
 theme = ExtResource("20_theme")
 theme_override_font_sizes/font_size = 32
 text = "THE FINAL COURTYARD
-Retry returns here · Exit open for now →"
+Sweep: step back · Ground wave: jump
+Defeat the guardian to open the exit →"
 horizontal_alignment = 1
 
 [node name="EntryTorch" type="Sprite2D" parent="FortressProps/Courtyard"]
@@ -2394,3 +2409,52 @@ color = Color(0.18, 0.25, 0.28, 1)
 [node name="StoneCourse1" type="Polygon2D" parent="FortressProps/Courtyard"]
 polygon = PackedVector2Array(64, 800, 2048, 800, 2048, 804, 64, 804)
 color = Color(0.18, 0.25, 0.28, 1)
+
+[node name="Boss" parent="." instance=ExtResource("21_boss")]
+position = Vector2(10112, 864)
+
+[node name="ExitBoundary" type="StaticBody2D" parent="."]
+position = Vector2(10848, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitBoundary"]
+shape = SubResource("RectangleShape2D_arena_wall")
+
+[node name="ExitGate" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(10832, 0, 10864, 0, 10864, 864, 10832, 864)
+color = Color(0.29, 0.34, 0.35, 1)
+
+[node name="BossHUD" type="CanvasLayer" parent="."]
+layer = 5
+visible = false
+
+[node name="Panel" type="PanelContainer" parent="BossHUD"]
+anchors_preset = 12
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -116.0
+offset_right = 220.0
+offset_bottom = -24.0
+theme = ExtResource("20_theme")
+mouse_filter = 2
+
+[node name="Info" type="VBoxContainer" parent="BossHUD/Panel"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Name" type="Label" parent="BossHUD/Panel/Info"]
+layout_mode = 2
+text = "COURTYARD GUARDIAN"
+horizontal_alignment = 1
+
+[node name="Health" type="ProgressBar" parent="BossHUD/Panel/Info"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("BossHealthBackground")
+theme_override_styles/fill = SubResource("BossHealthFill")
+max_value = 12.0
+value = 12.0
+show_percentage = false

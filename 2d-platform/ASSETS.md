@@ -241,4 +241,43 @@ entry boundary at x=9152 closes only after the player's capsule has cleared
 it; the right edge uses the level's existing full-height wall treatment.
 The entry Area2D detects only Player across the level height, so jumping
 through entry cannot skip the retry point. The safe retry origin is (9360, 718).
-The temporary exit sits at (10992, 800) and remains usable without a boss.
+The exit sits at (10992, 800); Step 6 seals it until guardian defeat.
+
+## Courtyard guardian and boss gates
+
+Step 6 adds no downloaded artwork. `scenes/boss.tscn` reuses the existing
+128 × 128 Gorgon Walk/Hurt/Dead atlas frames and their existing frame order;
+the player and ordinary enemy SpriteFrames remain unchanged. The guardian
+uses the standing Walk frame at 2.5× scale, teal tint, a native gold crown,
+hit flash/impact rays, and the three-frame Dead animation at 10 FPS. This
+retains the existing creature silhouette; the crown and size distinguish it.
+The original Gorgon source/license remains as documented above.
+
+The guardian stands at (10112, 864). Its enemy-layer damage receiver is a
+100 × 210 px rectangle centred 105 px above the floor. Player collision masks
+allow walking through it; body contact deals no damage. A 220 × 120 px sweep
+is centred 155 px towards the committed facing, 90 px above the floor. Its
+gold tell rectangle matches that area; teal swipe lines cover its reach.
+Two 64 × 40 px ground-wave areas, centred 20 px above the floor, use matching
+native jagged stone polygons. They start 70 px either side of the boss, travel
+at 650 px/s, and disappear at the courtyard boundaries or end of attack.
+Each attack damages a player at most once. The waves share one hit registry,
+so crossing both cannot cause a second hit in the same attack.
+
+| Guardian value | Default |
+| --- | --- |
+| Health / damage per attack | 12 / 1 |
+| Idle between tells | 0.7 s |
+| Sweep tell / strike | 0.7 / 0.22 s |
+| Ground-wave tell / attack lifetime | 1.0 / 2.2 s |
+| Recovery above / at or below half health | 1.2 / 0.85 s |
+| Vulnerability | All states after entry; hits do not interrupt the committed attack |
+
+Native effects use fortress gold for tells and pale teal for attacks/recovery.
+A compact bottom-centred health bar uses the shared menu theme and announces
+phase two. Gates use the existing 32 px stone boundary shape. The entry gate
+closes safely after entry as before; a second gate at x=10848 blocks the exit
+and opens on defeat. The locked exit hides its arrow, darkens its opening,
+and reads SEALED; defeat restores the teal arrow and EXIT label. Existing
+terrain, hazard/pickup shapes, player/enemy sheets, and camera bounds are
+unchanged. No new third-party assets or license claims are introduced.

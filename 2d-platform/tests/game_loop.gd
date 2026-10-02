@@ -127,7 +127,10 @@ func _run():
 	await key_event(KEY_ESCAPE)
 	await key_event(KEY_ESCAPE, false)
 	check(not paused, "Escape also resumes")
-	# Win does not require all pickups or enemy defeat.
+	# Completion requires the boss, but ordinary combat and pickups stay optional.
+	run._on_arena_entered(character)
+	run.boss.take_damage(run.boss.max_health)
+	await ticks()
 	character.position = run.get_node("Exit").position - Vector2(44, 77)
 	await ticks()
 	check(run.state == run.RunState.WON and paused and run.win_ui.visible, "Real exit overlap wins with an enemy alive and a pickup remaining")

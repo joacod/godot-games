@@ -94,11 +94,13 @@ func _run():
 			camera.force_update_scroll()
 			var half_view = camera.get_viewport_rect().size / camera.zoom / 2
 			check(camera.get_screen_center_position().x - half_view.x >= camera.limit_left - 1, "Retry camera starts within arena bounds")
-		# Temporary exit remains reachable from the real retry spawn.
+		# Defeating the boss opens the actual exit from the retry spawn.
+		run.boss.take_damage(run.boss.max_health)
+		await ticks()
 		Input.action_press("right")
 		await ticks(280)
 		Input.action_release("right")
-		check(run.state == run.RunState.WON and run.collected_count == gems, "Arena retry can still reach the temporary exit")
+		check(run.state == run.RunState.WON and run.collected_count == gems, "Arena retry reaches the exit after boss defeat")
 		run.win_ui.get_node("Overlay/Panel/Buttons/Retry").pressed.emit()
 		await scene_changed
 		run = current_scene
