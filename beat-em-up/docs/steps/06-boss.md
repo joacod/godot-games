@@ -1,6 +1,6 @@
 # Step 06 — Boss and complete game loop
 
-Status: implemented, pending manual validation. Prerequisite: Step 05 accepted.
+Status: accepted by user for progression. Prerequisite: Step 05 accepted.
 
 ## Outcome
 
@@ -74,7 +74,9 @@ Main Menu removes it. Menu confirmation requires release before gameplay input.
 ## Completion record
 
 Implemented on 2026-10-02 with Godot **4.7.2.stable.official.ed1daf0bf**,
-Compatibility renderer. **Pending manual acceptance.**
+Compatibility renderer. Accepted by the user for progression on 2026-10-02
+when confirming Step 07. Detailed hands-on observations were not supplied;
+the remaining checks below still need recorded evidence.
 
 Files changed:
 
@@ -140,4 +142,5 @@ commit, branch, push, PR, or publication.
 Remaining hands-on checks: title-to-victory clear; intentionally evade and punish
 both attacks; die to the boss and Retry; Play Again; pause/resume and Main Menu
 in actual combat; resized display and real controller (record device). Health,
-attack timing and route duration need playtest feedback. Step 07 has not started.
+attack timing and route duration need playtest feedback. Step 07's implementation
+and pending recovery/balance acceptance are recorded in [Step 07](07-props.md).

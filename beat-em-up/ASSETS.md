@@ -1,6 +1,6 @@
 # Asset brief and candidate sources
 
-**Status: Step 06 imports Toxic Enforcer from the reviewed free boss pack, 2026-10-02.** Biker, seaport enemy 1, and a
+**Status: Step 07 adds a cropped street crate and free CraftPix ribs icon, 2026-10-02.** Biker, seaport enemy 1, and a
 street backdrop are in the project. The acquisition record and exact sample
 mapping are in [asset provenance](assets/PROVENANCE.md). Other entries below
 remain candidates, not verified animation coverage.
@@ -124,3 +124,14 @@ frames display at 2×, with foot offset (-48, -96). Native staged rendering was
 inspected; attack readability, balance, and final cast acceptance remain pending
 hands-on play. No new pack, paid asset, replacement artwork, or other boss was added.
 See [Step 06](docs/steps/06-boss.md#boss-tuning-and-animation-mapping).
+
+Step 07 crops a single crate from City1 Bright `boxes&container.png` in the
+already-acquired street pack. The broken state reuses narrow strips of that crop
+as fallen planks. The free seaport tileset was reviewed as an alternative;
+the existing street art supplied a suitable crate without another tileset import.
+For food, imported only `1 Icons/Icons_17.png` (Ribs/meat) from
+[Free Pixel Art Icons for Mine Location](https://craftpix.net/freebies/free-pixel-art-icons-for-mine-location/).
+The 32 × 32 transparent PNG is unchanged. Native staged rendering checked scale,
+labels and ground sorting; full-route visual fit and recovery balance remain
+pending manual acceptance. Exact source/crop details are in
+[provenance](assets/PROVENANCE.md#step-07-crate-and-food).

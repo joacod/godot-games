@@ -23,8 +23,9 @@ func _test() -> void:
 		and hero.ground_bounds == street.BOSS_BOUNDS, "safe boss entry locks arena and camera")
 	_check(boss.health == 240 and boss.position.distance_to(hero.position) >= 80.0,
 		"boss starts healthy and separated from hero")
+	var receivers := get_nodes_in_group("damage_receivers").size()
 	street._update_progress()
-	_check(get_nodes_in_group("damage_receivers").size() == 8, "repeated boss entry cannot duplicate actors")
+	_check(get_nodes_in_group("damage_receivers").size() == receivers, "repeated boss entry cannot duplicate actors")
 	# AI alternates the two designed attacks, committing facing and depth.
 	boss.position = Vector2(2450, 278)
 	hero.position = Vector2(2398, 278)

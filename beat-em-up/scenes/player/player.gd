@@ -116,6 +116,17 @@ func require_input_release() -> void:
 	velocity = Vector2.ZERO
 
 
+func restore_health(amount: int) -> int:
+	if amount <= 0 or health <= 0 or jump_height > 0.0 or _jump_velocity > 0.0:
+		return 0
+	var restored := mini(amount, max_health - health)
+	if restored <= 0:
+		return 0
+	health += restored
+	health_changed.emit(health)
+	return restored
+
+
 func reset() -> void:
 	super.reset()
 	_air_attack_used = false

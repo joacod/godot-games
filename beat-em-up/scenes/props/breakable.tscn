@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/props/breakable.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/props/crate.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="Plank"]
+atlas = ExtResource("2")
+region = Rect2(18, 20, 204, 24)
+
+[node name="Breakable" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Shadow" type="Polygon2D" parent="."]
+color = Color(0.03, 0.04, 0.07, 0.4)
+polygon = PackedVector2Array(-32, -3, -24, -8, 24, -8, 32, -3, 24, 3, -24, 3)
+
+[node name="Intact" type="Sprite2D" parent="."]
+position = Vector2(0, -29.75)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2")
+
+[node name="Debris" type="Node2D" parent="."]
+visible = false
+
+[node name="PlankLeft" type="Sprite2D" parent="Debris"]
+position = Vector2(-9, -5)
+rotation = -0.18
+scale = Vector2(0.25, 0.25)
+texture = SubResource("Plank")
+
+[node name="PlankRight" type="Sprite2D" parent="Debris"]
+position = Vector2(7, -9)
+rotation = 0.3
+scale = Vector2(0.25, 0.25)
+texture = SubResource("Plank")
+
+[node name="Hint" type="Label" parent="."]
+offset_left = -54.0
+offset_top = -79.0
+offset_right = 54.0
+offset_bottom = -61.0
+theme_override_font_sizes/font_size = 12
+text = "J: break for food"
+horizontal_alignment = 1

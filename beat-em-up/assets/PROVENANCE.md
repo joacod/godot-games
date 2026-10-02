@@ -163,3 +163,26 @@ with restrictions on resale or redistribution of the artwork itself. No purchase
 or publication occurred. Other bosses, projectiles, fonts, and unused motions are
 excluded. Sprite mappings and active windows are recorded in
 [Step 06](../docs/steps/06-boss.md#boss-tuning-and-animation-mapping).
+
+## Step 07 crate and food
+
+On 2026-10-02 reused the original street archive's
+`PNG/City1/Bright/boxes&container.png` (1920 × 1080).
+The extracted source in `/private/tmp/beat-assets/street/` was verified byte-for-byte
+against the original archive in Downloads. Cropped `Rect2(978, 448, 240, 238)`
+into `props/crate.png`, without resizing or recoloring; the scene displays it at
+0.25×, anchored at bottom center. The existing [street license record](licenses/street.txt)
+applies. Broken planks reuse `Rect2(18, 20, 204, 24)` of that crop, positioned
+and rotated in the scene; no replacement bitmap was generated.
+
+Downloaded the free archive `craftpix-net-703342-free-pixel-art-icons-for-mine-location.zip`
+through the user's Chrome session from
+[Free Pixel Art Icons for Mine Location](https://craftpix.net/freebies/free-pixel-art-icons-for-mine-location/).
+Imported only `1 Icons/Icons_17.png` → `props/food.png`, an unchanged transparent
+32 × 32 PNG identified as Ribs (meat) by the archive's `Icons_name.txt`.
+Displayed at 1× with center (0, -16) above its ground root.
+The supplied `License.txt` is preserved as [food.txt](licenses/food.txt);
+it contains the official license URL. The
+[Freebie Products terms](https://craftpix.net/file-licenses/) were reviewed on
+acquisition. Publisher is CraftPix.net; no individual artist was supplied.
+No purchase, other icons, PSD, font, replacement art, or publication was added.
