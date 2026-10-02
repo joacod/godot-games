@@ -1,6 +1,6 @@
 # Step 02 — Movement, depth and jump
 
-Status: implemented; hands-on/controller validation pending. Prerequisite:
+Status: accepted by the user after manual testing. Prerequisite:
 Step 01 foundation evidence and the user's free-asset decision are recorded.
 
 ## Outcome
@@ -128,3 +128,10 @@ No branch, commit, push, PR, purchase, or publication was performed.
 Complete the hands-on keyboard/controller checks above. Approved missing-motion
 adaptations and final bruiser/boss art fit remain for their owning mechanics;
 Step 02 does not claim those animations are complete. Stop here before Step 03.
+
+### User acceptance update
+
+On 2026-10-02, before Step 03, the user reported: “Step 02 was manually tested
+all good, go”. Step 02 is accepted on that user-reported manual evidence. The
+original automated/native observations above remain the historical implementation
+record. No controller model or additional device-specific results were supplied.

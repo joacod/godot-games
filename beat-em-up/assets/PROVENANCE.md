@@ -99,3 +99,25 @@ Two additional free archives were downloaded through signed-in Chrome for review
 These remain in Downloads; no files from either archive were imported into this
 project. They establish only the asset-review observations in the asset brief.
 No purchase or new license grant is asserted by this review.
+
+## Step 03 combat subset
+
+On 2026-10-02, copied unchanged PNGs from the already-acquired original archives:
+`1 Biker/Biker_hurt.png` → `hero/hurt.png` (96 × 48),
+`1 Biker/Biker_death.png` → `hero/fall.png` (288 × 48),
+seaport `1/Hurt.png` → `enemy/hurt.png` (96 × 48), and
+`1/Death.png` → `enemy/fall.png` (288 × 48).
+The source extraction in `/private/tmp/beat-assets` matches the original used
+hero/enemy sheets byte-for-byte. Existing hero/enemy license records apply;
+no new download, purchase, or license assertion was made.
+
+Combat uses separate frame resources, preserving all original sample mappings.
+Each source frame remains 48 × 48 with the existing feet offsets and 2× scale.
+The hero's second punch uses indices 5, 6, 7, 5, removing the first punch.
+Finisher uses kick indices 0–5; air attack uses 2, 3, 4, 5.
+Hero fall uses 0, 1, 2 (before the fragmented tail); get-up reverses 2, 1, 0.
+Dummy fall uses 2, 3, 4 (omitting initial muzzle flashes and final tail);
+get-up reverses 4, 3, 2. Hurt uses indices 0, 1 for both.
+These are selected frames, not edited source pixels. Actual contact windows and
+phase-driven frame selection are in the
+[Step 03 record](../docs/steps/03-combat.md#combat-tuning-and-animation-mapping).

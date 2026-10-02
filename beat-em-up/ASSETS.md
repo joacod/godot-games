@@ -1,6 +1,6 @@
 # Asset brief and candidate sources
 
-**Status: Step 02 uses the existing free assets, 2026-10-02.** Biker, seaport enemy 1, and a
+**Status: Step 03 uses the existing free assets and approved adaptations, 2026-10-02.** Biker, seaport enemy 1, and a
 street backdrop are in the project. The acquisition record and exact sample
 mapping are in [asset provenance](assets/PROVENANCE.md). Other entries below
 remain candidates, not verified animation coverage.
@@ -19,8 +19,9 @@ remain candidates, not verified animation coverage.
   mechanics: trim the second punch into one strike; use the kick as
   the finisher and air attack; use non-disintegrating death/fall frames for
   knockdown and reverse the fall into recovery. Validate these visually when
-  implementing the owning mechanics. These are approved adaptations, not yet
-  implemented or visually accepted combat/recovery animations.
+  implementing the owning mechanics. These are approved adaptations, implemented in Step 03 and inspected as
+  rendered poses. The user accepted Step 03 after manual testing; no detailed
+  device results were supplied.
 - The free extra-animation and factory-boss archives were inspected before Step
   02. Extra motions provide walk and airborne fall/landing poses, but no dedicated
   air attack or get-up. Toxic Enforcer has readable melee punches, running poses,
@@ -103,3 +104,9 @@ damage rules, or menu flow. Different proportions can require explicit offsets,
 collision footprints, reach, and animation timing adjustments; a swap is not
 promised to be a filename replacement. Step 09 will prove and document this with
 one real alternate character using a duplicate validation scene.
+
+Step 03 imports only Biker and seaport enemy 1 hurt/death sheets from the original
+archives. Gameplay trims the second punch, maps the kick to finisher/air attack,
+and selects intact fall frames with reverse recovery. See the exact frame mapping
+and phase timing in [Step 03](docs/steps/03-combat.md#combat-tuning-and-animation-mapping).
+No new pack, replacement artwork, paid asset, or extra-animation import was needed.
