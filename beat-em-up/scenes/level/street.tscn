@@ -1,0 +1,114 @@
+[gd_scene load_steps=8 format=3]
+[ext_resource type="Script" path="res://scenes/level/street.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/street/city.png" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/grunt.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/bruiser.tscn" id="5"]
+[ext_resource type="Script" path="res://scenes/level/encounter.gd" id="6"]
+[sub_resource type="AtlasTexture" id="RoadExtension"]
+atlas = ExtResource("2")
+region = Rect2(0, 900, 1920, 180)
+[node name="Street" type="Node2D"]
+process_mode = 1
+script = ExtResource("1")
+[node name="Scenery" type="Node2D" parent="."]
+
+[node name="StreetLeft" type="Sprite2D" parent="Scenery"]
+position = Vector2(0, -60)
+scale = Vector2(0.33333334, 0.33333334)
+texture = ExtResource("2")
+centered = false
+
+[node name="StreetRight" type="Sprite2D" parent="Scenery"]
+position = Vector2(640, -60)
+scale = Vector2(0.33333334, 0.33333334)
+texture = ExtResource("2")
+centered = false
+flip_h = true
+
+[node name="RoadLeft" type="Sprite2D" parent="Scenery"]
+position = Vector2(0, 300)
+scale = Vector2(0.33333334, 0.33333334)
+texture = SubResource("RoadExtension")
+centered = false
+flip_v = true
+
+[node name="RoadRight" type="Sprite2D" parent="Scenery"]
+position = Vector2(640, 300)
+scale = Vector2(0.33333334, 0.33333334)
+texture = SubResource("RoadExtension")
+centered = false
+flip_h = true
+flip_v = true
+
+[node name="StreetFarLeft" type="Sprite2D" parent="Scenery"]
+position = Vector2(1280, -60)
+scale = Vector2(0.33333334, 0.33333334)
+texture = ExtResource("2")
+centered = false
+
+[node name="StreetFarRight" type="Sprite2D" parent="Scenery"]
+position = Vector2(1920, -60)
+scale = Vector2(0.33333334, 0.33333334)
+texture = ExtResource("2")
+centered = false
+flip_h = true
+
+[node name="RoadFarLeft" type="Sprite2D" parent="Scenery"]
+position = Vector2(1280, 300)
+scale = Vector2(0.33333334, 0.33333334)
+texture = SubResource("RoadExtension")
+centered = false
+flip_v = true
+
+[node name="RoadFarRight" type="Sprite2D" parent="Scenery"]
+position = Vector2(1920, 300)
+scale = Vector2(0.33333334, 0.33333334)
+texture = SubResource("RoadExtension")
+centered = false
+flip_h = true
+flip_v = true
+
+
+[node name="Boundaries" type="Node2D" parent="."]
+z_index = 1
+
+[node name="Actors" type="Node2D" parent="."]
+y_sort_enabled = true
+[node name="Player" parent="Actors" instance=ExtResource("3")]
+position = Vector2(160, 278)
+[node name="Camera" type="Camera2D" parent="."]
+position = Vector2(320, 180)
+limit_left = 0
+limit_top = 0
+limit_right = 2560
+limit_bottom = 360
+process_callback = 0
+[node name="FirstFight" type="Node2D" parent="."]
+script = ExtResource("6")
+arena_bounds = Rect2(480, 242, 540, 70)
+waves = Array[PackedScene]([ExtResource("4"), ExtResource("4")])
+wave_sizes = Array[int]([2])
+[node name="Spawns" type="Node2D" parent="FirstFight"]
+[node name="Spawn0" type="Marker2D" parent="FirstFight/Spawns"]
+position = Vector2(540, 252)
+[node name="Spawn1" type="Marker2D" parent="FirstFight/Spawns"]
+position = Vector2(960, 300)
+[node name="Spawn2" type="Marker2D" parent="FirstFight/Spawns"]
+position = Vector2(580, 300)
+[node name="Spawn3" type="Marker2D" parent="FirstFight/Spawns"]
+position = Vector2(920, 252)
+[node name="YardFight" type="Node2D" parent="."]
+script = ExtResource("6")
+arena_bounds = Rect2(1560, 242, 540, 70)
+waves = Array[PackedScene]([ExtResource("4"), ExtResource("4"), ExtResource("4"), ExtResource("5")])
+wave_sizes = Array[int]([2, 2])
+[node name="Spawns" type="Node2D" parent="YardFight"]
+[node name="Spawn0" type="Marker2D" parent="YardFight/Spawns"]
+position = Vector2(1620, 252)
+[node name="Spawn1" type="Marker2D" parent="YardFight/Spawns"]
+position = Vector2(2040, 300)
+[node name="Spawn2" type="Marker2D" parent="YardFight/Spawns"]
+position = Vector2(1660, 300)
+[node name="Spawn3" type="Marker2D" parent="YardFight/Spawns"]
+position = Vector2(2000, 252)
