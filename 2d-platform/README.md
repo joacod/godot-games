@@ -147,7 +147,7 @@ The implementation machine uses
 For changes to gameplay, run the existing focused checks:
 
 ```sh
-for suite in movement menu_navigation damage_death_retry combat game_loop level_route arena_retry; do
+for suite in movement menu_navigation damage_death_retry combat game_loop level_route arena_retry boss; do
   godot --headless --path 2d-platform --fixed-fps 60 \
     --script "res://tests/$suite.gd" || exit 1
 done
@@ -165,6 +165,21 @@ with **Debug → Visible Collision Shapes** enabled. Use a physical gamepad when
 available; injected input checks cannot establish device behavior.
 
 ## Validation status and limits
+
+The user confirmed on 2026-10-02 that the human playthrough is complete. The
+earlier records below retain the validation limits at the time of each step;
+their human-playthrough follow-ups are superseded by this confirmation.
+Physical gamepad testing has not been confirmed.
+
+The 2026-10-02 skill/MCP cleanup passed startup and all eight focused suites
+with Godot 4.7.2. MCP native Metal/Mobile startup reported no warnings or
+errors. Native boss checks passed with inspected telegraph, wave/jump, arena
+retry, defeat/open-exit, and completion captures. The capture helper now forces
+draws on static screens so it can finish without extending its timeout.
+All 18 scripts retain tracked UIDs; local documentation links and
+`git diff --check` passed. Headless checks still emit the macOS certificate
+diagnostic. See [the cleanup record](PLAN.md#skillmcp-cleanup-record--2026-10-02)
+for scope and commands.
 
 The user reported manual acceptance of the original playable-level plan
 (Steps 1–5) on 2026-10-01. Runtime checks

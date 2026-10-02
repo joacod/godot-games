@@ -58,7 +58,9 @@ func capture(name):
 		return
 	# Include the existing deferred HUD refresh after arena scene replacement.
 	for i in range(6):
-		await RenderingServer.frame_post_draw
+		await process_frame
+		# Static defeat/completion screens may skip drawing; force capture frames.
+		RenderingServer.force_draw(false)
 	if name == "sweep-telegraph":
 		var crown_at = boss.get_global_transform_with_canvas() * Vector2(0, -228)
 		var pixel = root.get_texture().get_image().get_pixelv(Vector2i(crown_at))

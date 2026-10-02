@@ -1,41 +1,41 @@
 extends CharacterBody2D
 
 ## Health restored by a full-level retry.
-@export var max_health = 2
+@export var max_health: int = 2
 ## Horizontal patrol speed in pixels per second.
-@export var patrol_speed = 90.0
+@export var patrol_speed: float = 90.0
 ## Patrol endpoints in pixels relative to this instance's starting position.
-@export var patrol_left = -90.0
-@export var patrol_right = 90.0
-@export var attack_damage = 1
-@export var windup_duration = 0.55
-@export var strike_duration = 0.15
-@export var recovery_duration = 0.75
+@export var patrol_left: float = -90.0
+@export var patrol_right: float = 90.0
+@export var attack_damage: int = 1
+@export var windup_duration: float = 0.55
+@export var strike_duration: float = 0.15
+@export var recovery_duration: float = 0.75
 
 enum CombatState {PATROL, WINDUP, STRIKE, RECOVERY}
-var combat_state = CombatState.PATROL
-var state_remaining = 0.0
-var health = 0
-var is_defeated = false
-var direction = 1
-var start_x = 0.0
-var hurt_remaining = 0.0
-var knockback_remaining = 0.0
-var knockback_speed = 0.0
-var hit_players = {}
-var impact_direction = 1
-var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
-@onready var sprite = $AnimatedSprite2D
-@onready var awareness = $ContactDamage
-@onready var attack_hitbox = $AttackHitbox
-@onready var floor_ahead = $FloorAhead
+var combat_state: CombatState = CombatState.PATROL
+var state_remaining: float = 0.0
+var health: int = 0
+var is_defeated: bool = false
+var direction: int = 1
+var start_x: float = 0.0
+var hurt_remaining: float = 0.0
+var knockback_remaining: float = 0.0
+var knockback_speed: float = 0.0
+var hit_players: Dictionary[int, bool] = {}
+var impact_direction: int = 1
+var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var awareness: Area2D = $ContactDamage
+@onready var attack_hitbox: Area2D = $AttackHitbox
+@onready var floor_ahead: RayCast2D = $FloorAhead
 
-func _ready():
+func _ready() -> void:
 	health = max_health
 	start_x = global_position.x
 	sprite.animation_finished.connect(_on_animation_finished)
 
-func _physics_process(delta):
+func _physics_process(delta: float) -> void:
 	if is_defeated:
 		return
 	hurt_remaining = maxf(0.0, hurt_remaining - delta)
@@ -92,23 +92,23 @@ func _physics_process(delta):
 				body.take_damage(attack_damage)
 	queue_redraw()
 
-func _safe_step(facing, speed, delta):
+func _safe_step(facing: float, speed: float, delta: float) -> bool:
 	# Look beyond the body and this tick's movement before crossing a ledge.
 	floor_ahead.position.x = facing * (32.0 + speed * delta)
 	floor_ahead.force_raycast_update()
 	return not is_on_floor() or (not is_on_wall() and floor_ahead.is_colliding())
 
-func apply_knockback(speed):
+func apply_knockback(speed: float) -> void:
 	if get_tree().paused:
 		return
-	impact_direction = -signf(speed)
+	impact_direction = -int(signf(speed))
 	queue_redraw()
 	if is_defeated:
 		return
 	knockback_speed = speed
 	knockback_remaining = 0.16
 
-func take_damage(amount: int = 1):
+func take_damage(amount: int = 1) -> void:
 	if is_defeated or get_tree().paused or amount <= 0:
 		return
 	health = maxi(0, health - amount)
@@ -134,7 +134,7 @@ func take_damage(amount: int = 1):
 		sprite.play("dead")
 	queue_redraw()
 
-func _draw():
+func _draw() -> void:
 	# Native effects share the fortress gold/teal palette and follow actual timing.
 	if hurt_remaining > 0.0:
 		var center = Vector2(impact_direction * 24, -90)
@@ -154,6 +154,6 @@ func _draw():
 	elif combat_state == CombatState.RECOVERY:
 		draw_circle(Vector2(0, -178), 4, Color(0.45, 0.8, 0.78))
 
-func _on_animation_finished():
+func _on_animation_finished() -> void:
 	if is_defeated:
 		queue_free()
