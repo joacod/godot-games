@@ -4,12 +4,14 @@ A single-player, one-level street brawler inspired by Final Fight, in developmen
 Build a complete, enjoyable game first; make later art swaps straightforward
 through ordinary Godot scenes and Inspector values.
 
-**Status: Step 06 boss and completion implemented; manual validation pending.**
+**Status: Step 07 props and recovery implemented; manual validation pending.**
 F5 opens a title with Play, Controls, and Quit. Play starts a fresh street route:
 safe entrance → two grunts → connecting stretch → two grunts followed by a
 grunt/bruiser wave → locked final arena with Toxic Enforcer → victory.
 Step 05 was accepted after user-reported manual testing.
 Steps 02–04 were accepted after user-reported manual testing.
+Step 06 was accepted by the user for progression; detailed hands-on results were
+not supplied.
 
 ## Open and run
 
@@ -38,6 +40,12 @@ and SWEEP/CHARGE labels show the committed lane; change depth or jump above the
 hit band to avoid it. OPEN marks recovery. Boss hits reduce health without
 cancelling committed attacks or knocking it down. Its health appears in the HUD.
 Defeat it to reach Victory after its death sequence; Play Again starts a fresh run.
+
+Between the two ordinary fights, punch the labeled crate twice to break it.
+It drops one food pickup restoring up to 30 HP. Walk close at the same street
+depth to collect it while grounded. At full health it stays available; jumping
+or death prevents collection. The crate and its debris never block movement.
+Retry/Play Again restore the crate and discard old drops.
 
 Escape/Start opens pause with Resume, Retry, Main Menu, and Quit. Zero health
 opens Game Over with Retry, Main Menu, and Quit. Navigate menus with arrows/D-pad,
@@ -70,6 +78,7 @@ The original automatic art preview is preserved at
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/enemies_test.gd
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/level_test.gd
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/boss_test.gd
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/props_test.gd
 git diff --check
 ```
 
@@ -79,6 +88,9 @@ test scenes. Synthetic controller events do not establish hardware support.
 See the [Step 05 record](docs/steps/05-level.md#completion-record) for route tuning,
 automated results and rendered observations. The [Step 06 record](docs/steps/06-boss.md#completion-record)
 covers boss tuning, completion/reset checks, and pending hands-on acceptance.
+The [Step 07 record](docs/steps/07-props.md#completion-record) covers prop damage,
+food eligibility, pause/reset checks and rendered observations. Full-route balance
+and completion time remain pending a hands-on playtest.
 
 ## Start here
 

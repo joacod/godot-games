@@ -22,6 +22,7 @@ func _ready() -> void:
 	$Boundaries.draw.connect(_draw_boundaries)
 	player.ground_bounds = ROUTE_BOUNDS
 	player.died.connect(_hero_died)
+	$Actors/RecoveryProp.player = player
 	for encounter in encounters:
 		encounter.player = player
 		encounter.camera = camera

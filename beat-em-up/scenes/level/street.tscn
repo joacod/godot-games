@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 [ext_resource type="Script" path="res://scenes/level/street.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/street/city.png" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/grunt.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/bruiser.tscn" id="5"]
 [ext_resource type="Script" path="res://scenes/level/encounter.gd" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/props/breakable.tscn" id="7"]
 [sub_resource type="AtlasTexture" id="RoadExtension"]
 atlas = ExtResource("2")
 region = Rect2(0, 900, 1920, 180)
@@ -90,6 +91,8 @@ z_index = 1
 y_sort_enabled = true
 [node name="Player" parent="Actors" instance=ExtResource("3")]
 position = Vector2(160, 278)
+[node name="RecoveryProp" parent="Actors" instance=ExtResource("7")]
+position = Vector2(1280, 278)
 [node name="Camera" type="Camera2D" parent="."]
 position = Vector2(320, 180)
 limit_left = 0

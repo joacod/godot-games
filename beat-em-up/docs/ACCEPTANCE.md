@@ -15,7 +15,11 @@ physical controller acceptance remains pending. Step 05 automated wave/reset/men
 in its [completion record](steps/05-level.md#completion-record). The user reported
 manual testing and accepted Step 05 on 2026-10-02. No detailed route, display, or
 device observations were supplied; physical controller acceptance remains pending. Step 06 boss/completion regressions and staged native rendering are recorded in
-its [completion record](steps/06-boss.md#completion-record). A full hands-on clear,
+its [completion record](steps/06-boss.md#completion-record). The user accepted
+Step 06 for progression on 2026-10-02 without detailed hands-on observations.
+Step 07 recovery regressions and staged native rendering are recorded in its
+[completion record](steps/07-props.md#completion-record); recovery/balance manual
+acceptance remains pending. A full hands-on clear,
 boss balance, and physical controller results remain pending. The remaining gameplay and final acceptance checks
 below remain pending. Keep automated results separate from visual, input, controller,
 and audio observations. A missing controller leaves controller acceptance pending.
