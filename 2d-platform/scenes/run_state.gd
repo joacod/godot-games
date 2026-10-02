@@ -6,6 +6,8 @@ extends Node
 enum RunState {PLAYING, DEAD, RETRYING, PAUSED, WON}
 var state = RunState.PLAYING
 var collected_count = 0
+var arena_entered = false
+var arena_entry_count = 0
 @onready var character = $CharacterBody2D
 @onready var death_ui = $DeathUI
 @onready var pause_ui = $PauseUI
@@ -28,8 +30,27 @@ func _ready():
 	for pickup in $Collectibles.get_children():
 		pickup.collected.connect(_on_collected)
 	$Exit.reached.connect(_on_exit_reached)
+	$ArenaEntry.body_entered.connect(_on_arena_entered)
 	_update_health(character.health)
 	_update_count()
+
+func _on_arena_entered(body):
+	if body != character or arena_entered or state != RunState.PLAYING or character.is_dead:
+		return
+	arena_entered = true
+	arena_entry_count = collected_count
+	character.health = character.max_health
+	character.invulnerability_remaining = 0.0
+	character.player.modulate = Color.WHITE
+	character.health_changed.emit(character.health)
+	_bound_arena()
+
+func _bound_arena():
+	# Entry detection starts beyond the player's radius, clear of the closing wall.
+	$ArenaBoundary/CollisionShape2D.set_deferred("disabled", false)
+	$ArenaGate.show()
+	character.get_node("Camera2D").limit_left = int($ArenaBoundary.position.x - 16)
+	character.get_node("Camera2D")._fit_viewport()
 
 func _unhandled_input(event):
 	if event.is_action_pressed("pause") and not event.is_echo():
@@ -96,12 +117,47 @@ func retry():
 func _reload_level(previous_state):
 	# Reload detaches this node immediately; retain the tree before that happens.
 	var tree = get_tree()
+	# A completion's Play Again always starts fresh. Only pause/death use entry.
+	var restore_entry = arena_entered and previous_state != RunState.WON
+	var restore_callback = _restore_arena.bind(tree, arena_entry_count)
+	if restore_entry:
+		tree.scene_changed.connect(restore_callback, CONNECT_ONE_SHOT)
 	var error = tree.reload_current_scene()
 	if error != OK:
+		if restore_entry:
+			tree.scene_changed.disconnect(restore_callback)
 		state = previous_state
 		push_error("Could not reload the level: %s" % error)
 		return
 	tree.paused = false
+
+static func _restore_arena(tree, entry_count):
+	# Static callback survives the old run being freed by the scene transition.
+	var run = tree.current_scene
+	run.arena_entered = true
+	run.arena_entry_count = entry_count
+	run.collected_count = entry_count
+	run.character.position = run.get_node("ArenaSpawn").position
+	run._bound_arena()
+	# All gems are before the boundary. Remove even uncollected ones to prevent
+	# a restored count from ever being increased by replaying the approach.
+	for pickup in run.get_node("Collectibles").get_children():
+		pickup.get_parent().remove_child(pickup)
+		pickup.queue_free()
+	run._update_count()
+	# Native rendering can retain empty draw lists after replacing the paused run.
+	# Refresh the restored HUD once, after scene construction has finished.
+	RenderingServer.frame_post_draw.connect(run._redraw_hud, CONNECT_ONE_SHOT)
+	var camera = run.character.get_node("Camera2D")
+	camera.reset_smoothing()
+	camera.force_update_scroll()
+
+func _redraw_hud():
+	# Let the restored controls finish their first draws before refreshing them.
+	await RenderingServer.frame_post_draw
+	await RenderingServer.frame_post_draw
+	for control in hud.find_children("*", "Control"):
+		control.queue_redraw()
 
 func main_menu():
 	if state not in [RunState.DEAD, RunState.PAUSED, RunState.WON]:

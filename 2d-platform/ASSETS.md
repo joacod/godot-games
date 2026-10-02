@@ -223,3 +223,22 @@ collision; the lethal spike area still covers the whole spike strip.
 
 The existing `player_sprites/` and `Tileset.png` files are unchanged. Their
 original source and license have not been established in this step.
+
+## Refreshed route and courtyard
+
+Step 5 reuses all existing textures and SpriteFrames; no assets were downloaded.
+The masonry atlas and its full-cell collisions are unchanged, while occupied
+cells now form a 11,280 px-wide route with nine main floor stretches, two
+optional shelves at y=608, and a continuous final approach/courtyard floor at
+y=864. The useful opening platforms remain. Main gaps are 96–160 px wide;
+upward steps are at most 128 px. Repositioned patrol, spikes, gems, prompts,
+and props follow the shorter route. Reusable detection shapes are unchanged.
+
+The final courtyard spans x=9152–11264, with native Polygon2D stone piers,
+dark arched recesses, masonry courses, and a teal banner using the existing
+shield texture. These decorations have no collision. A visible 32 px-wide
+entry boundary at x=9152 closes only after the player's capsule has cleared
+it; the right edge uses the level's existing full-height wall treatment.
+The entry Area2D detects only Player across the level height, so jumping
+through entry cannot skip the retry point. The safe retry origin is (9360, 718).
+The temporary exit sits at (10992, 800) and remains usable without a boss.

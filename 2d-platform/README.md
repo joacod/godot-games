@@ -1,7 +1,9 @@
 # 2D Platform
 
 A small Godot platformer for learning and experimentation. Jump across one
-level, fight or avoid a patrol, collect two optional gems, and reach the EXIT.
+concise level, fight or avoid a patrol, collect two optional gems, and reach
+the EXIT in a bounded fortress courtyard. The exit stays open until the boss
+is added in the next plan step.
 The world and menus share a night fortress style with layered silhouettes,
 moss-capped stone, gold focus, and a teal exit marker.
 
@@ -54,11 +56,18 @@ available during a swing, its facing stays fixed, and another attack cannot
 interrupt it. Neither defeating the enemy nor collecting gems is required to win.
 
 Pause freezes gameplay and offers Resume, Retry, Main Menu, and Quit. Death
-and win show Retry, Main Menu, and Quit; win also shows the collected count.
+shows Retry, Main Menu, and Quit; win shows Play Again, Main Menu, Quit, and
+the collected count.
 Main Menu discards the current run and clears pause. Play always starts fresh.
-Menus have visible initial focus and work without a mouse. Retry reloads the entire level from its start,
-resetting health, velocity, enemies, gems, count, and combat state. Quit closes
-the running game. There are no checkpoints or saved progress.
+Menus have visible initial focus and work without a mouse. Before courtyard
+entry, Retry reloads the level from its start, resetting health, velocity,
+enemies, gems, count, and combat state. Entering the courtyard restores full
+health, records the gem count, and closes the boundary behind you. After entry,
+death/pause Retry reloads the scene at the safe courtyard spawn with full
+health, clean combat/movement state, and the recorded count. Approach gems
+cannot be collected again. Play Again and Main Menu/Play discard this entry
+point and start a fresh level. The entry point lasts only for the current
+session; no progress is saved. Quit closes the running game.
 
 ## Find and edit the game
 
@@ -71,7 +80,7 @@ the running game. There are no checkpoints or saved progress.
 | [scenes/main_character.tscn](scenes/main_character.tscn) | Player SpriteFrames, atlas references, body collision, and attack area |
 | [scenes/main_character.gd](scenes/main_character.gd) | Player movement, health, invulnerability, damage, and striking frames |
 | [scenes/enemy.tscn](scenes/enemy.tscn) / [enemy.gd](scenes/enemy.gd) | Enemy art, awareness/strike shapes, telegraph/recovery, health, patrol, and ledge probe |
-| [scenes/run_state.gd](scenes/run_state.gd) | Death, fall threshold, pause, win, count, full-level retry, and Main Menu navigation |
+| [scenes/run_state.gd](scenes/run_state.gd) | Death, fall threshold, pause, win, count, level/arena retry, and Main Menu navigation |
 | [scenes/level_camera.gd](scenes/level_camera.gd) | Camera fitting for an expanded viewport |
 | [scenes/hazard.tscn](scenes/hazard.tscn), [collectible.tscn](scenes/collectible.tscn), [exit.tscn](scenes/exit.tscn) | Reusable spikes, gems, and goal, each with its matching `.gd` script |
 | [scenes/hud.tscn](scenes/hud.tscn), [death_ui.tscn](scenes/death_ui.tscn), [pause_ui.tscn](scenes/pause_ui.tscn), [win_ui.tscn](scenes/win_ui.tscn) | Compact HUD, menus, and focus styling |
@@ -87,7 +96,7 @@ in the Inspector. Edit the reusable scene or script default to change the base.
 | Level enemy instance | Patrol offsets overridden to -160 / +160 px from its spawn; uniform scale 0.85 |
 | Run owner (`main.tscn` root) | `fall_kill_y` 1120 px |
 | Project Settings → Physics → 2D | `default_gravity` 2500 px/s² |
-| Player's Camera2D in `main.tscn` | Bounds left 0, top 0, right 24768, bottom 1080 px |
+| Player's Camera2D in `main.tscn` | Bounds left 0, top 0, right 11280, bottom 1080 px |
 
 Recheck the route and optional shelves after changing speed, jump velocity,
 gravity, or body size. Edit `STRIKING_FRAMES` in the player script when attack
@@ -117,7 +126,7 @@ The implementation machine uses
 For changes to gameplay, run the existing focused checks:
 
 ```sh
-for suite in movement menu_navigation damage_death_retry combat game_loop level_route; do
+for suite in movement menu_navigation damage_death_retry combat game_loop level_route arena_retry; do
   godot --headless --path 2d-platform --fixed-fps 60 \
     --script "res://tests/$suite.gd" || exit 1
 done
@@ -127,15 +136,17 @@ git diff --check
 Then play in the editor. Check walking/running, landings and gaps, both optional
 gem shelves and their return routes, every attack facing both ways, enemy
 windup, strike avoidance, recovery punishment, and defeat, spikes and falls, camera edges, and pause/resume during an
-attack. Retry after death, pause, and win several times and confirm everything
-resets. Navigate each menu without a mouse and test Quit. For art changes,
+attack. Retry before and after courtyard entry with zero, one, and two gems; confirm
+full health, clean combat, safe positioning, and the recorded entry count.
+Play Again and Main Menu/Play must start fresh. Navigate each menu without a mouse and test Quit. For art changes,
 inspect frame alignment, both facings, attack reach, and body/attack shapes
 with **Debug → Visible Collision Shapes** enabled. Use a physical gamepad when
 available; injected input checks cannot establish device behavior.
 
 ## Validation status and limits
 
-The user reported manual acceptance of Steps 1–5 on 2026-10-01. Runtime checks
+The user reported manual acceptance of the original playable-level plan
+(Steps 1–5) on 2026-10-01. Runtime checks
 and rendered frame inspection also passed. A reversible idle-sheet replacement
 was checked with baseline, replacement, and restored native captures. Final
 local verification on 2026-10-01 passed startup and all four gameplay suites, with native Metal/Mobile
@@ -145,9 +156,10 @@ performed during final verification. No connected gamepad was detected.
 Physical controller testing and the 1–2 minute human pacing target remain
 unconfirmed. The user accepted the original completion plan as done; these
 optional follow-ups do not block the new [demo polish plan](PLAN.md). That plan
-covers a title screen, graphics, mechanics, menus, and a final boss. Steps 1–4
-(title/navigation, world/UI visual identity, jump forgiveness/height, and
-distinct attacks/readable combat) are implemented. Steps 5–7 remain pending.
+covers a title screen, graphics, mechanics, menus, and a final boss. Steps 1–5
+(title/navigation, world/UI visual identity, jump forgiveness/height,
+distinct attacks/readable combat, and the refreshed route/arena retry point)
+are implemented. Steps 6–7 remain pending.
 
 Step 1 checks on 2026-10-01 passed startup, the new menu-navigation suite, and
 all four existing gameplay suites. Navigation checks cover keyboard help/back,
@@ -196,3 +208,14 @@ attack, enemy cue, impact, combat-sign, and controls-help frames were inspected.
 These are automated checks and visual inspection; human combat feel and a
 physical gamepad remain unverified. No new art was downloaded. Level geometry,
 movement, navigation logic, input bindings, engine, and renderer are unchanged.
+
+Step 5 checks on 2026-10-01 passed startup and all seven focused suites,
+including physical arena-entry overlap, repeated pause/death arena retries for
+0/1/2 entry gems, boundary safety, held-confirm suppression, camera positioning,
+temporary-exit reachability, and fresh Play Again/Main Menu runs. The arena
+retry suite also passed with native Metal/Mobile rendering. The route
+suite checks damage throughout traversal so entry healing cannot hide a hit.
+Walking and running traversals, patrol phases, both optional shelves, and camera
+bounds passed. Native Metal/Mobile frames were inspected for the start, gem,
+patrol, spikes, approach, courtyard, and wide/tall arena-retry views. Human
+route pacing, combat feel, and physical gamepad checks remain unverified.
