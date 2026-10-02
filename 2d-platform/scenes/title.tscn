@@ -78,7 +78,7 @@ horizontal_alignment = 1
 
 [node name="Goal" type="Label" parent="Center/Help"]
 layout_mode = 2
-text = "Reach the EXIT. Combat and the two gems are optional."
+text = "Defeat the guardian, then reach the EXIT.\nPatrol combat and the two gems are optional."
 horizontal_alignment = 1
 
 [node name="Controls" type="GridContainer" parent="Center/Help"]
@@ -189,7 +189,7 @@ text = "A / south"
 [node name="Note" type="Label" parent="Center/Help"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
-text = "Controller labels may differ. Retry restarts the entire level."
+text = "Retry restarts the level; after courtyard entry, it restarts the boss.\nController labels may differ."
 horizontal_alignment = 1
 
 [node name="Back" type="Button" parent="Center/Help"]

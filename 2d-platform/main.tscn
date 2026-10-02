@@ -2193,8 +2193,8 @@ offset_bottom = 700.0
 theme = ExtResource("20_theme")
 theme_override_colors/font_color = Color(0.76, 0.81, 0.65, 1)
 theme_override_font_sizes/font_size = 26
-text = "REACH THE TEAL EXIT →
-Gems and combat are optional"
+text = "DEFEAT THE GUARDIAN →
+Gems and patrol combat are optional"
 
 [node name="TeachingJump" type="Label" parent="RouteSigns"]
 offset_left = 620.0

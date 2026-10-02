@@ -3,7 +3,7 @@
 Texture references live directly in [scenes/main_character.tscn](scenes/main_character.tscn),
 [scenes/enemy.tscn](scenes/enemy.tscn), and [main.tscn](main.tscn).
 The following dimensions come from the PNGs and current scene resources.
-Step 2 adds the fortress assets and native drawing described below.
+The completed demo uses the fortress assets and native drawing described below.
 
 ## Player sprite sheets
 
@@ -281,3 +281,15 @@ and opens on defeat. The locked exit hides its arrow, darkens its opening,
 and reads SEALED; defeat restores the teal arrow and EXIT label. Existing
 terrain, hazard/pickup shapes, player/enemy sheets, and camera bounds are
 unchanged. No new third-party assets or license claims are introduced.
+
+## Final visual verification
+
+Step 7 on 2026-10-02 reused all existing assets, SpriteFrames, collision data,
+and the shared theme. Native Metal/Mobile frames were inspected for title/help,
+the opening level, pause/death, guardian tells and waves, arena retry,
+defeat/open-exit, and Demo Complete. The help and opening sign now distinguish
+optional patrol combat from the required guardian; help also explains arena
+Retry. A deferred redraw restores the player HUD after title/menu scene
+replacement as well as arena retry. Native pixel checks cover both paths.
+No art replacements, downloads, hitbox changes, or new fonts were needed.
+Existing unresolved player/tileset provenance remains unchanged.

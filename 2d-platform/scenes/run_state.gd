@@ -37,6 +37,8 @@ func _ready() -> void:
 	$ArenaEntry.body_entered.connect(_on_arena_entered)
 	_update_health(character.health)
 	_update_count()
+	# Native scene replacement can retain empty HUD draw lists after menus.
+	RenderingServer.frame_post_draw.connect(_redraw_hud, CONNECT_ONE_SHOT)
 
 func _on_arena_entered(body) -> void:
 	if body != character or arena_entered or state != RunState.PLAYING or character.is_dead:
@@ -175,9 +177,6 @@ static func _restore_arena(tree: SceneTree, entry_count: int) -> void:
 		pickup.get_parent().remove_child(pickup)
 		pickup.queue_free()
 	run._update_count()
-	# Native rendering can retain empty draw lists after replacing the paused run.
-	# Refresh the restored HUD once, after scene construction has finished.
-	RenderingServer.frame_post_draw.connect(run._redraw_hud, CONNECT_ONE_SHOT)
 	var camera = run.character.get_node("Camera2D")
 	camera.reset_smoothing()
 	camera.force_update_scroll()

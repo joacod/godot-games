@@ -1,7 +1,8 @@
 # Polish the platformer into a complete demo
 
 Status: the original playable-level plan is complete and accepted by the user
-on 2026-10-01. This is the new active plan. Steps 1–6 are implemented; Step 7 has not started.
+on 2026-10-01. This demo polish plan is complete locally as of 2026-10-02;
+Steps 1–7 are implemented and verified within the limits recorded below.
 
 The user confirmed on 2026-10-02 that the human playthrough is complete.
 Earlier implementation records retain their historical live-check gaps.
@@ -208,7 +209,7 @@ remaining bugs; do not use a headless result as evidence of gameplay feel.
 - [x] 4. Distinct attacks and readable combat
 - [x] 5. Refreshed level, arena, and boss retry point
 - [x] 6. Final boss and demo ending
-- [ ] 7. Complete-demo polish and verification
+- [x] 7. Complete-demo polish and verification
 
 ### Step 1 implementation record — 2026-10-01
 
@@ -446,6 +447,68 @@ remaining bugs; do not use a headless result as evidence of gameplay feel.
   untouched. No dependencies, migrations, branches, commits, pushes, PRs, or
   publication were performed. Asset provenance and distribution work remain
   separately scoped follow-ups.
+
+### Step 7 implementation record — 2026-10-02
+
+- Corrected stale How to Play goal/retry text in `scenes/title.tscn` and the
+  opening sign in `main.tscn`: the guardian is required, patrol combat/gems
+  are optional, and courtyard entry changes Retry to an arena restart.
+- Native inspection reproduced a missing player HUD after title → Play.
+  Moved the existing deferred HUD refresh in `scenes/run_state.gd` to every
+  newly loaded run, retaining the arena-retry refresh without a duplicate
+  connection. Final native captures and pixel assertions confirm the fix.
+- Extended `tests/menu_navigation.gd` for Main Menu from boss-area pause/death
+  during live shockwaves, freeing the old boss/projectiles, and fresh boss,
+  gate, bar, and entry state on Play. Added optional `MENU_CAPTURE_DIR` native
+  screenshots and HUD pixel checks across the tested menu/Play cycles.
+- Passed Godot 4.7.2 startup and all eight focused headless suites after the
+  fixes. Coverage includes short/full and forgiven jumps, all player attacks
+  in both directions, enemy/boss damage and invulnerability, spikes/falls,
+  pickups/optional shelves, walking/running routes and camera bounds, boss
+  phase/tells/waves, pause in every boss state, repeated level/arena retries,
+  Main Menu from pause/death/completion, and fresh Play Again.
+- Native Metal/Mobile movement, combat, route, arena retry, menu navigation,
+  and boss suites passed. Inspected title/help, opening level, pause/death,
+  sweep tell, wave/jump, restored arena, defeated/open-exit, and completion
+  frames. The input-driven boss fight passes without damage in both phases.
+  These are automated gameplay checks and frame inspection; no new human
+  playthrough or physical controller test was performed in this session.
+  The user's earlier human-playthrough confirmation remains accepted.
+- Updated game/root README, ASSETS, and this completion record. Local Markdown
+  targets, all 18 tracked script UIDs, and `git diff --check` passed. Headless
+  runs retain the known macOS certificate diagnostic; final native logs contain
+  no errors. Native window/Metal checks required execution outside the sandbox.
+- Movement/combat tuning, boss implementation, route geometry, collision
+  shapes, textures/SpriteFrames, theme, input bindings, camera bounds, engine,
+  renderer, dependencies, and UIDs are intentionally unchanged.
+- Verification commands from the repository root:
+
+  ```sh
+  /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+    --log-file /private/tmp/godot-step7-startup-final.log --quit-after 120
+  for suite in movement menu_navigation damage_death_retry combat game_loop level_route arena_retry boss; do
+    /Applications/Godot.app/Contents/MacOS/Godot --headless --path 2d-platform \
+      --log-file "/private/tmp/godot-step7-$suite-final.log" --fixed-fps 60 \
+      --script "res://tests/$suite.gd" || exit 1
+  done
+  mkdir -p /private/tmp/godot-step7-menu-captures /private/tmp/godot-step7-boss-captures
+  MENU_CAPTURE_DIR=/private/tmp/godot-step7-menu-captures \
+    /Applications/Godot.app/Contents/MacOS/Godot --path 2d-platform \
+    --disable-vsync --fixed-fps 60 --script res://tests/menu_navigation.gd
+  BOSS_CAPTURE_DIR=/private/tmp/godot-step7-boss-captures \
+    /Applications/Godot.app/Contents/MacOS/Godot --path 2d-platform \
+    --disable-vsync --fixed-fps 60 --script res://tests/boss.gd
+  for suite in movement combat level_route arena_retry; do
+    /Applications/Godot.app/Contents/MacOS/Godot --path 2d-platform \
+      --disable-vsync --fixed-fps 60 --script "res://tests/$suite.gd" || exit 1
+  done
+  git diff --check
+  ```
+
+- Remaining follow-ups: physical gamepad testing, existing unresolved art
+  provenance, and separately scoped export/distribution. No remaining gameplay
+  bug was identified by these checks. No branches, commits, pushes, PRs, or
+  publication were performed. Stop after this local delivery.
 
 ## Out of scope
 
