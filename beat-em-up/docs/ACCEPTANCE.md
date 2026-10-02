@@ -1,7 +1,8 @@
 # Validation and final acceptance
 
-Nothing below has been executed for this game. Each implementation step records
-its own results. Keep automated results separate from visual, input, controller,
+Step 01 import/startup and sample checks are recorded in its
+[completion record](steps/01-foundation.md#completion-record). The gameplay and
+final acceptance checks below remain pending. Keep automated results separate from visual, input, controller,
 and audio observations. A missing controller leaves controller acceptance pending.
 
 ## Engine and startup
