@@ -124,10 +124,13 @@ func run() -> void:
 		var rect := Rect2(area.position, area.get_child(0).polygon[2])
 		check(Rect2(0, 60, 640, 240).encloses(rect), "Hotspot remains within stage and outside UI")
 	var names: Array[String] = []
+	var oil_label_rect: Rect2
 	for child in main.get_node("Room").get_children():
 		if child is Label:
 			names.append(child.text)
 			check(child.mouse_filter == Control.MOUSE_FILTER_IGNORE, "Decorative label ignores clicks")
+			if child.text == "Oil flask":
+				oil_label_rect = child.get_rect()
 	check(names.size() == 5 and "Noticeboard" in names and "Exit gate" in names, "Every prop has an authored label")
 	check(main.get_node("UI/Presentation/Footer").text.contains("Step 02"), "Foundation status is clear")
 	for action in ["interact", "cancel", "pause"]:
@@ -137,6 +140,24 @@ func run() -> void:
 	check(ProjectSettings.get_setting("rendering/renderer/rendering_method") == "gl_compatibility", "Compatibility renderer retained")
 	await capture("room")
 	main.queue_free()
+	await process_frame
+	# The same polygon may start at any vertex without changing its label layout.
+	var reordered := baseline.duplicate(true)
+	var polygon: Array = reordered.room.hotspots[0].polygon
+	reordered.room.hotspots[0].polygon = polygon.slice(2) + polygon.slice(0, 2)
+	check(ContentLoader.new().validate(reordered).is_empty(), "Reordered polygon remains valid content")
+	var reordered_main := MainScene.instantiate()
+	reordered_main.content_directory = "res://missing-fixture"
+	root.add_child(reordered_main)
+	reordered_main.content = reordered
+	reordered_main.build_room()
+	await process_frame
+	var reordered_label_rect: Rect2
+	for child in reordered_main.get_node("Room").get_children():
+		if child is Label and child.text == "Oil flask":
+			reordered_label_rect = child.get_rect()
+	check(reordered_label_rect == oil_label_rect, "Reordered polygon preserves label position and width")
+	reordered_main.queue_free()
 	await process_frame
 	print("Foundation checks: %d passed, %d failed" % [checks - failures, failures])
 	quit(1 if failures else 0)

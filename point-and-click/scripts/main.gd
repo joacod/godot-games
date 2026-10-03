@@ -49,7 +49,10 @@ func build_room() -> void:
 		label.text = definition.name
 		label.theme = $UI/Presentation.theme
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		label.position = visual.position + Vector2(-20, -24)
-		label.size = Vector2(vertices[1].x + 40, 22)
+		var bounds := Rect2(vertices[0], Vector2.ZERO)
+		for vertex in vertices:
+			bounds = bounds.expand(vertex)
+		label.position = visual.position + bounds.position + Vector2(-20, -24)
+		label.size = Vector2(bounds.size.x + 40, 22)
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		$Room.add_child(label)

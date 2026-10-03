@@ -28,7 +28,7 @@ Run from this folder:
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/run_tests.gd
 ```
 
-Expected behavioral result: `Foundation checks: 126 passed, 0 failed`.
+Expected behavioral result: `Foundation checks: 128 passed, 0 failed`.
 An import exit code alone is insufficient: inspect output for script/resource
 errors. For native rendering checks and optional viewport captures:
 
@@ -36,7 +36,7 @@ errors. For native rendering checks and optional viewport captures:
 /Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd -- --capture-dir=/tmp/closed-gate-step01-evidence
 ```
 
-The native capture run adds two image-save checks (128 total). It validates the
+The native capture run adds two image-save checks (130 total). It validates the
 error panel and room, then exits. This does not substitute for a human playthrough.
 See [acceptance evidence](docs/ACCEPTANCE.md) for checks and remaining gaps.
 

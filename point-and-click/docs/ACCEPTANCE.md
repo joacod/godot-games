@@ -82,6 +82,22 @@ The full isolated-copy completion/reskin route remains Step 06 work.
   acceptance is claimed. See [provenance](../assets/PROVENANCE.md).
 - Later-step acceptance items in DESIGN.md remain unchecked.
 
+## Step 01 label bounds correction — 2026-10-03
+
+Label placement and width now use the hotspot polygon's bounding rectangle,
+so changing its starting vertex does not change the label layout. The authored
+room geometry and later-step status are unchanged.
+
+- Import passed with no script/resource errors using Godot 4.7.2.
+- The current headless suite passed **128/128**; the native capture suite passed
+  **130/130**. Two new checks validate reordered content and compare the label's
+  position and size with the original layout.
+- Native room and error-panel captures were inspected for readability. Captures
+  are temporary outputs under `/private/tmp/closed-gate-label-bounds-evidence`;
+  the original Step 01 evidence images above are retained.
+- No new human playthrough, live mouse-input acceptance, or isolated-copy check
+  was performed for this correction. Steps 02–06 remain pending.
+
 ## Files changed for Step 01
 
 Only this game and its OpenSpec task checklist changed:

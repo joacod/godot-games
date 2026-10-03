@@ -20,10 +20,15 @@ Prioritize complete, understandable gameplay over frameworks or speculative reus
   development checks use 4.7.2. Confirm that skills and MCP tools use this engine
   version before running project operations. Read each project's README and
   `project.godot` for setup, validation commands, and renderer settings.
-- Consult [godot-gdscript-patterns](.agents/skills/godot-gdscript-patterns/SKILL.md)
-  on demand for relevant GDScript, scene architecture, game state, or performance
-  work. Repository and project constraints take precedence over its generic
-  Godot 4.x examples; use only patterns needed for the requested task.
+- Use relevant available skills when they help the requested task, and read their
+  `SKILL.md` before applying them. Repository and project constraints take
+  precedence over generic examples. Apply only the guidance needed for the task;
+  skill availability alone does not justify additional changes.
+- Use the available Godot MCP when it helps inspect a project, launch the editor,
+  or run and debug the game. Use terminal commands for the documented test suites.
+  Confirm the target project before operations, and start a project through the
+  MCP before requesting its debug output. Report MCP checks separately from
+  visual and gameplay verification.
 - For all games, look for suitable assets on [CraftPix](https://craftpix.net/)
   before creating replacements. Prefer free assets or assets already available
   through the user's account. Agents may browse and download using the user's
