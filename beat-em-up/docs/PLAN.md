@@ -30,7 +30,9 @@ accepted after user-reported manual testing. Step 03 is also accepted after
 user-reported manual testing. Step 04 is accepted after user-reported manual testing.
 Step 05 is accepted after user-reported manual testing. Step 06 is accepted by
 the user for progression; detailed hands-on results were not supplied. Step 07
-is implemented, pending manual validation. Steps 08–09 are **not started**.
+is accepted by the user for progression; recovery/balance hands-on results were
+not supplied. Step 08 is implemented, pending listening and manual validation.
+Step 09 is **not started**.
 Steps depend on the preceding step. They can be requested individually, but are not independent
 implementations.
 
@@ -42,8 +44,8 @@ implementations.
 | [04 — Enemies](steps/04-enemies.md) | Accepted after user-reported manual testing | Mixed fight with two grunts and one bruiser |
 | [05 — Level and encounters](steps/05-level.md) | Accepted after user-reported manual testing | Clear the street to the boss entrance |
 | [06 — Boss and completion](steps/06-boss.md) | Accepted by user for progression | Boss and complete result/reset loop; see validation record |
-| [07 — Props and recovery](steps/07-props.md) | Implemented; manual validation pending | Breakable and food on connecting stretch; balance playtest pending |
-| [08 — Presentation](steps/08-presentation.md) | Final art, sound, menus, feedback | Play a coherent polished level |
+| [07 — Props and recovery](steps/07-props.md) | Accepted by user for progression | Breakable and food on connecting stretch; balance playtest pending |
+| [08 — Presentation](steps/08-presentation.md) | Implemented; listening/manual validation pending | Art, sound, menus and feedback integrated; see validation record |
 | [09 — Acceptance and art swap](steps/09-acceptance.md) | Full regression and replacement proof | Verified game with practical editing notes |
 
 ## How to implement a step

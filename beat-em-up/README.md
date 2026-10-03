@@ -4,8 +4,8 @@ A single-player, one-level street brawler inspired by Final Fight, in developmen
 Build a complete, enjoyable game first; make later art swaps straightforward
 through ordinary Godot scenes and Inspector values.
 
-**Status: Step 07 props and recovery implemented; manual validation pending.**
-F5 opens a title with Play, Controls, and Quit. Play starts a fresh street route:
+**Status: Step 08 presentation implemented; listening/manual validation pending.**
+F5 opens a title with Play, Controls, Audio, and Quit. Play starts a fresh street route:
 safe entrance → two grunts → connecting stretch → two grunts followed by a
 grunt/bruiser wave → locked final arena with Toxic Enforcer → victory.
 Step 05 was accepted after user-reported manual testing.
@@ -18,8 +18,9 @@ not supplied.
 Import `project.godot` into Godot **4.7.2**, then press **F5**. The independent
 project uses GDScript and the Compatibility renderer. The logical viewport is
 640 × 360, displayed in a 1280 × 720 window with nearest filtering and preserved
-aspect ratio. Cyan crosses still mark actor ground anchors; the outlined strip
-marks walkable ground. Amber lines show locked encounter and boss-arena gates. Jumping cannot bypass movement bounds.
+aspect ratio. Normal play hides actor anchor crosses and the ground test outline.
+Striped amber ground markers show locked encounter and boss-arena gates. Jumping
+cannot bypass movement bounds. The HUD stays above the walkable area.
 
 From the repository root on this Mac:
 
@@ -47,7 +48,7 @@ depth to collect it while grounded. At full health it stays available; jumping
 or death prevents collection. The crate and its debris never block movement.
 Retry/Play Again restore the crate and discard old drops.
 
-Escape/Start opens pause with Resume, Retry, Main Menu, and Quit. Zero health
+Escape/Start opens pause with Resume, Retry, Audio, Main Menu, and Quit. Zero health
 opens Game Over with Retry, Main Menu, and Quit. Navigate menus with arrows/D-pad,
 confirm with Enter/south, and use Escape/east to go back from Controls or resume.
 Retry restarts the entire route; there are no checkpoints. R/Back and the test
@@ -60,6 +61,14 @@ also accepts K/north for a normal strike and L/right shoulder for a knockdown.
 
 The movement-stick deadzone is 0.25. After boot, resume, or reset, release held
 controls before fresh movement/jump input. Close the window to exit.
+
+Audio is available from the title and pause menus. Use Up/Down or D-pad to
+choose Master/Music/SFX, then Left/Right or D-pad to adjust in 5% steps; 0% mutes.
+Defaults are 80% / 45% / 80%. Choices last for the app session, including Retry
+and Main Menu, and return to defaults after closing the game. One music loop
+continues across runs, 8 dB quieter in menus. Pause freezes gameplay sounds and
+impact effects; menu sounds remain active. Retry/Main Menu discard old sounds
+and effects. No hit pause, camera shake, or global time effect is used.
 
 The original automatic art preview is preserved at
 `scenes/sample/street_sample.tscn`. Open it and press **F6**, or run:
@@ -79,6 +88,7 @@ The original automatic art preview is preserved at
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/level_test.gd
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/boss_test.gd
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/props_test.gd
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/presentation_test.gd
 git diff --check
 ```
 
@@ -89,8 +99,11 @@ See the [Step 05 record](docs/steps/05-level.md#completion-record) for route tun
 automated results and rendered observations. The [Step 06 record](docs/steps/06-boss.md#completion-record)
 covers boss tuning, completion/reset checks, and pending hands-on acceptance.
 The [Step 07 record](docs/steps/07-props.md#completion-record) covers prop damage,
-food eligibility, pause/reset checks and rendered observations. Full-route balance
-and completion time remain pending a hands-on playtest.
+food eligibility, pause/reset checks and rendered observations. The [Step 08 record](docs/steps/08-presentation.md#completion-record) covers
+menu/volume tests, native rendering at two window sizes and measured audio output.
+Listening quality, full-route balance and completion time remain pending hands-on
+play. Headless accelerated audio tests can report Ogg playback resources retained
+at shutdown; the native presentation suite at real frame timing exits cleanly.
 
 ## Start here
 

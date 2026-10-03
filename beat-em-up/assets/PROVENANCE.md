@@ -186,3 +186,78 @@ it contains the official license URL. The
 [Freebie Products terms](https://craftpix.net/file-licenses/) were reviewed on
 acquisition. Publisher is CraftPix.net; no individual artist was supplied.
 No purchase, other icons, PSD, font, replacement art, or publication was added.
+
+## Step 08 presentation and audio
+
+Acquired/imported on 2026-10-02. Every approved actor sheet, animation mapping,
+scale, foot offset and hit window is retained. No replacement bitmap, paid pack,
+new font, shader or additional character was added. UI uses Godot's built-in font.
+The eight-ray impact spark is drawn by `scenes/level/presentation.gd` for 0.18 s;
+it is visual feedback, independent of the damage receiver and hit eligibility.
+
+### Scenery and candidate review
+
+Reused `PNG/City1/Bright/boxes&container.png` from the original street archive,
+verified byte-for-byte against the ZIP in Downloads. Cropped
+`Rect2(0, 208, 432, 596)` → `street/dumpster.png`, without recoloring/resizing.
+The 432 × 596 RGBA crop displays at 0.15×, with bottom-center at (2320, 232) and
+(2700, 232); the second is mirrored. Both are background dressing behind the
+walkable strip. The existing [street terms record](licenses/street.txt) applies.
+The final yard sign and striped encounter boundaries are ordinary Godot drawing/UI.
+
+Reviewed CraftPix first:
+
+- [Free Futuristic Sounds and Music Pack for Pixel Games](https://craftpix.net/freebies/free-futuristic-sounds-and-music-pack-for-pixel-games/)
+  has collection/crate sounds and loopable music. Its free download reaches a
+  sign-in page; the available in-app browser is signed out and Chrome control
+  was unavailable. No files or licenses from this audio pack were imported.
+  This remains an optional alternative if the user later supplies its WAV/MP3
+  battle loop, collection, crate and menu cues.
+- [Free Cartoon Smoke Effects](https://craftpix.net/freebies/free-cartoon-smoke-effects-asset-pack/)
+  uses smooth vector smoke, unsuitable for this small pixel-art punch accent.
+  [Free Pixel Art Enemy Spaceships](https://craftpix.net/freebies/free-pixel-art-enemy-spaceship-2d-sprites/)
+  includes larger explosions, also unsuitable for this restrained accent.
+  No pack was downloaded for either; the final accent is code-drawn, with no
+  new bitmap art.
+
+### Audio files and rights
+
+Public download URLs required no account or purchase. Kenney archive-supplied
+`License.txt` wording is preserved, with normalized whitespace, as
+`licenses/kenney-impact.txt`,
+`kenney-interface.txt` and `kenney-rpg.txt`. All identify CC0. The music author
+upload page identifies CC0 and permits use without attribution; its authored
+source record is [music.txt](licenses/music.txt), not a supplied archive license.
+[CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) permits use and
+modification without attribution requirements. Credits are retained here.
+
+| Publisher / pack | Acquired file | Imported source → local file |
+| --- | --- | --- |
+| [Kenney / Impact Sounds 1.0](https://kenney.nl/assets/impact-sounds) | `kenney_impact-sounds.zip` | `Audio/impactPunch_medium_000.ogg` → `audio/hit.ogg`; `impactPunch_heavy_000.ogg` → `hurt.ogg`; `impactWood_heavy_000.ogg` → `break.ogg` |
+| [Kenney / Interface Sounds 1.0](https://kenney.nl/assets/interface-sounds) | `kenney_interface-sounds.zip` | `Audio/confirmation_001.ogg` → `audio/pickup.ogg`; `select_001.ogg` → `focus.ogg`; `click_001.ogg` → `confirm.ogg` |
+| [Kenney Vleugels / RPG Audio](https://kenney.nl/assets/rpg-audio) | `kenney_rpg-audio.zip` | `Audio/cloth1.ogg` → `audio/swing.ogg` |
+| [pmiller / Chiptune Battle Music](https://opengameart.org/content/chiptune-battle-music) | `battle_music_01-loop.ogg` | Unchanged → `audio/street.ogg` |
+
+Only these eight audio files and license records are imported. Archive copies
+are temporary `/private/tmp/brawler-presentation/`; no unused sounds, preview
+tracks, HTML, or project files are shipped. All source audio bytes are unchanged.
+Music is 152 s long; the source page recommends repeating its loop file from
+approximately 7.5 s. The Godot import enables looping with offset 7.5; the intro
+plays on app boot. Listening to the seam is still a manual acceptance item.
+
+### Playback mapping
+
+`scenes/ui/audio.gd` owns one Music player, six bounded gameplay SFX players and
+one menu SFX player. Master/Music/SFX default to 80%/45%/80%, with a -1 dB Master
+hard limiter. Music's player gain is -10 dB in play and -18 dB in menus; gameplay
+SFX gain is -8 dB and menu gain -12 dB. Per-bus 0% explicitly mutes.
+
+An attack commitment requests `swing`; an accepted receiver hit requests `hit`
+or `hurt` for the hero, including protected boss commitments. A lethal crate hit
+requests `break` rather than an extra hit cue. Food requests `pickup` once.
+Focus and activation request `focus`/`confirm`; results use `hurt`/`pickup` on
+the menu voice after clearing old game sounds. Rejected damage emits no feedback.
+Pause freezes gameplay sound tails and spark lifetimes while music/menu audio
+continues. Retry/Main Menu stop gameplay voices and discard old effect nodes;
+they preserve the one music player and session volume choices. No settings save,
+hit pause, time-scale change or camera shake is introduced.

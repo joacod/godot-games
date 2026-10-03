@@ -1,6 +1,6 @@
 # Asset brief and candidate sources
 
-**Status: Step 07 adds a cropped street crate and free CraftPix ribs icon, 2026-10-02.** Biker, seaport enemy 1, and a
+**Status: Step 08 integrates presentation, a street dumpster crop and CC0 audio, 2026-10-02.** Biker, seaport enemy 1, and a
 street backdrop are in the project. The acquisition record and exact sample
 mapping are in [asset provenance](assets/PROVENANCE.md). Other entries below
 remain candidates, not verified animation coverage.
@@ -70,8 +70,9 @@ height, and palette must work together; matching the genre tag is not enough.
 - World: background layers, broad ground surface, arena boundaries, one breakable
   prop with broken state, one recognizable food pickup, small impact effect.
 - UI/audio: legible font, health presentation, attack/hit/hurt/break/pickup/menu
-  sounds, and one music loop. These have no selected source yet; search CraftPix
-  first and record any remaining sourcing gap before adding another source.
+  sounds, and one music loop. Step 08 uses the built-in Godot font, native health bars, small code-drawn sparks,
+  Kenney CC0 effects and a pmiller CC0 music loop. CraftPix candidates and the
+  download-access gap are recorded in provenance.
 
 An asset with three attack sheets is not necessarily three unarmed strikes.
 If a required animation is missing, report the exact gap and propose either a
@@ -135,3 +136,12 @@ The 32 × 32 transparent PNG is unchanged. Native staged rendering checked scale
 labels and ground sorting; full-route visual fit and recovery balance remain
 pending manual acceptance. Exact source/crop details are in
 [provenance](assets/PROVENANCE.md#step-07-crate-and-food).
+
+Step 08 retains every approved actor sheet, scale, foot offset and contact window.
+A cropped dumpster from the existing street pack dresses the rear of the final
+yard; it is scenery outside the walkable strip. The normal street hides cyan
+anchors and its diagnostic bounds outline, retaining striped encounter locks and
+boss SWEEP/CHARGE/OPEN cues. Test scenes remain unchanged. Exact audio sources,
+license records and scene mappings are in
+[provenance](assets/PROVENANCE.md#step-08-presentation-and-audio). Final animation
+readability and listening acceptance remain pending a full hands-on run.

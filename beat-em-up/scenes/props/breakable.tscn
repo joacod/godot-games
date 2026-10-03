@@ -40,5 +40,5 @@ offset_top = -79.0
 offset_right = 54.0
 offset_bottom = -61.0
 theme_override_font_sizes/font_size = 12
-text = "J: break for food"
+text = "J / west: food"
 horizontal_alignment = 1
