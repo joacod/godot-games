@@ -1,6 +1,6 @@
 # Asset brief and candidate sources
 
-**Status: Step 08 integrates presentation, a street dumpster crop and CC0 audio, 2026-10-02.** Biker, seaport enemy 1, and a
+**Status: Step 09 proves an isolated alternate-art swap using existing CraftPix resources, 2026-10-02.** Biker, seaport enemy 1, and a
 street backdrop are in the project. The acquisition record and exact sample
 mapping are in [asset provenance](assets/PROVENANCE.md). Other entries below
 remain candidates, not verified animation coverage.
@@ -103,8 +103,11 @@ scale, and foot offset after import. Record active hit windows separately.
 Changing art must not require changing enemy decisions, encounter sequencing,
 damage rules, or menu flow. Different proportions can require explicit offsets,
 collision footprints, reach, and animation timing adjustments; a swap is not
-promised to be a filename replacement. Step 09 will prove and document this with
-one real alternate character using a duplicate validation scene.
+promised to be a filename replacement. Step 09 proves this with a Cyborg-drawn
+grunt in an inherited validation scene;
+[the editing guide](docs/EDITING.md#proven-alternate-art-sample) records the exact
+resource/offset changes and unchanged gameplay values. Final hands-on fit
+remains pending.
 
 Step 03 imports only Biker and seaport enemy 1 hurt/death sheets from the original
 archives. Gameplay trims the second punch, maps the kick to finisher/air attack,

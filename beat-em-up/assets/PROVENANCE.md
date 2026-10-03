@@ -261,3 +261,20 @@ Pause freezes gameplay sound tails and spark lifetimes while music/menu audio
 continues. Retry/Main Menu stop gameplay voices and discard old effect nodes;
 they preserve the one music player and session volume choices. No settings save,
 hit pause, time-scale change or camera shake is introduced.
+
+## Step 09 alternate-art proof
+
+On 2026-10-02, reused the Step 04 Cyborg PNG subset and existing
+`scenes/enemies/bruiser_frames.tres` in
+`scenes/sample/art_swap_street.tscn`. The source is the already-acquired
+[Free 3 Cyberpunk Characters pack](https://craftpix.net/freebies/free-3-cyberpunk-characters-pixel-art/);
+[hero.txt](licenses/hero.txt) remains the supplied terms record. No acquisition,
+license change, pixel modification, download or purchase occurred in this step.
+
+The inherited fight scene changes only the left grunt's SpriteFrames resource
+and offset from (-21, -48) to (-14, -48), plus its explanatory title. The
+existing 48 × 48 mappings, 2× scale and Cyborg intact fall/reverse get-up entries
+are retained. The actor still uses grunt tuning and the original enemy script.
+Primary level resources are unchanged. See the
+[replacement guide](../docs/EDITING.md#proven-alternate-art-sample) and
+[Step 09 evidence](../docs/steps/09-acceptance.md#completion-record).

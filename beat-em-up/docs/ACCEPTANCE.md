@@ -22,7 +22,11 @@ Step 07 recovery regressions and staged native rendering are recorded in its
 results. Step 08 presentation checks, staged native art review and audio-output
 measurements are in its [completion record](steps/08-presentation.md#completion-record).
 Listening quality and final hands-on presentation acceptance remain pending.
-A full hands-on clear,
+Step 09 regression and alternate-art proof are implemented; see its
+[completion record](steps/09-acceptance.md#completion-record) for the tested
+working tree, 427 automated checks, native results and per-area evidence audit.
+The user authorized progression without supplying final listening/playthrough
+results. A full hands-on clear,
 boss balance, and physical controller results remain pending. The remaining gameplay and final acceptance checks
 below remain pending. Keep automated results separate from visual, input, controller,
 and audio observations. A missing controller leaves controller acceptance pending.
@@ -68,6 +72,10 @@ Do not invent a passing suite or add an external test dependency by default.
   Run `--script res://tests/presentation_test.gd` with the same flags. Synthetic
   events and output measurements do not establish physical controller support
   or listening quality.
+- Step 09: run `--script res://tests/art_swap_test.gd` with the same flags for
+  the actual alternate-art scene, unchanged grunt tuning, phase poses, depth/
+  height/facing eligibility, hurt/down/recovery/death and retry. The
+  [editing guide](EDITING.md) explains the exact visual overrides.
 
 ## Manual checks
 
