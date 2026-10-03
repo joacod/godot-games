@@ -1,150 +1,79 @@
-# Asset brief and candidate sources
+# Art reference
 
-**Status: Step 09 proves an isolated alternate-art swap using existing CraftPix resources, 2026-10-02.** Biker, seaport enemy 1, and a
-street backdrop are in the project. The acquisition record and exact sample
-mapping are in [asset provenance](assets/PROVENANCE.md). Other entries below
-remain candidates, not verified animation coverage.
+The finished level uses free CraftPix character and street art, Kenney CC0
+interface and impact sounds, and one CC0 music loop. Exact archives, crops,
+licenses, and frame indices are in [provenance](assets/PROVENANCE.md).
+[The editing guide](docs/EDITING.md) is the procedure for a further swap.
 
-## Step 01 decisions and gaps
+## What is in the game
 
-- Biker supplies idle/run, an unarmed punch (`attack1`), a double punch
-  (`attack2`), and a kick (misleadingly named `punch`). The source `attack3`
-  contains an energy weapon and is excluded. The sample displays the unmodified
-  double-punch sheet; it is not yet a one-strike combo implementation.
-- Seaport enemy 1 supplies idle/walk and a melee attack. Other entries include
-  ranged characters, drones, and a robot dog; this archive does not establish
-  two standing melee silhouettes. Step 04 uses the armored Cyborg from the already-acquired hero pack as the bruiser.
-- Both inspected actor archives have hurt/death, but no dedicated get-up.
-  Biker has jump poses but no dedicated air attack. Approved direction for later
-  mechanics: trim the second punch into one strike; use the kick as
-  the finisher and air attack; use non-disintegrating death/fall frames for
-  knockdown and reverse the fall into recovery. Validate these visually when
-  implementing the owning mechanics. These are approved adaptations, implemented in Step 03 and inspected as
-  rendered poses. The user accepted Step 03 after manual testing; no detailed
-  device results were supplied.
-- The free extra-animation and factory-boss archives were inspected before Step
-  02. Extra motions provide walk and airborne fall/landing poses, but no dedicated
-  air attack or get-up. Toxic Enforcer has readable melee punches, running poses,
-  and a non-disintegrating death; punch/run are proposed sweep/charge mappings.
-  The already-downloaded Cyborg has an armored silhouette and an unarmed punch,
-  making it a bruiser candidate. Step 04 imports Cyborg; Step 06 imports Toxic Enforcer for the boss;
-  scale, attack/recovery presentation, and final cast fit remain to be validated
-  in Steps 04/06. No paid pack is selected.
-- The street sample composites City1 Bright sky, buildings, rear wall and road,
-  omitting oversized foreground props and the obscuring front wall. A mirrored
-  road strip extends the floor. This is a single sample, not a verified tiling
-  level. Its illustrative ground band is Y=238–316; bounds arrive in Step 02.
-
-On 2026-10-02 the user chose to keep the free assets already available and make
-adjustments for missing motions later. This resolves the asset decision needed
-to proceed with Step 02; complete cast and adaptation acceptance remain pending
-in the owning mechanics. Step 02 imports only the original Biker jump sheet and
-uses its poses for ascent/apex/descent; it retains the existing locomotion sheet.
-
-## Direction and shortlist
-
-Start with a cohesive urban pixel-art style. Prefer free CraftPix assets or packs
-already available through the user's account. Review actual animation sheets in
-Step 01 before settling on character scale and combat presentation.
-
-| Need | Candidate | What still needs checking |
+| Role | Source | Local files |
 | --- | --- | --- |
-| Hero | [Free 3 Cyberpunk Characters](https://craftpix.net/freebies/free-3-cyberpunk-characters-pixel-art/) | Listed with 12 animations per character; verify unarmed attacks, jump and reactions |
-| Extra hero motion | [Free Extra Animations for Cyberpunk Characters](https://craftpix.net/freebies/free-extra-animations-for-cyberpunk-characters/) | Optional supplement; verify matching character, anchor and dimensions |
-| Ordinary enemies | [Free Pixel Enemies for Seaport](https://craftpix.net/freebies/free-pixel-enemies-character-pack-for-seaport-location/) | Choose two readable melee silhouettes; check attack and knockdown coverage |
-| Boss | [Free Factory Boss Enemies](https://craftpix.net/freebies/free-factory-boss-enemies-asset-pack-for-cyberpunk/) | Toxic Enforcer candidate; verify animations can communicate sweep and charge |
-| Scenery | [Free Pixel Art Street Backgrounds](https://craftpix.net/freebies/free-pixel-art-street-2d-backgrounds/) | Layered backgrounds; confirm usable ground depth, seams and scale |
-| Ground and props | [Free Seaport Tileset](https://craftpix.net/freebies/free-seaport-tileset-32x32-pixel-art-for-platformer/) | Platformer art may need careful layout for a broad brawler street |
+| Hero | [Free 3 Cyberpunk Characters](https://craftpix.net/freebies/free-3-cyberpunk-characters-pixel-art/), Biker | `assets/hero/` |
+| Grunts | [Free Pixel Enemies for Seaport](https://craftpix.net/freebies/free-pixel-enemies-character-pack-for-seaport-location/), enemy 1 | `assets/enemy/` |
+| Bruiser and the art-swap sample | Same cyberpunk pack, Cyborg | `assets/bruiser/` |
+| Boss | [Free Factory Boss Enemies](https://craftpix.net/freebies/free-factory-boss-enemies-asset-pack-for-cyberpunk/), Toxic Enforcer | `assets/boss/` |
+| Street, crate, dumpster | [Free Pixel Art Street Backgrounds](https://craftpix.net/freebies/free-pixel-art-street-2d-backgrounds/), City1 Bright | `assets/street/`, `assets/props/crate.png` |
+| Food | [Free Pixel Art Icons for Mine Location](https://craftpix.net/freebies/free-pixel-art-icons-for-mine-location/), Ribs | `assets/props/food.png` |
+| Hits, hurt, break, swing, menu | [Kenney](https://kenney.nl/) CC0 packs | `assets/audio/` |
+| Music | [pmiller / Chiptune Battle Music](https://opengameart.org/content/chiptune-battle-music) CC0 | `assets/audio/street.ogg` |
 
-Do not force a shallow side-scrolling background to serve as the entire walkable
-plane. Evaluate a street/yard floor separately. Pixel density, perspective, actor
-height, and palette must work together; matching the genre tag is not enough.
+UI text uses Godot's built-in font. Health bars and the impact spark are drawn
+in code. Encounter locks and the boss SWEEP, CHARGE, and OPEN cues are drawn
+in the street scene. Actor sheets are 48 × 48 except the boss, which is
+96 × 96. Gameplay displays them at 2×. Source pixels are unchanged; unused
+frames were omitted from the SpriteFrames resources.
 
-## Required coverage
+## Adaptations
 
-- Hero: idle, locomotion, three readable combo strikes, jump/fall, air attack,
-  hurt, knockdown/get-up, and death.
-- Ordinary enemies: idle, locomotion, tell/attack/recovery, hurt, knockdown/get-up,
-  and death. Bruiser must be visually distinguishable without color alone.
-- Boss: idle/movement, readable sweep and charge phases, hurt feedback, death.
-- World: background layers, broad ground surface, arena boundaries, one breakable
-  prop with broken state, one recognizable food pickup, small impact effect.
-- UI/audio: legible font, health presentation, attack/hit/hurt/break/pickup/menu
-  sounds, and one music loop. Step 08 uses the built-in Godot font, native health bars, small code-drawn sparks,
-  Kenney CC0 effects and a pmiller CC0 music loop. CraftPix candidates and the
-  download-access gap are recorded in provenance.
+The packs do not include a dedicated air attack or get-up. The game uses
+these mappings instead of new drawings:
 
-An asset with three attack sheets is not necessarily three unarmed strikes.
-If a required animation is missing, report the exact gap and propose either a
-better pack or a clearly described animation adaptation for review. Temporary
-debug shapes may support mechanic checks, but cannot satisfy final art acceptance.
-Do not create replacement artwork before reviewing suitable CraftPix options.
+- The hero's second punch sheet is trimmed to one strike. The kick sheet is
+  the combo finisher and the air attack. Fall frames stop before the
+  disintegrating tail, and get-up plays those frames in reverse.
+- Grunt and bruiser attacks use six entries, with contact at index 4 and
+  recovery at index 5. Fall uses intact frames, then reverse get-up.
+- The boss punch sheet is the sweep, with contact at frame 3. Prepare is the
+  stationary charge tell, Run is the moving charge, and intact Death frames
+  are the defeat. Feet use offset `(-48, -96)`.
 
-## Acquisition and provenance
+Attack and reaction frames are selected by state timers. Looping idle and
+move animations are the ones that advance by FPS. Provenance lists the index
+lists. Do not treat a sheet filename as the gameplay rule.
 
-Use the user's logged-in browser for free or already-owned downloads when
-available. Do not purchase a pack without explicit authorization. If access is
-unavailable, provide the user the product link and exact files/animations needed.
+## Reviewed and not imported
 
-For each imported pack record product URL, title/author, acquisition date, archive
-name, included files, local destinations, modifications, and the license supplied
-with that download. Consult the [CraftPix license page](https://craftpix.net/file-licenses/)
-and the archive's terms at acquisition; licensing has not been verified by this
-plan. Import only used assets and required license records, not whole promotional
-or engine-specific bundles. Do not copy assets from `2d-platform` by assumption.
+These were checked and left out. A later art pass can start somewhere else.
 
-## Replacement contract to implement and verify
+- [Free Extra Animations for Cyberpunk Characters](https://craftpix.net/freebies/free-extra-animations-for-cyberpunk-characters/):
+  walk and airborne fall poses, still no dedicated air attack or get-up.
+- [Free Seaport Tileset](https://craftpix.net/freebies/free-seaport-tileset-32x32-pixel-art-for-platformer/):
+  platformer tiles. The street pack already supplied the crate.
+- [Free Futuristic Sounds and Music Pack](https://craftpix.net/freebies/free-futuristic-sounds-and-music-pack-for-pixel-games/):
+  the signed-in download was unavailable when audio was chosen. Kenney and
+  the CC0 loop were used instead.
+- [Free Cartoon Smoke Effects](https://craftpix.net/freebies/free-cartoon-smoke-effects-asset-pack/)
+  and [Free Pixel Art Enemy Spaceships](https://craftpix.net/freebies/free-pixel-art-enemy-spaceship-2d-sprites/):
+  the smoke and explosions were the wrong scale and style for a small punch accent.
 
-Keep feet anchored at the actor root, visuals under a separate child, and a
-consistent facing convention. Map source animations to semantic gameplay names.
-Record each sheet's dimensions, frame rectangles/count, frame rate, looping,
-scale, and foot offset after import. Record active hit windows separately.
+The hero's energy-weapon attack sheet, other seaport characters, other factory
+bosses, and unused street foreground layers are also outside the project.
 
-Changing art must not require changing enemy decisions, encounter sequencing,
-damage rules, or menu flow. Different proportions can require explicit offsets,
-collision footprints, reach, and animation timing adjustments; a swap is not
-promised to be a filename replacement. Step 09 proves this with a Cyborg-drawn
-grunt in an inherited validation scene;
-[the editing guide](docs/EDITING.md#proven-alternate-art-sample) records the exact
-resource/offset changes and unchanged gameplay values. Final hands-on fit
-remains pending.
+## Replacement rules
 
-Step 03 imports only Biker and seaport enemy 1 hurt/death sheets from the original
-archives. Gameplay trims the second punch, maps the kick to finisher/air attack,
-and selects intact fall frames with reverse recovery. See the exact frame mapping
-and phase timing in [Step 03](docs/steps/03-combat.md#combat-tuning-and-animation-mapping).
-No new pack, replacement artwork, paid asset, or extra-animation import was needed.
+Look on CraftPix before generating replacement art. Prefer a free pack or one
+already available on the user's account. Do not purchase without an explicit
+yes. Import only used files and the license record. Do not copy assets from
+`2d-platform` by assumption.
 
-Step 04 imports Cyborg idle/run/attack1/hurt/death as the bruiser. Its armored
-silhouette differs from the seaport grunts without recoloring. The punch uses
-source frame 4 for contact; fall uses intact frames 0–3 and reverse recovery.
-The user accepted Step 04 after manual testing. Detailed motion/device observations
-were not supplied; final cast and art-replacement acceptance remain in Step 09.
+Keep feet at the actor root, visuals on a separate child, and a consistent
+facing. Map sheets to the semantic animation names already in the frame
+resources. Record dimensions, rectangles, frame rate, looping, scale, and foot
+offset in provenance. Record hit windows separately from animation FPS.
 
-Step 06 imports only Toxic Enforcer Idle/Run/Attack/Prepare/Hurt/Death. The punch
-maps to sweep (contact frame 3); Prepare maps to a stationary charge tell, Run to
-its straight active movement, and intact Death frames to defeat. The 96 × 96
-frames display at 2×, with foot offset (-48, -96). Native staged rendering was
-inspected; attack readability, balance, and final cast acceptance remain pending
-hands-on play. No new pack, paid asset, replacement artwork, or other boss was added.
-See [Step 06](docs/steps/06-boss.md#boss-tuning-and-animation-mapping).
-
-Step 07 crops a single crate from City1 Bright `boxes&container.png` in the
-already-acquired street pack. The broken state reuses narrow strips of that crop
-as fallen planks. The free seaport tileset was reviewed as an alternative;
-the existing street art supplied a suitable crate without another tileset import.
-For food, imported only `1 Icons/Icons_17.png` (Ribs/meat) from
-[Free Pixel Art Icons for Mine Location](https://craftpix.net/freebies/free-pixel-art-icons-for-mine-location/).
-The 32 × 32 transparent PNG is unchanged. Native staged rendering checked scale,
-labels and ground sorting; full-route visual fit and recovery balance remain
-pending manual acceptance. Exact source/crop details are in
-[provenance](assets/PROVENANCE.md#step-07-crate-and-food).
-
-Step 08 retains every approved actor sheet, scale, foot offset and contact window.
-A cropped dumpster from the existing street pack dresses the rear of the final
-yard; it is scenery outside the walkable strip. The normal street hides cyan
-anchors and its diagnostic bounds outline, retaining striped encounter locks and
-boss SWEEP/CHARGE/OPEN cues. Test scenes remain unchanged. Exact audio sources,
-license records and scene mappings are in
-[provenance](assets/PROVENANCE.md#step-08-presentation-and-audio). Final animation
-readability and listening acceptance remain pending a full hands-on run.
+Changing art must not require changing enemy decisions, encounter order, damage
+rules, or menus. Different proportions can require an explicit offset,
+footprint, reach, or timing change. The Cyborg grunt in
+`scenes/sample/art_swap_street.tscn` is the worked example: art and foot offset
+changed, grunt tuning did not.

@@ -5,7 +5,10 @@ Prioritize complete, understandable gameplay over frameworks or speculative reus
 
 - Read the relevant project, scenes, and scripts before editing. For
   `2d-platform`, use [the game README](2d-platform/README.md) and
-  [the art reference](2d-platform/ASSETS.md).
+  [the art reference](2d-platform/ASSETS.md). For `beat-em-up`, use
+  [the game README](beat-em-up/README.md), [the design](beat-em-up/docs/DESIGN.md),
+  [the editing guide](beat-em-up/docs/EDITING.md), and
+  [asset provenance](beat-em-up/assets/PROVENANCE.md).
 - If requirements are unclear, ask before coding. Explain the approach and wait
   for confirmation before non-trivial features, architecture changes, or broad rewrites.
 - When asked for a numbered step, complete only that step and report its validation.

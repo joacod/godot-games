@@ -34,13 +34,14 @@ The archive-supplied license files are preserved as
 That page was reviewed on acquisition: its freebie terms permit personal and
 commercial game use and modification, with restrictions on resale and
 redistribution of the artwork itself. This records the source terms, not a
-separate license for the repository. No publication is part of Step 01.
+separate license for the repository. Nothing here was published.
 
 ## Sprite mapping
 
 All frames are 48 × 48, in one horizontal row; zero-based frame `i` uses
-`Rect2(i * 48, 0, 48, 48)`. Frame durations are equal. These are preview rates,
-not approved combat timings. No active hit windows or damage exist yet.
+`Rect2(i * 48, 0, 48, 48)`. Frame durations are equal. The rates below are the
+original preview rates. Combat scenes select attack frames from state timers
+instead of these FPS values.
 
 | Actor / semantic name | Local sheet | Sheet size | Frames | FPS | Loop |
 | --- | --- | --- | --- | --- | --- |
@@ -59,17 +60,17 @@ Sprites are uncentered, with offsets (-14, -48) and (-21, -48). The separate
 uses X=-2 to mirror around the feet, rather than around the sheet center.
 Standing silhouettes are about 68–72 logical pixels high.
 
-Both roots stay fixed, at (240, 258) and (398, 310). Their shadows and cyan
-anchor marks stay at ground level. The parent sorts by root Y. Sorting under
-movement/jump is not tested because those mechanics are intentionally absent.
+In the original preview, both roots stay fixed, at (240, 258) and (398, 310).
+Their shadows and cyan anchor marks stay at ground level. The parent sorts by
+root Y. That preview does not move or jump; the playable street does.
 
 Preview phases last 2.4 seconds: idle → move → first attack → second attack →
 third attack → repeat. Enemy attack restarts in each attack phase. Non-looping
 animations hold their final frame until the next phase. Movement is an in-place
 animation preview, not foot-sliding acceptance for locomotion.
 
-For unresolved coverage and proposed adaptations, see
-[the asset brief](../ASSETS.md#step-01-decisions-and-gaps).
+The finished cast and the approved motion adaptations are in
+[the art reference](../ASSETS.md#adaptations).
 
 ## Step 02 movement subset
 
@@ -81,13 +82,14 @@ sheets and adds semantic `jump`. Jump frames do not advance by FPS: the movement
 script selects frame 1 while rising faster than 60 px/s, frame 2 near the apex,
 and frame 3 while descending faster than 60 px/s. Frame 0 is not used in the
 current jump presentation. All use the existing (14, 48) anchor and 2× scale.
-This does not establish air-attack or recovery animation coverage.
+The jump sheet itself has no air attack or get-up. Later combat imports use the
+kick and trimmed fall frames for those motions; see the combat subset below.
 
-The original preview is now `scenes/sample/street_sample.tscn`, unchanged from
-its former `main.tscn` contents. The new movement street places two copies of
-the same backdrop/road composite across a 1280-pixel test area, mirroring the
-right copy horizontally to join matching edge pixels. Source pixels are unchanged;
-this is a test street with repeated/mirrored scenery, not final level art.
+The original preview is `scenes/sample/street_sample.tscn`. The movement test
+street places two copies of the same backdrop and road composite across a
+1280-pixel area, mirroring the right copy horizontally so the edge pixels join.
+Source pixels are unchanged. The finished level repeats that same composite;
+it is not a newly painted street.
 
 Two additional free archives were downloaded through signed-in Chrome for review:
 
@@ -118,9 +120,8 @@ Finisher uses kick indices 0–5; air attack uses 2, 3, 4, 5.
 Hero fall uses 0, 1, 2 (before the fragmented tail); get-up reverses 2, 1, 0.
 Dummy fall uses 2, 3, 4 (omitting initial muzzle flashes and final tail);
 get-up reverses 4, 3, 2. Hurt uses indices 0, 1 for both.
-These are selected frames, not edited source pixels. Actual contact windows and
-phase-driven frame selection are in the
-[Step 03 record](../docs/steps/03-combat.md#combat-tuning-and-animation-mapping).
+These are selected frames, not edited source pixels. State timers choose the
+contact frame; sheet FPS does not. The player exports own the hit windows.
 
 ## Step 04 ordinary enemies
 
@@ -161,8 +162,21 @@ it is an authored provenance note, not a supplied license. The official
 on this date. They allow use/modification in personal and commercial game projects,
 with restrictions on resale or redistribution of the artwork itself. No purchase
 or publication occurred. Other bosses, projectiles, fonts, and unused motions are
-excluded. Sprite mappings and active windows are recorded in
-[Step 06](../docs/steps/06-boss.md#boss-tuning-and-animation-mapping).
+excluded.
+
+All boss frames are 96 × 96, `Rect2(i * 96, 0, 96, 96)`, displayed at 2× with
+offset `(-48, -96)`. Feet and the shadow stay on the ground root.
+
+| Semantic animation | Sheet size | Frames | Playback |
+| --- | --- | --- | --- |
+| Idle | 384 × 96 | 0–3 | 8 FPS, looping |
+| Move / active charge | 576 × 96 | 0–5 | 8 FPS, looping |
+| Sweep | 576 × 96 | Tell 0–2; contact 3; recovery 5 | Held by attack phase |
+| Charge prepare / recovery | 192 × 96 | Tell 0; recovery 1 | Held by attack phase |
+| Hurt | 192 × 96 | 0–1 | Shared 0.24 s reaction |
+| Death (`fall`) | 576 × 96 | 0–5, intact fall | 0.9 s, then the last pose holds |
+
+Sweep and charge timing, reach, and damage are exports on `scenes/enemies/boss.gd`.
 
 ## Step 07 crate and food
 
@@ -241,9 +255,9 @@ modification without attribution requirements. Credits are retained here.
 Only these eight audio files and license records are imported. Archive copies
 are temporary `/private/tmp/brawler-presentation/`; no unused sounds, preview
 tracks, HTML, or project files are shipped. All source audio bytes are unchanged.
-Music is 152 s long; the source page recommends repeating its loop file from
-approximately 7.5 s. The Godot import enables looping with offset 7.5; the intro
-plays on app boot. Listening to the seam is still a manual acceptance item.
+Music is 152 s long. The source page recommends repeating the loop from about
+7.5 s. The Godot import loops with that offset, and the intro plays on app boot.
+Judge the seam by ear when the music file or its import changes.
 
 ### Playback mapping
 
@@ -275,6 +289,6 @@ The inherited fight scene changes only the left grunt's SpriteFrames resource
 and offset from (-21, -48) to (-14, -48), plus its explanatory title. The
 existing 48 × 48 mappings, 2× scale and Cyborg intact fall/reverse get-up entries
 are retained. The actor still uses grunt tuning and the original enemy script.
-Primary level resources are unchanged. See the
-[replacement guide](../docs/EDITING.md#proven-alternate-art-sample) and
-[Step 09 evidence](../docs/steps/09-acceptance.md#completion-record).
+Primary level resources are unchanged. The
+[editing guide](../docs/EDITING.md#proven-alternate-art-sample) records the
+override.
