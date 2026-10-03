@@ -1,0 +1,22 @@
+schema: spec-driven
+context: |
+  This repository contains independent, copyable one-level Godot games.
+  New work targets Godot 4.7; development verification uses 4.7.2 and GDScript.
+  survivors/, point-and-click/, and shooter/ have separate project.godot files,
+  scenes, scripts, data, assets, and tests. No cross-game runtime dependencies,
+  shared launcher, shared autoload, or extension of either existing game.
+  Research and project docs/DESIGN.md precede gameplay implementation.
+  Mechanics belong in focused scripts; presentation and tuning belong in
+  project-local data or packed scenes. Placeholder visuals must remain runnable.
+  Research CraftPix first; no purchased asset pack is required to run.
+  Keep proposed requirements in changes until implementation is verified.
+rules:
+  proposal:
+    - State the one-level scope and explicit exclusions.
+  specs:
+    - Include observable success, failure or invalid-action, retry, and independent-copy scenarios.
+  design:
+    - Link the canonical project docs/DESIGN.md, researched sources, and reskin contract.
+  tasks:
+    - Group numbered tasks by game and link each bounded step guide.
+    - Separate automated validation from native visual and human playtest evidence.
