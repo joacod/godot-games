@@ -1,16 +1,21 @@
-[gd_resource type="AudioBusLayout" load_steps=2 format=3]
+[gd_resource type="AudioBusLayout" format=3 uid="uid://cis37k8ftiw3c"]
 
 [sub_resource type="AudioEffectHardLimiter" id="Limiter"]
 ceiling_db = -1.0
 
 [resource]
-bus/0/name = &"Master"
 bus/0/volume_db = -1.9382
 bus/0/effect/0/effect = SubResource("Limiter")
 bus/0/effect/0/enabled = true
 bus/1/name = &"Music"
+bus/1/solo = false
+bus/1/mute = false
+bus/1/bypass_fx = false
 bus/1/volume_db = -6.9357
 bus/1/send = &"Master"
 bus/2/name = &"SFX"
+bus/2/solo = false
+bus/2/mute = false
+bus/2/bypass_fx = false
 bus/2/volume_db = -1.9382
 bus/2/send = &"Master"
