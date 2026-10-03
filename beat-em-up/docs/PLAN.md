@@ -32,7 +32,9 @@ Step 05 is accepted after user-reported manual testing. Step 06 is accepted by
 the user for progression; detailed hands-on results were not supplied. Step 07
 is accepted by the user for progression; recovery/balance hands-on results were
 not supplied. Step 08 is implemented, pending listening and manual validation.
-Step 09 is **not started**.
+Step 09 regression and alternate-art proof are implemented, pending final
+hands-on acceptance. The user authorized progression on 2026-10-02; this does
+not establish Step 08 listening acceptance.
 Steps depend on the preceding step. They can be requested individually, but are not independent
 implementations.
 
@@ -46,7 +48,7 @@ implementations.
 | [06 — Boss and completion](steps/06-boss.md) | Accepted by user for progression | Boss and complete result/reset loop; see validation record |
 | [07 — Props and recovery](steps/07-props.md) | Accepted by user for progression | Breakable and food on connecting stretch; balance playtest pending |
 | [08 — Presentation](steps/08-presentation.md) | Implemented; listening/manual validation pending | Art, sound, menus and feedback integrated; see validation record |
-| [09 — Acceptance and art swap](steps/09-acceptance.md) | Full regression and replacement proof | Verified game with practical editing notes |
+| [09 — Acceptance and art swap](steps/09-acceptance.md) | Implemented; final hands-on acceptance pending | Regression and replacement proof with editing notes |
 
 ## How to implement a step
 

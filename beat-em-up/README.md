@@ -4,7 +4,7 @@ A single-player, one-level street brawler inspired by Final Fight, in developmen
 Build a complete, enjoyable game first; make later art swaps straightforward
 through ordinary Godot scenes and Inspector values.
 
-**Status: Step 08 presentation implemented; listening/manual validation pending.**
+**Status: Step 09 art-swap proof and regression implemented; final hands-on acceptance pending.**
 F5 opens a title with Play, Controls, Audio, and Quit. Play starts a fresh street route:
 safe entrance → two grunts → connecting stretch → two grunts followed by a
 grunt/bruiser wave → locked final arena with Toxic Enforcer → victory.
@@ -89,6 +89,7 @@ The original automatic art preview is preserved at
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/boss_test.gd
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/props_test.gd
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/presentation_test.gd
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path beat-em-up --fixed-fps 60 --script res://tests/art_swap_test.gd
 git diff --check
 ```
 
@@ -104,6 +105,15 @@ menu/volume tests, native rendering at two window sizes and measured audio outpu
 Listening quality, full-route balance and completion time remain pending hands-on
 play. Headless accelerated audio tests can report Ogg playback resources retained
 at shutdown; the native presentation suite at real frame timing exits cleanly.
+
+## Editing and alternate art
+
+[Play, tune and replace art](docs/EDITING.md) maps scene ownership, Inspector
+values and phase-driven animation requirements. Open
+`scenes/sample/art_swap_street.tscn` and press F6 to fight a Cyborg-drawn grunt
+with unchanged grunt rules. The primary level retains its chosen cast.
+The [Step 09 record](docs/steps/09-acceptance.md#completion-record) records the
+full regression, swap proof and remaining final acceptance checks.
 
 ## Start here
 
