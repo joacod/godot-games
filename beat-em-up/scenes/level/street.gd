@@ -8,11 +8,13 @@ const ROUTE_BOUNDS := Rect2(48, 242, 2672, 70)
 const BOSS_BOUNDS := Rect2(2180, 242, 540, 70)
 const BOSS = preload("res://scenes/enemies/boss.tscn")
 
+@export var debug_bounds: bool = false
+
 @onready var player: CharacterBody2D = $Actors/Player
 @onready var camera: Camera2D = $Camera
 @onready var encounters: Array[Node] = [$FirstFight, $YardFight]
 var active: Node2D
-var prompt: String = "Move →  J: combo   Space: jump"
+var prompt: String = "Move →   J / west: combo   Space / south: jump"
 var reached_entrance: bool = false
 var boss: CharacterBody2D
 var completed: bool = false
@@ -101,11 +103,21 @@ func _boss_defeated() -> void:
 
 
 func _draw_boundaries() -> void:
-	$Boundaries.draw_rect(ROUTE_BOUNDS, Color(0.5, 0.95, 0.85, 0.35), false, 1.0)
+	if debug_bounds:
+		$Boundaries.draw_rect(ROUTE_BOUNDS, Color(0.5, 0.95, 0.85, 0.35), false, 1.0)
 	for encounter in encounters:
 		if encounter == active:
 			for x in [encounter.arena_bounds.position.x, encounter.arena_bounds.end.x]:
-				$Boundaries.draw_line(Vector2(x, 220), Vector2(x, 318), Color(1, 0.7, 0.2), 5.0)
+				_draw_gate(x)
 	if reached_entrance:
 		for x in [BOSS_BOUNDS.position.x, BOSS_BOUNDS.end.x]:
-			$Boundaries.draw_line(Vector2(x, 220), Vector2(x, 318), Color(1, 0.7, 0.2), 5.0)
+			_draw_gate(x)
+
+
+func _draw_gate(x: float) -> void:
+	# A ground stripe is an encounter boundary cue, never an actor hitbox.
+	$Boundaries.draw_rect(Rect2(x - 5, 242, 10, 70), Color(0.08, 0.1, 0.12, 0.85))
+	for y in range(246, 309, 10):
+		$Boundaries.draw_line(Vector2(x - 4, y + 5), Vector2(x + 4, y), Color(1, 0.8, 0.4), 2.0)
+	$Boundaries.draw_string(ThemeDB.fallback_font, Vector2(x - 22, 232), "LOCK", HORIZONTAL_ALIGNMENT_LEFT,
+		-1, 11, Color(1, 0.8, 0.4))

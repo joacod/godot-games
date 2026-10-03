@@ -3,6 +3,8 @@ extends CharacterBody2D
 
 signal health_changed(value: int)
 signal died
+signal damaged
+signal attack_started
 
 enum Reaction { READY, HURT, DOWN, GET_UP, DEAD }
 
@@ -53,6 +55,7 @@ func receive_hit(amount: int, direction: Vector2, knockdown: bool = false) -> bo
 	else:
 		reaction = Reaction.HURT
 	health_changed.emit(health)
+	damaged.emit()
 	if health == 0:
 		died.emit()
 	return true

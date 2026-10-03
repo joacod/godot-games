@@ -18,8 +18,11 @@ device observations were supplied; physical controller acceptance remains pendin
 its [completion record](steps/06-boss.md#completion-record). The user accepted
 Step 06 for progression on 2026-10-02 without detailed hands-on observations.
 Step 07 recovery regressions and staged native rendering are recorded in its
-[completion record](steps/07-props.md#completion-record); recovery/balance manual
-acceptance remains pending. A full hands-on clear,
+[completion record](steps/07-props.md#completion-record); the user accepted Step 07 for progression without detailed recovery/balance
+results. Step 08 presentation checks, staged native art review and audio-output
+measurements are in its [completion record](steps/08-presentation.md#completion-record).
+Listening quality and final hands-on presentation acceptance remain pending.
+A full hands-on clear,
 boss balance, and physical controller results remain pending. The remaining gameplay and final acceptance checks
 below remain pending. Keep automated results separate from visual, input, controller,
 and audio observations. A missing controller leaves controller acceptance pending.
@@ -60,6 +63,11 @@ Do not invent a passing suite or add an external test dependency by default.
   player/boss death precedence, complete retry after pause/death/victory.
 - Step 07: one break/drop/collection, full-health clamp, no pickup by dead/airborne
   player or through a different depth lane.
+- Step 08: keyboard/controller menu events, actual bus volume/mute values, one cue
+  per accepted damage/pickup, pause/effect lifetime and Retry sound/effect cleanup.
+  Run `--script res://tests/presentation_test.gd` with the same flags. Synthetic
+  events and output measurements do not establish physical controller support
+  or listening quality.
 
 ## Manual checks
 

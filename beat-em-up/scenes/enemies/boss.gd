@@ -79,6 +79,7 @@ func _start_attack(kind: Attack) -> void:
 	_hit_targets.clear()
 	velocity = Vector2.ZERO
 	_update_attack_visual()
+	attack_started.emit()
 	queue_redraw()
 
 
@@ -130,6 +131,7 @@ func receive_hit(amount: int, direction: Vector2, _knockdown: bool = false) -> b
 	health = maxi(0, health - amount)
 	_hit_flash = 0.12
 	health_changed.emit(health)
+	damaged.emit()
 	return true
 
 

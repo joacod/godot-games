@@ -42,6 +42,7 @@ func _physics_process(delta: float) -> void:
 		_attack_facing = _facing
 		state = State.WINDUP
 		velocity = Vector2.ZERO
+		attack_started.emit()
 		_tick_attack(delta)
 		return
 	var destination: Vector2 = encounter.approach_position(self)

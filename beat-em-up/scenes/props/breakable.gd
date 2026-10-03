@@ -2,6 +2,7 @@ extends Node2D
 ## A nonblocking receiver; the broken flag owns the single deterministic drop.
 
 signal broken
+signal damaged
 
 const FOOD = preload("res://scenes/props/food.tscn")
 
@@ -36,4 +37,5 @@ func receive_hit(amount: int, _direction: Vector2, _knockdown: bool = false) -> 
 		food.recovery = food_recovery
 		get_parent().add_child(food)
 		broken.emit()
+	damaged.emit()
 	return true

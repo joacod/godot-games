@@ -1,6 +1,7 @@
 # Step 07 — Breakable prop and health recovery
 
-Status: implemented, pending manual validation. Prerequisite: Step 06 accepted
+Status: accepted by the user for progression on 2026-10-02; recovery/balance
+hands-on results remain pending. Prerequisite: Step 06 accepted
 by the user for progression on 2026-10-02.
 
 ## Outcome
@@ -118,4 +119,5 @@ readability and nonblocking movement, retain food at full health, collect after
 damage, pause/retry while food is available, and record completion time/fairness.
 Keyboard and physical controller input need actual play observations; audio
 remains for presentation. Adjust recovery or encounter tuning only from that
-feedback. Step 08 has not started.
+feedback. The user accepted Step 07 for progression on 2026-10-02 without supplying
+detailed hands-on results; Step 08 is recorded separately.

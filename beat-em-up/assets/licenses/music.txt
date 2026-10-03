@@ -1,0 +1,11 @@
+Chiptune Battle Music
+Author: pmiller
+Source: https://opengameart.org/content/chiptune-battle-music
+File: https://opengameart.org/sites/default/files/battle_music_01-loop.ogg
+Acquired: 2026-10-02
+
+The author upload page identifies this work as CC0 and permits use without attribution.
+CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
+This is an authored source record, not an archive-supplied license file.
+Imported unchanged as assets/audio/street.ogg. The page recommends repeating
+the loop file from approximately 7.5 seconds; Godot import uses loop_offset=7.5.

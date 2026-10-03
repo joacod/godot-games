@@ -85,6 +85,7 @@ func _start_strike(index: int) -> void:
 	_hit_targets.clear()
 	_attack_facing = _facing
 	velocity = Vector2.ZERO
+	attack_started.emit()
 
 
 func _tick_attack(delta: float) -> void:
