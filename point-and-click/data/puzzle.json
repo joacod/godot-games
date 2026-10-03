@@ -1,0 +1,272 @@
+{
+  "initial_flags": {
+    "oil_taken": false,
+    "press_repaired": false,
+    "pass_granted": false,
+    "complete": false
+  },
+  "failure_responses": {
+    "look": "There is nothing to inspect there.",
+    "use": "That will not help. Try something else.",
+    "talk": "There is no conversation to have here.",
+    "capacity": "Your inventory is full. Make room before trying again."
+  },
+  "rules": [
+    {
+      "id": "look_oil",
+      "verb": "look",
+      "target_id": "oil",
+      "item_id": "",
+      "requires": [],
+      "effects": [
+        {
+          "type": "show_text",
+          "text": "A flask of oil left beside the press."
+        }
+      ],
+      "failure_text": "There is nothing more to inspect."
+    },
+    {
+      "id": "look_press",
+      "verb": "look",
+      "target_id": "press",
+      "item_id": "",
+      "requires": [],
+      "effects": [
+        {
+          "type": "show_text",
+          "text": "The stamp press is jammed. Its hinges look dry."
+        }
+      ],
+      "failure_text": "There is nothing more to inspect."
+    },
+    {
+      "id": "look_clerk",
+      "verb": "look",
+      "target_id": "clerk",
+      "item_id": "",
+      "requires": [],
+      "effects": [
+        {
+          "type": "show_text",
+          "text": "The clerk waits patiently behind the desk."
+        }
+      ],
+      "failure_text": "There is nothing more to inspect."
+    },
+    {
+      "id": "look_noticeboard",
+      "verb": "look",
+      "target_id": "noticeboard",
+      "item_id": "",
+      "requires": [],
+      "effects": [
+        {
+          "type": "show_text",
+          "text": "Only stamped passes open the gate. Ask the clerk for yours."
+        }
+      ],
+      "failure_text": "There is nothing more to inspect."
+    },
+    {
+      "id": "look_gate",
+      "verb": "look",
+      "target_id": "gate",
+      "item_id": "",
+      "requires": [],
+      "effects": [
+        {
+          "type": "show_text",
+          "text": "The gate is firmly closed. It needs an official stamped pass."
+        }
+      ],
+      "failure_text": "There is nothing more to inspect."
+    },
+    {
+      "id": "take_oil",
+      "verb": "use",
+      "target_id": "oil",
+      "item_id": "",
+      "requires": [
+        {
+          "flag": "oil_taken",
+          "value": false
+        }
+      ],
+      "effects": [
+        {
+          "type": "grant_item",
+          "item_id": "oil"
+        },
+        {
+          "type": "set_flag",
+          "flag_id": "oil_taken",
+          "value": true
+        }
+      ],
+      "failure_text": "The flask has already been collected."
+    },
+    {
+      "id": "repair",
+      "verb": "use",
+      "target_id": "press",
+      "item_id": "oil",
+      "requires": [
+        {
+          "item": "oil",
+          "owned": true
+        },
+        {
+          "flag": "press_repaired",
+          "value": false
+        }
+      ],
+      "effects": [
+        {
+          "type": "consume_item",
+          "item_id": "oil"
+        },
+        {
+          "type": "set_flag",
+          "flag_id": "press_repaired",
+          "value": true
+        },
+        {
+          "type": "show_text",
+          "text": "The press moves freely now."
+        }
+      ],
+      "failure_text": "The press needs no more oil."
+    },
+    {
+      "id": "talk_jammed",
+      "verb": "talk",
+      "target_id": "clerk",
+      "item_id": "",
+      "requires": [
+        {
+          "flag": "press_repaired",
+          "value": false
+        }
+      ],
+      "effects": [
+        {
+          "type": "start_dialogue",
+          "node_id": "jammed"
+        }
+      ],
+      "failure_text": "The clerk is waiting."
+    },
+    {
+      "id": "talk_repaired",
+      "verb": "talk",
+      "target_id": "clerk",
+      "item_id": "",
+      "requires": [
+        {
+          "flag": "press_repaired",
+          "value": true
+        },
+        {
+          "flag": "pass_granted",
+          "value": false
+        }
+      ],
+      "effects": [
+        {
+          "type": "start_dialogue",
+          "node_id": "repaired"
+        }
+      ],
+      "failure_text": "The clerk is waiting."
+    },
+    {
+      "id": "talk_issued",
+      "verb": "talk",
+      "target_id": "clerk",
+      "item_id": "",
+      "requires": [
+        {
+          "flag": "pass_granted",
+          "value": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "start_dialogue",
+          "node_id": "issued"
+        }
+      ],
+      "failure_text": "Your pass is already issued."
+    },
+    {
+      "id": "exit",
+      "verb": "use",
+      "target_id": "gate",
+      "item_id": "pass",
+      "requires": [
+        {
+          "item": "pass",
+          "owned": true
+        },
+        {
+          "flag": "complete",
+          "value": false
+        }
+      ],
+      "effects": [
+        {
+          "type": "set_flag",
+          "flag_id": "complete",
+          "value": true
+        },
+        {
+          "type": "finish"
+        }
+      ],
+      "failure_text": "The gate has already opened."
+    },
+    {
+      "id": "gate_without_pass",
+      "verb": "use",
+      "target_id": "gate",
+      "item_id": "",
+      "requires": [],
+      "effects": [
+        {
+          "type": "show_text",
+          "text": "Only an official stamped pass will open the gate."
+        }
+      ],
+      "failure_text": "Only an official stamped pass will open the gate."
+    },
+    {
+      "id": "dry_press",
+      "verb": "use",
+      "target_id": "press",
+      "item_id": "",
+      "requires": [],
+      "effects": [
+        {
+          "type": "show_text",
+          "text": "The press is jammed. Its hinges need oil."
+        }
+      ],
+      "failure_text": "The press is jammed. Its hinges need oil."
+    },
+    {
+      "id": "oil_on_clerk",
+      "verb": "use",
+      "target_id": "clerk",
+      "item_id": "oil",
+      "requires": [],
+      "effects": [
+        {
+          "type": "show_text",
+          "text": "The clerk is not machinery. Try the oil on the stamp press."
+        }
+      ],
+      "failure_text": "The clerk is not machinery. Try the oil on the stamp press."
+    }
+  ]
+}

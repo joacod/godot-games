@@ -1,0 +1,68 @@
+{
+  "initial_node_id": "jammed",
+  "speakers": [
+    {
+      "id": "clerk",
+      "name": "Gate clerk"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "jammed",
+      "speaker_id": "clerk",
+      "text": "No stamp, no pass. The press is stuck. A little oil should persuade it.",
+      "choices": [
+        {
+          "text": "I will look for oil.",
+          "requires": [],
+          "effects": []
+        }
+      ]
+    },
+    {
+      "id": "repaired",
+      "speaker_id": "clerk",
+      "text": "Smooth as paperwork! Would you like your pass?",
+      "choices": [
+        {
+          "text": "Please stamp my pass.",
+          "requires": [
+            {
+              "flag": "pass_granted",
+              "value": false
+            }
+          ],
+          "effects": [
+            {
+              "type": "grant_item",
+              "item_id": "pass"
+            },
+            {
+              "type": "set_flag",
+              "flag_id": "pass_granted",
+              "value": true
+            }
+          ],
+          "next_id": "issued"
+        },
+        {
+          "text": "Not yet.",
+          "requires": [],
+          "effects": []
+        }
+      ]
+    },
+    {
+      "id": "issued",
+      "speaker_id": "clerk",
+      "text": "Your pass is ready. Present it at the gate.",
+      "choices": [
+        {
+          "text": "Thank you.",
+          "requires": [],
+          "effects": []
+        }
+      ]
+    }
+  ]
+}

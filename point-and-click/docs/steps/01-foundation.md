@@ -10,8 +10,8 @@ Create the independent project, static stage and validated JSON content definiti
 
 ## Planned files
 
-These paths are relative to `point-and-click/` and are implementation targets, not files
-claimed to exist yet. Follow the established paths from earlier steps if refined.
+These paths are relative to `point-and-click/` and now exist. The independent
+placeholder visual scenes live under `scenes/visuals/`.
 
 - `project.godot`
 - `scenes/main.tscn`
@@ -37,9 +37,9 @@ claimed to exist yet. Follow the established paths from earlier steps if refined
 
 ## Completion gate
 
-- [ ] Launch this game folder alone and display a readable static room.
-- [ ] Malformed JSON, unknown effects, missing dialogue targets and duplicate IDs produce actionable validation failures.
-- [ ] Confirm room framing and UI text in a native window.
+- [x] Launch this game folder alone and display a readable static room.
+- [x] Malformed JSON, unknown effects, missing dialogue targets and duplicate IDs produce actionable validation failures.
+- [x] Confirm room framing and UI text in a native window.
 
 Run the import and test commands in [DESIGN.md](../DESIGN.md), extending
 `tests/run_tests.gd` to include this step's behavioral checks. Run the native
@@ -53,3 +53,8 @@ sibling new games, engine version and renderer remain untouched. Do not add
 later-step mechanics while completing this step. Do not commit, branch, push,
 or publish unless separately requested. Report exact files changed, behavior,
 commands/results, manual checks, intentionally untouched files and next step.
+
+## Recorded result
+
+Completed 2026-10-03; see [acceptance evidence](../ACCEPTANCE.md).
+126 headless checks and 128 native checks passed. Step 02 remains pending.

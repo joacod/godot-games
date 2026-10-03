@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[node name="Clerk" type="Node2D"]
+
+[node name="Shape0" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(28, 10, 48, 10, 55, 28, 48, 43, 28, 43, 21, 28)
+color = Color(0.83, 0.68, 0.51, 1)
+
+[node name="Shape1" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(28, 43, 48, 43, 68, 96, 8, 96)
+color = Color(0.38, 0.56, 0.59, 1)
+
+[node name="Shape2" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 86, 85, 86, 85, 100, 0, 100)
+color = Color(0.55, 0.40, 0.28, 1)

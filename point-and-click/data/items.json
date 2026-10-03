@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "id": "oil",
+      "name": "Oil flask",
+      "description": "A small flask of oil. Ideal for stubborn machinery.",
+      "icon_scene": "res://scenes/visuals/oil.tscn"
+    },
+    {
+      "id": "pass",
+      "name": "Stamped pass",
+      "description": "Official permission to leave. The stamp is still fresh.",
+      "icon_scene": "res://scenes/visuals/pass.tscn"
+    }
+  ]
+}

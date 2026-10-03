@@ -1,18 +1,20 @@
 # Tasks
 
-Implementation is pending. Execute only the requested step and attach evidence
-before checking tasks. Research completion is not gameplay completion.
+Step 01 is complete; Steps 02–06 are pending. Execute only the requested step
+and attach evidence before checking tasks. Research completion is not gameplay completion.
 
 ## 1. Standalone room and content schema
 
 [Detailed step guide](../../../point-and-click/docs/steps/01-foundation.md)
 
-- [ ] 1.1 Configure Compatibility and 640×360 logical viewport with legible text at 1280×720. Set up mouse clicks, cancel and pause actions.
-- [ ] 1.2 Create the fixed camera and five labeled placeholder hotspots. No avatar movement or pathfinding is required.
-- [ ] 1.3 Define the small JSON schemas in DESIGN.md, including all line/choice text and failure responses. Validate IDs, references, value types and allowed effect names before play.
-- [ ] 1.4 Choose one CraftPix interior candidate; inspect actual files only if importing. Keep independent prop visuals and a complete placeholder room, recording candidates versus used assets.
-- [ ] 1.5 Create the test runner and local commands; retain every generated script UID.
-- [ ] 1.6 Pass the step completion gate and record automated and native evidence in `point-and-click/docs/ACCEPTANCE.md`.
+- [x] 1.1 Configure Compatibility and 640×360 logical viewport with legible text at 1280×720. Set up mouse clicks, cancel and pause actions.
+- [x] 1.2 Create the fixed camera and five labeled placeholder hotspots. No avatar movement or pathfinding is required.
+- [x] 1.3 Define the small JSON schemas in DESIGN.md, including all line/choice text and failure responses. Validate IDs, references, value types and allowed effect names before play.
+- [x] 1.4 Choose one CraftPix interior candidate; inspect actual files only if importing. Keep independent prop visuals and a complete placeholder room, recording candidates versus used assets.
+- [x] 1.5 Create the test runner and local commands; retain every generated script UID.
+- [x] 1.6 Pass the step completion gate and record automated and native evidence in `point-and-click/docs/ACCEPTANCE.md`.
+
+Step 01 evidence: [acceptance record](../../../point-and-click/docs/ACCEPTANCE.md).
 
 ## 2. Look, Use and Talk dispatch
 

@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[node name="Press" type="Node2D"]
+
+[node name="Shape0" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 74, 90, 74, 90, 89, 0, 89)
+color = Color(0.52, 0.38, 0.27, 1)
+
+[node name="Shape1" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(10, 10, 24, 10, 24, 74, 10, 74)
+color = Color(0.60, 0.65, 0.67, 1)
+
+[node name="Shape2" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(10, 10, 72, 10, 72, 24, 10, 24)
+color = Color(0.60, 0.65, 0.67, 1)
+
+[node name="Shape3" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(48, 24, 58, 24, 58, 55, 48, 55)
+color = Color(0.60, 0.65, 0.67, 1)
+
+[node name="Shape4" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(34, 55, 72, 55, 72, 65, 34, 65)
+color = Color(0.79, 0.44, 0.30, 1)
