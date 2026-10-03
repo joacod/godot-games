@@ -140,7 +140,14 @@ editing need justifies moving them.
 
 ## Validate a change
 
-From the repository root, run a startup check with Godot 4.7.2 on your PATH:
+From the repository root, use Godot 4.7.2 on your PATH. On a fresh checkout,
+import assets before running terminal checks:
+
+```sh
+godot --headless --path 2d-platform --import
+```
+
+Then run a startup check:
 
 ```sh
 godot --headless --path 2d-platform --quit-after 120

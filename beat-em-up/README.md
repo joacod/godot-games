@@ -104,6 +104,13 @@ crate and food, pause and resume, death and retry, and a boss clear.
 
 Headless accelerated audio tests can report Ogg playback resources retained at
 shutdown. The native presentation suite at real frame timing exits cleanly.
+Run it without headless mode or a fixed frame rate:
+
+```sh
+godot --path beat-em-up --script res://tests/presentation_test.gd
+```
+
+Listening quality still requires manual testing.
 
 ## Edit and replace art
 

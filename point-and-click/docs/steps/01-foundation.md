@@ -58,3 +58,7 @@ commands/results, manual checks, intentionally untouched files and next step.
 
 Completed 2026-10-03; see [acceptance evidence](../ACCEPTANCE.md).
 126 headless checks and 128 native checks passed. Step 02 remains pending.
+
+The subsequent label bounds correction adds two regression checks; current
+totals are 128 headless and 130 native checks. The acceptance record preserves
+the original foundation results separately from this correction.
