@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[node name="Pass" type="Node2D"]
+
+[node name="Shape0" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 0, 28, 0, 28, 22, 0, 22)
+color = Color(0.84, 0.77, 0.59, 1)
+
+[node name="Shape1" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(17, 12, 24, 12, 24, 19, 17, 19)
+color = Color(0.67, 0.30, 0.25, 1)

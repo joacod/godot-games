@@ -1,0 +1,141 @@
+{
+  "id": "gatehouse",
+  "background_scene": "res://scenes/visuals/background.tscn",
+  "hotspots": [
+    {
+      "id": "oil",
+      "name": "Oil flask",
+      "position": [
+        70,
+        193
+      ],
+      "polygon": [
+        [
+          0,
+          0
+        ],
+        [
+          56,
+          0
+        ],
+        [
+          56,
+          75
+        ],
+        [
+          0,
+          75
+        ]
+      ],
+      "visual_scene": "res://scenes/visuals/oil.tscn"
+    },
+    {
+      "id": "press",
+      "name": "Stamp press",
+      "position": [
+        166,
+        175
+      ],
+      "polygon": [
+        [
+          0,
+          0
+        ],
+        [
+          90,
+          0
+        ],
+        [
+          90,
+          94
+        ],
+        [
+          0,
+          94
+        ]
+      ],
+      "visual_scene": "res://scenes/visuals/press.tscn"
+    },
+    {
+      "id": "clerk",
+      "name": "Clerk",
+      "position": [
+        307,
+        167
+      ],
+      "polygon": [
+        [
+          0,
+          0
+        ],
+        [
+          85,
+          0
+        ],
+        [
+          85,
+          102
+        ],
+        [
+          0,
+          102
+        ]
+      ],
+      "visual_scene": "res://scenes/visuals/clerk.tscn"
+    },
+    {
+      "id": "noticeboard",
+      "name": "Noticeboard",
+      "position": [
+        34,
+        82
+      ],
+      "polygon": [
+        [
+          0,
+          0
+        ],
+        [
+          100,
+          0
+        ],
+        [
+          100,
+          86
+        ],
+        [
+          0,
+          86
+        ]
+      ],
+      "visual_scene": "res://scenes/visuals/noticeboard.tscn"
+    },
+    {
+      "id": "gate",
+      "name": "Exit gate",
+      "position": [
+        492,
+        88
+      ],
+      "polygon": [
+        [
+          0,
+          0
+        ],
+        [
+          110,
+          0
+        ],
+        [
+          110,
+          180
+        ],
+        [
+          0,
+          180
+        ]
+      ],
+      "visual_scene": "res://scenes/visuals/gate.tscn"
+    }
+  ]
+}

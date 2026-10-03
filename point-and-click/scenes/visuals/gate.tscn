@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[node name="Gate" type="Node2D"]
+
+[node name="Shape0" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 180, 0, 30, 20, 0, 90, 0, 110, 30, 110, 180)
+color = Color(0.10, 0.13, 0.17, 1)
+
+[node name="Shape1" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(15, 22, 22, 22, 22, 180, 15, 180)
+color = Color(0.48, 0.53, 0.57, 1)
+
+[node name="Shape2" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(38, 22, 45, 22, 45, 180, 38, 180)
+color = Color(0.48, 0.53, 0.57, 1)
+
+[node name="Shape3" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(61, 22, 68, 22, 68, 180, 61, 180)
+color = Color(0.48, 0.53, 0.57, 1)
+
+[node name="Shape4" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(84, 22, 91, 22, 91, 180, 84, 180)
+color = Color(0.48, 0.53, 0.57, 1)
+
+[node name="Shape5" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 85, 110, 85, 110, 93, 0, 93)
+color = Color(0.57, 0.59, 0.59, 1)

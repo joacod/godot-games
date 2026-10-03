@@ -80,10 +80,10 @@ panel rather than leaving a partially playable puzzle.
 | Local content | Externalized fields |
 | --- | --- |
 | `data/room.json` | Room ID, background scene path, hotspot IDs, names, polygons, visual paths |
-| `data/items.json` | Stable IDs, names, descriptions, icons; inventory cap remains six |
+| `data/items.json` | Stable IDs, names, descriptions, icon scene paths; inventory cap remains six |
 | `data/dialogue.json` | Speaker IDs, all lines, choice labels, conditions, next-node IDs, effects |
 | `data/puzzle.json` | Verb/item/target rules, conditions, effects, initial flags, failure responses |
-| `data/theme.tres` | Fonts, palette, UI labels and visual scene bindings |
+| `data/theme.tres` | Fonts, label palette and UI text metadata; visual bindings live in JSON |
 
 Dialogue node shape: `id`, `speaker_id`, `text`, `choices`; a choice has `text`,
 `requires`, `effects`, and optional `next_id`. Conditions use known flag/item
@@ -94,6 +94,69 @@ A reskin changes room composition, NPC/prop scenes, item art, lines, and rules
 within this schema. Preserve IDs for a cosmetic swap; update all references
 together for a new puzzle. Leave verb dispatch, inventory, condition/effect
 handling, and dialogue presentation scripts untouched.
+
+## Implemented content schema (Step 01)
+
+`scripts/content_loader.gd` loads the four JSON files before the room is built.
+Objects reject missing fields, incorrect types and unknown keys. All strings
+must be nonempty except a rule's `item_id`, where `""` means no selected item.
+Array entry IDs must be unique within each collection. JSON roots are objects;
+malformed JSON errors report the file and parser line. Validation errors report
+the JSON filename, owning ID and field/reference problem. Invalid content is
+never exposed to the room as a partially loaded bundle.
+
+| File/object | Required fields |
+| --- | --- |
+| Room | `id` string, `background_scene` string, `hotspots` array |
+| Hotspot | `id`, `name`, `visual_scene` strings; `position`, `polygon` arrays |
+| Items root | `items` array |
+| Item | `id`, `name`, `description`, `icon_scene` strings |
+| Dialogue root | `initial_node_id` string, `speakers`, `nodes` arrays |
+| Speaker | `id`, `name` strings |
+| Dialogue node | `id`, `speaker_id`, `text` strings; `choices` array |
+| Choice | `text` string, `requires`, `effects` arrays; optional `next_id` string |
+| Puzzle root | `initial_flags`, `failure_responses` objects; `rules` array |
+| Rule | `id`, `verb`, `target_id`, `item_id`, `failure_text` strings; `requires`, `effects` arrays |
+
+Scene paths must be local `res://` `.tscn` resources, without `..` traversal,
+and have a `Node2D` root. `position` is `[x, y]` in logical room coordinates;
+`polygon` contains at least three local `[x, y]` vertices, with finite numeric
+coordinates and a nondegenerate triangulatable area. Visuals and hitboxes use
+the same position, but their geometry is independent. The camera is centered
+at `(320, 180)`; authored room content occupies the stage between UI bands.
+
+`initial_flags` maps nonempty flag IDs to booleans. Conditions have exactly one
+of these shapes, with known IDs; an empty `requires` array is unconditional:
+
+```json
+{"flag": "press_repaired", "value": true}
+{"item": "oil", "owned": true}
+```
+
+These are alternative object shapes, not one combined JSON document.
+The closed effect set accepts only these fields:
+
+| Effect `type` | Other fields |
+| --- | --- |
+| `set_flag` | `flag_id` string referring to an initial flag; `value` boolean |
+| `grant_item`, `consume_item` | `item_id` string referring to an item |
+| `show_text` | `text` string |
+| `start_dialogue` | `node_id` string referring to a dialogue node |
+| `finish` | None |
+
+Rules allow only `look`, `use`, `talk`; targets reference room hotspot IDs.
+Choices and initial dialogue references must resolve to nodes; each node must
+reference a speaker and offer at least one explicit choice. Choices without
+`next_id` end the conversation. `failure_responses` requires exactly `look`,
+`use`, `talk`, `capacity`, each containing authored text. Empty effects are
+allowed for a choice; no expressions or scripts are evaluated.
+
+The shipped JSON contains the intended puzzle chain and text. Step 01 validates
+these definitions only; conditions, effects and dialogue do not execute yet.
+`data/theme.tres` is a native Theme: font sizing and Label colors are ordinary
+Theme properties, and `title`, `subtitle`, `foundation_note`, `content_error`
+metadata hold foundation UI text. Godot imports this resource; it is outside
+the JSON validator. Visual scene bindings live in room/item JSON.
 
 ## Godot APIs and pitfalls
 
@@ -132,10 +195,11 @@ and gate if later seeking a coherent CraftPix companion set.
 
 ## Project boundary and status
 
-Research handoff dated 2026-10-03. This document specifies future behavior;
-no gameplay implementation or playable acceptance is claimed yet.
+Research handoff dated 2026-10-03. Step 01 now implements the static room and
+validated content schema; later gameplay remains prospective. See
+[acceptance evidence](ACCEPTANCE.md) for completed foundation checks and gaps.
 Use Godot 4.7, verified locally as 4.7.2, GDScript, and Compatibility rendering.
-Each game owns its eventual `project.godot`, scenes, scripts, data, assets, and
+Each game owns its `project.godot`, scenes, scripts, data, assets, and
 checks. No shared launcher, autoload, source imports, symlinks, or sibling-game
 resources. OpenSpec at the repository root is planning tooling only.
 
@@ -177,7 +241,7 @@ No purchase, account access, download, or asset inclusion occurred in this hando
 
 ## Verification and evidence
 
-These are future implementation commands, run from this game's folder:
+Run these implemented foundation commands from this game's folder:
 
 ```sh
 /Applications/Godot.app/Contents/MacOS/Godot --version
@@ -186,7 +250,8 @@ These are future implementation commands, run from this game's folder:
 /Applications/Godot.app/Contents/MacOS/Godot --path .
 ```
 
-The test runner is a planned deliverable, not an existing command target.
+The Step 01 test runner validates content boundaries and static startup.
+Extend it with behavior checks when implementing later steps.
 Test observable behavior and boundary cases, not merely node existence.
 Record engine version, commands, results, and remaining gaps in
 `docs/ACCEPTANCE.md`. Separately record native rendering/input and a timed human

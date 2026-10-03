@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[node name="Oil" type="Node2D"]
+
+[node name="Shape0" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(14, 26, 42, 26, 48, 65, 8, 65)
+color = Color(0.77, 0.55, 0.23, 1)
+
+[node name="Shape1" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(20, 12, 36, 12, 36, 30, 20, 30)
+color = Color(0.91, 0.77, 0.45, 1)

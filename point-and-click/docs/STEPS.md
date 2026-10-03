@@ -1,9 +1,9 @@
 # point-and-click implementation steps
 
-Status: research complete; all implementation steps are pending. Implement one
-requested step at a time, in order. Each step depends on the preceding one;
+Status: Step 01 complete; Steps 02–06 pending. See [acceptance evidence](ACCEPTANCE.md).
+Implement one requested step at a time, in order. Each step depends on the preceding one;
 Step 01 depends on [DESIGN.md](DESIGN.md) and the researched content decisions.
-Do not mark an implementation checkbox complete for writing this handoff.
+Mark progress only when implementation and its evidence exist.
 
 [OpenSpec requirements](../../openspec/changes/add-point-and-click/specs/point-and-click-slice/spec.md)
 are the behavior contract. [OpenSpec tasks](../../openspec/changes/add-point-and-click/tasks.md)

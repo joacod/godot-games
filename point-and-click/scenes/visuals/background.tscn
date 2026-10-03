@@ -1,0 +1,35 @@
+[gd_scene format=3]
+
+[node name="Background" type="Node2D"]
+
+[node name="Shape0" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 300, 0, 300)
+color = Color(0.19, 0.23, 0.28, 1)
+
+[node name="Shape1" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 270, 640, 270, 640, 360, 0, 360)
+color = Color(0.27, 0.29, 0.31, 1)
+
+[node name="Shape2" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(24, 60, 450, 60, 450, 66, 24, 66)
+color = Color(0.34, 0.38, 0.41, 1)
+
+[node name="Shape3" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(24, 138, 450, 138, 450, 142, 24, 142)
+color = Color(0.25, 0.29, 0.34, 1)
+
+[node name="Shape4" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(24, 214, 450, 214, 450, 218, 24, 218)
+color = Color(0.25, 0.29, 0.34, 1)
+
+[node name="Shape5" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(110, 66, 114, 66, 114, 138, 110, 138)
+color = Color(0.25, 0.29, 0.34, 1)
+
+[node name="Shape6" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(340, 66, 344, 66, 344, 138, 340, 138)
+color = Color(0.25, 0.29, 0.34, 1)
+
+[node name="Shape7" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 270, 640, 270, 640, 277, 0, 277)
+color = Color(0.40, 0.39, 0.36, 1)

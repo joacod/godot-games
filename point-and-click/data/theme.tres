@@ -1,0 +1,12 @@
+[gd_resource type="Theme" format=3]
+
+[resource]
+default_font_size = 14
+Label/colors/font_color = Color(0.96, 0.92, 0.80, 1)
+Label/colors/font_shadow_color = Color(0.05, 0.06, 0.08, 1)
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+metadata/title = "THE CLOSED GATE"
+metadata/subtitle = "Gatehouse • a quiet afternoon"
+metadata/foundation_note = "Room foundation ready. Look, Use and Talk arrive in Step 02."
+metadata/content_error = "Content could not be loaded"
