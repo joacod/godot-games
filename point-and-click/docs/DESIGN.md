@@ -207,7 +207,8 @@ Research handoff dated 2026-10-03. Steps 01–03 implement the fixed room,
 validated content schema, hover names, verbs, six-slot inventory and atomic oil
 pickup/press repair. Step 04 adds JSON dialogue, a pass reward and one-time gate
 completion. Step 05 adds start/pause/completion menus, fresh-scene restart and
-readable presentation. Human timing acceptance and Step 06 remain pending. See
+readable presentation. Step 06 automated/native and independent reskin checks are verified; human
+timing acceptance and the overall completion gate remain pending. See
 [acceptance evidence](ACCEPTANCE.md) for completed foundation checks and gaps.
 Use Godot 4.7, verified locally as 4.7.2, GDScript, and Compatibility rendering.
 Each game owns its `project.godot`, scenes, scripts, data, assets, and
@@ -359,3 +360,31 @@ Menu titles, instructions and button labels are editable theme metadata with
 with dialogue, restart from initial/oil-selected/repaired/dialogue-open/completed
 states, completing every rebuilt run, repeat terminal actions and long text.
 Human new-player completion timing remains an explicit acceptance gap.
+
+
+## Step 06 reskin verification and editing paths
+
+`tests/create_reskin_copy.py` creates a standalone temporary cosmetic variant,
+compares all runtime script/UID hashes and scene hashes except the changed
+backdrop, and checks unchanged content IDs, geometry, conditions and effects.
+The same 352 behavioral checks run on shipped and reskinned data; native capture
+runs add fifteen checks. Display-name assertions use the loaded definitions.
+The modal-backdrop fixture clicks below choices so a wrapped clue does not turn
+its intended blocked room click into a valid dialogue choice.
+
+| Edit | Exact path and contract |
+| --- | --- |
+| Backdrop | `scenes/visuals/background.tscn`; `Node2D` root, fixed framing |
+| Hotspot labels | `data/room.json`, `hotspots[].name`; preserve IDs, positions and polygons |
+| Item labels/tooltips | `data/items.json`, `items[].name` and `.description`; preserve IDs |
+| Speaker and dialogue | `data/dialogue.json`, `speakers[].name`, `nodes[].text`, `choices[].text`; preserve graph, references, conditions and effects |
+| Action feedback | `data/puzzle.json`, text/failure responses; preserve rules and flags |
+| UI text and colors | `data/theme.tres`, Theme properties and metadata |
+| Project/window name | `project.godot`, `application/config/name` |
+
+Prop art remains independent of hitboxes. Preserve the press `Shape4` ram and
+gate `Shape1`–`Shape5` attachment nodes used for repaired/open visual states,
+or change their bindings as an explicit mechanics change. The verified copy
+changes only the backdrop palette and external display data. Human acceptance
+checkboxes above remain unchecked; [Step 06 evidence](ACCEPTANCE.md#step-06--2026-10-04)
+separately records agent native routes and results.

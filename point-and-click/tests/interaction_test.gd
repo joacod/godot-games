@@ -72,7 +72,7 @@ func run(tree: SceneTree, main: Node, check: Callable) -> void:
 	tree.root.push_input(motion, true)
 	await tree.process_frame
 	await tree.process_frame
-	check.call(ui.get_node("Hover").text == "Oil flask", "Mouse motion renders authored hover name")
+	check.call(ui.get_node("Hover").text == main.content.room.hotspots[0].name, "Mouse motion renders authored hover name")
 	interaction.select_verb("look")
 	before = messages.size()
 	await click(tree, oil_point)

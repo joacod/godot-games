@@ -1,7 +1,8 @@
 # point-and-click implementation steps
 
 Status: Steps 01–04 complete; Step 05 implemented with human timing gate pending;
-Step 06 pending. See [acceptance evidence](ACCEPTANCE.md).
+Step 06 automated/native and standalone reskin evidence recorded; human timing
+and final acceptance pending. See [acceptance evidence](ACCEPTANCE.md).
 Implement one requested step at a time, in order. Each step depends on the preceding one;
 Step 01 depends on [DESIGN.md](DESIGN.md) and the researched content decisions.
 Mark progress only when implementation and its evidence exist.

@@ -52,7 +52,7 @@ func run(tree: SceneTree, check: Callable, capture: Callable) -> void:
 	check.call(inventory.items == ["oil"] and messages.back() == main.content.puzzle.rules[5].failure_text, "Repeated pickup cannot duplicate")
 	await inputs.click(tree, bar.get_child(0).get_global_transform_with_canvas() * (bar.get_child(0).size / 2.0))
 	check.call(interaction.selected_item == "oil" and interaction.selected_verb == "use", "GUI slot selects item and Use")
-	check.call("Oil flask" in ui.get_node("ItemPrompt").text and bar.get_child(0).button_pressed, "Selected item prompt and slot shown")
+	check.call(inventory.definitions.oil.name in ui.get_node("ItemPrompt").text and bar.get_child(0).button_pressed, "Selected item prompt and slot shown")
 	await capture.call("inventory-selected")
 	var before := messages.size()
 	var cancel := InputEventMouseButton.new()

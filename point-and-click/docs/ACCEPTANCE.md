@@ -476,3 +476,141 @@ dependencies, loss condition, branch, commit, push or PR was added.
 Human new-player timing is the remaining Step 05 completion-gate gap. Step 06
 adds the full timed human checklist and independent copied/reskinned project
 acceptance. Controller support remains outside this slice and was not checked.
+
+## Step 06 — 2026-10-04
+
+Automated/native acceptance and independent cosmetic reskin verified. OpenSpec
+6.1, 6.3, 6.4 and 6.5 are checked. Tasks 5.6, 6.2 and 6.6 remain unchecked:
+no human new-player timed playthrough has been supplied. Agent timing below
+cannot establish the two-to-four-minute new-player target or final acceptance.
+
+Engine: `4.7.2.stable.official.ed1daf0bf`, Compatibility renderer, OpenGL 4.1 on
+Apple M2; 640×360 logical viewport and 1280×720 native captures are retained.
+
+### Automated and native suite evidence
+
+Run from `point-and-click/`:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --editor --import --quit
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/run_tests.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd -- --capture-dir=/private/tmp/closed-gate-step06-source-final
+python3 tests/create_reskin_copy.py
+```
+
+The final copy created by the last command was
+`/private/tmp/closed-gate-step06-0il9i0s7/harbor-gate`.
+It contained no `.godot/` before fresh import, no symlinks, no sibling game and
+no repository-level runtime resources. The copy helper uses Python 3's standard
+library and creates a new temporary path each time; replace this recorded path
+with the printed path when reproducing:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path /private/tmp/closed-gate-step06-0il9i0s7/harbor-gate --editor --import --quit
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path /private/tmp/closed-gate-step06-0il9i0s7/harbor-gate --script tests/run_tests.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path /private/tmp/closed-gate-step06-0il9i0s7/harbor-gate --script tests/run_tests.gd -- --capture-dir=/private/tmp/closed-gate-step06-reskin-verified
+/Applications/Godot.app/Contents/MacOS/Godot --path /private/tmp/closed-gate-step06-0il9i0s7/harbor-gate
+```
+
+| Check | Shipped project | Standalone reskin |
+| --- | --- | --- |
+| Import | Exit 0, no final script/resource errors | Fresh import exit 0; complete log has no errors/warnings |
+| Headless suite | 352 passed, 0 failed, exit 0 | 352 passed, 0 failed, exit 0 |
+| Native capture suite | 367 passed, 0 failed, exit 0 | 367 passed, 0 failed, exit 0 |
+| MCP launch/debug | Exact source project launched; no errors after route/restart | Exact copied project launched; no errors after route/restart |
+
+Retained fixtures cover six-item capacity failure/retry, atomic rollback,
+invalid initial/node/speaker/choice/effect dialogue references, wrong action
+order, duplicate rewards, one-time completion, modal click prevention,
+pause/resume, restart from five states and long scrollable text.
+The number of behavioral checks is unchanged; display-name assertions now read
+authored data so the same suite tests both presentations.
+
+The first restricted source import exited 0 but reported macOS certificate and
+editor-settings errors. Final engine checks used normal application-data access.
+The first native reskin suite exposed a fixture coordinate that landed on a
+choice after the longer clue wrapped. The backdrop check now clicks the lower
+part of the underlying oil hotspot, below the choices; both final suites pass.
+A capture also exposed an overly broad replacement of the word “pass” in the
+temporary reskin. The copy helper now changes only “stamped pass”; final feedback
+reads “You may pass through.” No runtime code was changed for either finding.
+
+### Native mouse routes and timing
+
+Agent computer-use mouse input, separately from injected test events:
+
+| Route | Observed evidence |
+| --- | --- |
+| Shipped game | Start; hover names; Look on noticeboard and press; early Talk oil hint; early gate refusal; pickup; oil on clerk retains item with feedback; repair; request one pass; repeat Talk without duplicate; gate completion; clean restart |
+| Standalone reskin | Start; renamed Keeper Mara and wrapped clue; renamed Amber oil pickup; wrong use on keeper retains item; repair; rewritten request/issued dialogue; Harbor pass completion; clean restart |
+
+Shipped route: **2:01** from the start-menu observation to gate completion,
+including tool/inspection time and a brief interleaved capture check. Copy route:
+**1:02**, with a narrower checklist. Restart was verified afterward in both.
+These are agent-operated routes with advance knowledge of the puzzle, not human
+new-player timing or comparable timing samples. The camera stayed fixed and
+native text, feedback, item labels and choices were readable at the target size.
+MCP reported no debug errors after either route; both runs were stopped.
+
+### Standalone reskin and mechanics audit
+
+The copy is named **The Harbor Gate**, uses a teal backdrop palette, names its
+clerk **Keeper Mara**, renames the items **Amber oil** and **Harbor pass**, and
+rewrites all dialogue lines/choices externally. JSON IDs, hotspot geometry,
+conditions, effects, flags and graph links are unchanged. The exact cosmetic
+edits are reproducible through `tests/create_reskin_copy.py`.
+
+[Retained SHA-256 audit](evidence/step06-reskin-audit.json) records all 22 runtime
+script/UID file hashes and all scene hashes except the deliberately recolored
+background. They match the source before import and were rechecked after final
+import, behavioral/native runs and the mouse route. All GDScript UIDs are present.
+Runtime resource references resolve inside the copy. Tests travel with the copy;
+OpenSpec links in documentation are planning links, not runtime dependencies.
+
+Representative final native test captures were inspected and retained:
+
+![Standalone harbor room with teal backdrop and renamed oil and keeper](evidence/step06-reskin-room.png)
+
+![Rewritten Keeper Mara clue wraps with its choice visible](evidence/step06-reskin-dialogue.png)
+
+![Standalone reskin completion with Harbor pass and open gate](evidence/step06-reskin-complete.png)
+
+These images come from the automated native capture suite. The computer-use
+mouse route independently reached the same presentation. No production art or
+CraftPix archive coverage is claimed; [provenance](../assets/PROVENANCE.md#step-06-coverage-and-reskin--2026-10-04)
+records placeholder coverage and current candidate/license observations.
+
+### Files changed and boundaries
+
+- Tests: `tests/run_tests.gd`, `tests/interaction_test.gd`,
+  `tests/inventory_actions_test.gd`, `tests/puzzle_chain_test.gd`,
+  `tests/restart_test.gd`, new `tests/create_reskin_copy.py`.
+- Documentation: `README.md`, `docs/DESIGN.md`, `docs/STEPS.md`,
+  `docs/steps/06-acceptance-and-reskin.md`, `assets/PROVENANCE.md`, this record,
+  and `openspec/changes/add-point-and-click/tasks.md`.
+- Evidence: `docs/evidence/step06-reskin-audit.json`,
+  `docs/evidence/step06-reskin-room.png`,
+  `docs/evidence/step06-reskin-dialogue.png`,
+  `docs/evidence/step06-reskin-complete.png`, and generated PNG import sidecars.
+
+Shipped runtime scripts, scenes, JSON/theme data, engine/renderer settings,
+existing script UIDs and Step 01 images are untouched. Other games, OpenSpec
+requirements and unrelated repository files are untouched. No dependencies,
+external artwork, branches, commits, pushes or PRs were added.
+
+### Remaining human acceptance
+
+Repository checks passed: `git diff --check` and
+`OPENSPEC_TELEMETRY=0 openspec validate add-point-and-click --strict --no-interactive`.
+Focused static checks passed for local Markdown targets/anchors and fences,
+Python syntax, GDScript UID coverage and retained mechanics hashes. The final
+source import after adding evidence images exited 0 with no errors or warnings.
+
+Have a new player use the shipped game with native mouse input, without a
+solution walkthrough. Record date, completion time from Start to completion,
+text readability, clue discovery, wrong-action recovery and restart using the
+[design checklist](DESIGN.md#acceptance-route--under-five-minutes). Record any
+errors and whether the route meets the two-to-four-minute target and under-five-
+minute completion gate. Only then evaluate tasks 5.6, 6.2 and 6.6. Do not infer
+human acceptance from the agent timings above. Controller, save/load, extra
+rooms and final downloaded art are outside this slice and remain unclaimed.

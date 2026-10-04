@@ -1,7 +1,8 @@
 # Tasks
 
 Steps 01–04 are complete; Step 05 is implemented with its human timing gate
-pending; Step 06 is pending. Execute only the requested step
+pending; Step 06 automated/native and standalone reskin checks are verified,
+with human timing and final acceptance pending. Execute only the requested step
 and attach evidence before checking tasks. Research completion is not gameplay completion.
 
 ## 1. Standalone room and content schema
@@ -74,9 +75,14 @@ has no human evidence. Implementation and the other completion gates are verifie
 
 [Detailed step guide](../../../point-and-click/docs/steps/06-acceptance-and-reskin.md)
 
-- [ ] 6.1 Run import and behavioral checks, including inventory capacity and invalid dialogue-reference fixtures.
+- [x] 6.1 Run import and behavioral checks, including inventory capacity and invalid dialogue-reference fixtures.
 - [ ] 6.2 Perform the full timed checklist with native mouse input and record completion time, text readability, invalid-action feedback and restart.
-- [ ] 6.3 Copy the project outside the repository without .godot. Change room art, clerk name, oil/pass display names and dialogue text; preserve IDs for this cosmetic reskin.
-- [ ] 6.4 Verify mechanics hashes do not change and the copied puzzle still finishes without any sibling folders.
-- [ ] 6.5 Record asset coverage and license evidence separately from gameplay acceptance. Update exact editing paths and complete only evidenced OpenSpec tasks.
+- [x] 6.3 Copy the project outside the repository without .godot. Change room art, clerk name, oil/pass display names and dialogue text; preserve IDs for this cosmetic reskin.
+- [x] 6.4 Verify mechanics hashes do not change and the copied puzzle still finishes without any sibling folders.
+- [x] 6.5 Record asset coverage and license evidence separately from gameplay acceptance. Update exact editing paths and complete only evidenced OpenSpec tasks.
 - [ ] 6.6 Pass the step completion gate and record automated and native evidence in `point-and-click/docs/ACCEPTANCE.md`.
+
+Step 06 evidence: [acceptance record](../../../point-and-click/docs/ACCEPTANCE.md#step-06--2026-10-04).
+Tasks 6.2 and 6.6 remain unchecked because the timed new-player checklist has
+no human evidence. Agent native mouse routes, copy completion/restart and
+mechanics hashes are verified separately; task 5.6 remains pending.

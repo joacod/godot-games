@@ -40,8 +40,8 @@ func fresh(main: Node, check: Callable) -> void:
 	check.call(main.get_node("Dialogue").current_node_id.is_empty() and main.get_node("Dialogue").choices.is_empty() and main.get_node("Dialogue").feedback.is_empty(), "Restart clears dialogue cursor, choices and feedback")
 	check.call(not main.get_node("UI/Presentation/DialoguePanel").visible and main.get_node("UI/Presentation/Menus").screen.is_empty(), "Restart removes stale modal presentation")
 	check.call(main.get_node("Room/Props/oil").visible and main.get_node("Room/Hotspots/oil").visible and main.get_node("Room/oilLabel").visible, "Restart restores oil visual, label and hit region")
-	check.call(is_equal_approx(main.get_node("Room/Props/press/Shape4").position.y, 0) and main.get_node("Room/pressLabel").text == "Stamp press", "Restart restores original press shape and label")
-	check.call(main.get_node("Room/Props/gate/Shape5").visible and main.get_node("Room/gateLabel").text == "Exit gate", "Restart closes gate shape and label")
+	check.call(is_equal_approx(main.get_node("Room/Props/press/Shape4").position.y, 0) and main.get_node("Room/pressLabel").text == main.content.room.hotspots[1].name, "Restart restores original press shape and label")
+	check.call(main.get_node("Room/Props/gate/Shape5").visible and main.get_node("Room/gateLabel").text == main.content.room.hotspots[4].name, "Restart closes gate shape and label")
 	check.call(main.get_node("UI/Presentation/InteractionUI/Description/Text").text == main.get_node("UI/Presentation").theme.get_meta("interaction_hint"), "Restart resets previous feedback")
 	check.call(main.get_node("Room/Camera2D").position == Vector2(320, 180), "Lifecycle preserves fixed camera")
 
@@ -97,7 +97,7 @@ func run(tree: SceneTree, check: Callable, capture: Callable) -> void:
 		elif stage == "complete":
 			finish(main)
 			check.call(main.lifecycle == "complete" and main.get_node("Interaction").modal_open, "Finish opens terminal screen and locks room")
-			check.call(not main.get_node("Room/Props/gate/Shape5").visible and main.get_node("Room/gateLabel").text == "Exit gate (open)", "Completion opens gate shape and label")
+			check.call(not main.get_node("Room/Props/gate/Shape5").visible and main.get_node("Room/gateLabel").text == main.get_node("UI/Presentation").theme.get_meta("gate_open"), "Completion opens gate shape and label")
 			for index in 20:
 				main.get_node("Interaction").dispatch("gate")
 				main.pause_game()
