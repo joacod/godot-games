@@ -21,7 +21,7 @@ consuming progress. Inventory stays small and every action is mouse driven.
 
 ## Puzzle and interaction contract
 
-Working theme: **The Closed Gate**, a lightly comic administrative obstacle.
+Theme: **The Closed Gate**, a lightly comic administrative obstacle.
 The screen is a static illustrated stage; a player avatar and pathfinding are
 not necessary. Present hotspots over scenery, not as an action-game map.
 Use a 640×360 logical viewport with text UI legible at a 1280×720 window.
@@ -46,7 +46,7 @@ on repeat Talk, so the player cannot become stuck from action ordering.
 ## Scene tree and script responsibilities
 
 ```text
-Main (Node; start/run/completion transitions)
+Main (Node; start/playing/pause/complete transitions)
 ├── Room (Node2D; fixed composition)
 │   ├── Background (Sprite2D or replaceable visual scene)
 │   ├── Camera2D (fixed position and zoom)
@@ -60,7 +60,7 @@ Main (Node; start/run/completion transitions)
 └── UI (CanvasLayer)
     ├── Verbs (Control)
     ├── InventoryBar (Control; six slots)
-    ├── Description (Label)
+    ├── Description (scrollable RichTextLabel)
     ├── DialoguePanel (Control)
     └── Menus (Control)
 ```
@@ -95,7 +95,7 @@ within this schema. Preserve IDs for a cosmetic swap; update all references
 together for a new puzzle. Leave verb dispatch, inventory, condition/effect
 handling, and dialogue presentation scripts untouched.
 
-## Implemented content schema (Step 01)
+## Content schema
 
 `scripts/content_loader.gd` loads the four JSON files before the room is built.
 Objects reject missing fields, incorrect types and unknown keys. All strings
@@ -151,21 +151,21 @@ reference a speaker and offer at least one explicit choice. Choices without
 `use`, `talk`, `capacity`, each containing authored text. Empty effects are
 allowed for a choice; no expressions or scripts are evaluated.
 
-The shipped JSON contains the intended puzzle chain and text. Step 01 validates
-these definitions. Step 04 executes all six effects only after conditions and final inventory
-validity pass. Dialogue and completion signals are emitted after the transaction
+The shipped JSON contains the puzzle chain and text. All six effects execute
+only after conditions and final inventory validity pass. Dialogue and completion signals are emitted after the transaction
 commits; completion emits once per run. Runtime flags and item
 IDs are separate from immutable content definitions.
-`data/theme.tres` is a native Theme: font sizing and Label colors are ordinary
-Theme properties, and `title`, `subtitle`, `foundation_note`, `content_error`
-metadata hold foundation UI text. Step 02 adds `verb_look`, `verb_use`,
-`verb_talk`, and `interaction_hint` for interaction UI text. Godot imports this
-resource; it is outside the JSON validator. Step 03 adds `item_prompt` (two `%s`
-placeholders for item and target), `item_target` and `press_repaired` metadata. Visual scene bindings live in room/item JSON.
+`data/theme.tres` supplies font sizing, Label colors and UI text metadata.
+Keys include `title`, `subtitle`, `foundation_note`, `content_error`,
+`verb_look`, `verb_use`, `verb_talk`, `interaction_hint`, `item_prompt`,
+`item_target`, `press_repaired`, `dialogue_cancel`, `gate_open` and `menu_`
+labels/instructions. `item_prompt` has two `%s` placeholders for item and target.
+Godot imports this native Theme; it is outside the JSON validator.
+Visual scene bindings live in room/item JSON.
 
 ## Godot APIs and pitfalls
 
-Hotspots use `Area2D` collision polygons. Step 02 centrally hit-tests their
+Hotspots use `Area2D` collision polygons. Interaction centrally hit-tests their
 authored polygons in room-definition order and dispatches through
 `_unhandled_input`, so GUI controls consume clicks before room dispatch and
 overlap priority does not depend on physics picking. Use `Control`,
@@ -179,47 +179,20 @@ Validate JSON types and references before mutating state. Apply consume/grant
 and flag changes as one successful action, after capacity/precondition checks,
 to prevent duplicate rewards and softlocks from repeated clicks.
 
-## CraftPix candidates and gaps
+## Presentation and acceptance
 
-[Free Castle Interior Pixel Game Backgrounds](https://craftpix.net/freebies/free-castle-interior-pixel-game-backgrounds/)
-lists four 576×324 PNG/PSD backgrounds. Choose one interior as a fixed backdrop;
-no parallax or extra screens are required. Its listing does not establish
-separate clickable props, a suitable clerk, or inventory icons. Use labeled
-placeholder props and a clerk portrait/silhouette; keep hotspot geometry
-independent of the background image. Inspect cropping and text contrast before
-selecting final art. Request transparent pixel PNGs for oil, press, pass, clerk,
-and gate if later seeking a coherent CraftPix companion set.
-
-## Acceptance route — under five minutes
-
-- [ ] Start, hover hotspots, read their names, and use Look on noticeboard and press.
-- [ ] Talk before repairing; receive the oil clue. Attempt the gate; remain in the room.
-- [ ] Collect oil; attempt oil on clerk; see feedback and retain it.
-- [ ] Use oil on press; oil disappears once and press visibly changes.
-- [ ] Talk and request pass; receive one pass. Repeating Talk grants no duplicate.
-- [ ] Use pass on gate; see completion, with the route taking two to four minutes.
-- [ ] Restart; restore the oil pickup, original press, flags, inventory, and dialogue.
-- [ ] No combat, camera movement, hidden pixel hunting, softlock, or console error.
-
-## Project boundary and status
-
-Research handoff dated 2026-10-03. Steps 01–03 implement the fixed room,
-validated content schema, hover names, verbs, six-slot inventory and atomic oil
-pickup/press repair. Step 04 adds JSON dialogue, a pass reward and one-time gate
-completion. Step 05 adds start/pause/completion menus, fresh-scene restart and
-readable presentation. Step 06 automated/native and independent reskin checks are verified; human
-timing acceptance and the overall completion gate remain pending. See
-[acceptance evidence](ACCEPTANCE.md) for completed foundation checks and gaps.
-Use Godot 4.7, verified locally as 4.7.2, GDScript, and Compatibility rendering.
-Each game owns its `project.godot`, scenes, scripts, data, assets, and
-checks. No shared launcher, autoload, source imports, symlinks, or sibling-game
-resources. OpenSpec at the repository root is planning tooling only.
+All visuals are project-authored placeholder polygons. See
+[asset provenance](../assets/PROVENANCE.md) for coverage, the researched CraftPix
+candidate and the evidence needed before importing replacement art.
+The game was accepted after the user's human playtest on 2026-10-04;
+[acceptance evidence](ACCEPTANCE.md) separates user-reported results from
+headless, native-input and standalone-copy checks.
 
 ## Copy and reskin contract
 
 Copy this entire game folder to a new location, including `project.godot`,
 `scenes/`, `scripts/`, script `.gd.uid` files, `data/`, `assets/`, `docs/`, and
-`tests/` once implemented. Omit generated `.godot/`, export builds, and local
+`tests/`. Omit generated `.godot/`, export builds, and local
 logs. OpenSpec and all sibling folders are unnecessary to run the copy.
 All runtime references must resolve within the copied project's `res://`.
 
@@ -236,52 +209,16 @@ an all-purpose controller or a reusable framework spanning these games.
 Godot [Resources](https://docs.godotengine.org/en/stable/tutorials/scripting/resources.html)
 and packed scenes provide the local data/presentation boundary.
 
-## Asset research policy
+## Verification
 
-Candidate product descriptions were checked on 2026-10-03. Archives, exact
-frame layouts, account entitlements, and in-engine appearance are not verified.
-Before import, record source URL, archive name, used files, frame dimensions,
-animation mapping, modifications, and license evidence in `assets/PROVENANCE.md`.
-Use only the files needed by this game, stored inside this game.
+Run the import, behavioral and optional native-capture commands in the
+[README](../README.md#validate). The runner covers content validation, input,
+inventory, puzzle/dialogue transactions, lifecycle, restart and long text.
+Headless checks establish behavior; inspect native output and play the game
+separately to establish rendering, input and clue readability. Repeat the
+puzzle and restart in a standalone copy after changing presentation.
 
-CraftPix's [license page](https://craftpix.net/file-licenses/) distinguishes
-use in games from distribution of retrievable artwork and templates. Do not
-assume a free download or account subscription grants unrestricted template
-redistribution. Keep a complete placeholder presentation available; verify the
-applicable terms before including art in a distributed source template.
-No purchase, account access, download, or asset inclusion occurred in this handoff.
-
-## Verification and evidence
-
-Run these implemented foundation commands from this game's folder:
-
-```sh
-/Applications/Godot.app/Contents/MacOS/Godot --version
-/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --editor --import --quit
-/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/run_tests.gd
-/Applications/Godot.app/Contents/MacOS/Godot --path .
-```
-
-The test runner validates content boundaries, static startup and Step 02
-interaction through `tests/interaction_test.gd`, including injected viewport
-mouse events, click-through prevention and modal locking. Extend it with
-behavior checks when implementing later steps.
-Test observable behavior and boundary cases, not merely node existence.
-Record engine version, commands, results, and remaining gaps in
-`docs/ACCEPTANCE.md`. Separately record native rendering/input and a timed human
-playthrough. Capture console output through win, invalid actions or loss, and
-restart; require no errors. Headless success does not prove visual clarity,
-feel, physical input, or balance. Controller support is outside this slice.
-Repeat launch and the completion route from a copy outside this repository,
-with no sibling projects available. Keep all acceptance items unchecked until
-that evidence exists.
-
-## Implementation steps
-
-See [the step index](STEPS.md) and [OpenSpec tasks](../../openspec/changes/add-point-and-click/tasks.md).
-
-
-## Step 03 runtime and presentation
+## Inventory and atomic actions
 
 `Inventory` owns known, unique item IDs with a capacity of six. There is no player
 command to discard an item. `PuzzleState` stages flag and item changes on copies,
@@ -289,7 +226,7 @@ rejects unmet conditions, duplicate rewards, missing consumables and invalid fin
 inventory, then commits both stores before publishing change signals. Failed
 actions leave flags, selection, inventory and pickup availability unchanged.
 `Interaction` selects items, matches verb/item/target rules and clears selection
-on right-click, explicit verb selection or consumption. Step 04 adds dialogue and completion effects to the same transaction; failed
+on right-click, explicit verb selection or consumption. Dialogue and completion effects use the same transaction; failed
 actions cannot open a conversation or emit completion.
 
 `scenes/ui/inventory_bar.tscn` and `scripts/inventory_ui.gd` render six text buttons
@@ -300,8 +237,7 @@ oil's visual, label and hit region hide together after a successful pickup. Oil,
 press and clerk positions in `data/room.json` leave space for the extra UI row;
 hotspot polygon sizes and the fixed camera are unchanged. No art is imported.
 
-
-## Step 04 dialogue and puzzle execution
+## Dialogue and completion
 
 `scripts/dialogue.gd` indexes the validated dialogue nodes and speaker names.
 A room rule's `start_dialogue` effect selects the node appropriate to the puzzle
@@ -322,12 +258,10 @@ The clerk gives an oil clue before repair, offers a pass afterward, and returns
 the issued-pass reminder on repeat Talk. The reward atomically grants one pass
 and sets `pass_granted`. Using that pass on the gate sets `complete` and emits
 `PuzzleState.finished` once after committed state is visible to observers.
-The gate's success and repeat responses come from `data/puzzle.json`. Step 04
-originally kept the room displayed with completion feedback. Step 05 now opens
-the gate, presents completion and offers restart.
+The gate's success and repeat responses come from `data/puzzle.json`.
+Completion opens the gate and offers restart.
 
-
-## Step 05 lifecycle and readable presentation
+## Lifecycle and readable presentation
 
 `scripts/main.gd` owns start, playing, pause and complete states. The menu scene
 and `scripts/menu_ui.gd` render labels from `data/theme.tres` and emit user intent.
@@ -359,10 +293,8 @@ Menu titles, instructions and button labels are editable theme metadata with
 `tests/restart_test.gd` covers startup blocking, Escape precedence, pause/resume
 with dialogue, restart from initial/oil-selected/repaired/dialogue-open/completed
 states, completing every rebuilt run, repeat terminal actions and long text.
-Human new-player completion timing remains an explicit acceptance gap.
 
-
-## Step 06 reskin verification and editing paths
+## Reskin verification and editing paths
 
 `tests/create_reskin_copy.py` creates a standalone temporary cosmetic variant,
 compares all runtime script/UID hashes and scene hashes except the changed
@@ -385,6 +317,5 @@ its intended blocked room click into a valid dialogue choice.
 Prop art remains independent of hitboxes. Preserve the press `Shape4` ram and
 gate `Shape1`–`Shape5` attachment nodes used for repaired/open visual states,
 or change their bindings as an explicit mechanics change. The verified copy
-changes only the backdrop palette and external display data. Human acceptance
-checkboxes above remain unchecked; [Step 06 evidence](ACCEPTANCE.md#step-06--2026-10-04)
-separately records agent native routes and results.
+changes only the backdrop palette and external display data;
+[acceptance evidence](ACCEPTANCE.md#standalone-reskin) records the copy checks.

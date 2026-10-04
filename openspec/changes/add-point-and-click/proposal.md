@@ -33,4 +33,4 @@ No shared launcher, autoload, codebase, runtime dependency or required asset
 purchase. Existing `2d-platform/` and `beat-em-up/` remain unchanged.
 
 See [the canonical design](../../../point-and-click/docs/DESIGN.md) and
-[the step index](../../../point-and-click/docs/STEPS.md).
+[acceptance evidence](../../../point-and-click/docs/ACCEPTANCE.md).

@@ -4,9 +4,10 @@
 
 The researched, canonical game design is
 [docs/DESIGN.md](../../../point-and-click/docs/DESIGN.md). It contains the core loop,
-scene tree, data contracts, CraftPix candidates, API sources, scope limits,
-reskin boundaries and under-five-minute acceptance route. Keep those details
-there to avoid divergent copies. Research is complete; gameplay is pending.
+scene tree, data contracts, asset provenance links, scope limits and reskin
+boundaries. Keep those details there to avoid divergent copies. Implementation
+and user-reported human acceptance are complete as of 2026-10-04. See
+[acceptance evidence](../../../point-and-click/docs/ACCEPTANCE.md) for timing limitations.
 
 ## Goals / Non-Goals
 
@@ -34,6 +35,7 @@ establish feel, physical input or human completion time.
 
 ## Delivery
 
-Follow [tasks.md](tasks.md) and the six linked guides one requested step at a
-time. Proposed requirements stay under this change until implementation and
-acceptance are complete; no archive or baseline spec promotion during research.
+All six steps in [tasks.md](tasks.md) are complete. The game docs now contain
+run/editing guidance and concise acceptance history; completed step guides were
+removed. The requirements remain here as the behavior contract. This cleanup
+does not archive the OpenSpec change or promote a baseline spec.
