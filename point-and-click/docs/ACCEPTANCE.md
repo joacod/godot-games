@@ -213,3 +213,87 @@ dialogue UI. The independent-copy/reskin route remains Step 06 work.
   or PR was added.
 - Next: Step 03, six-slot inventory and atomic item use. Human timed puzzle
   acceptance and independent-copy completion remain later work.
+
+
+## Step 03 — 2026-10-03
+
+Six-slot inventory and atomic item use complete; OpenSpec tasks 3.1–3.6 are
+checked. Steps 04–06 remain pending. Godot `4.7.2.stable.official.ed1daf0bf`,
+Compatibility renderer and the 640×360 logical / 1280×720 native view are retained.
+
+### Behavior and files changed
+
+- New runtime files: `scripts/inventory.gd`, `scripts/puzzle_state.gd`,
+  `scripts/inventory_ui.gd`, `scenes/ui/inventory_bar.tscn`, and generated script UIDs.
+- Integrated runtime: `scripts/main.gd`, `scripts/interaction.gd`,
+  `scripts/interaction_ui.gd`, `scenes/main.tscn`, `scenes/ui/verbs.tscn`.
+- Content: `data/puzzle.json` adds pickup feedback and state-specific press text;
+  `data/theme.tres` adds selection/repaired labels and current instructions;
+  `data/room.json` moves oil, press and clerk clear of the new UI row.
+- Tests: new `tests/inventory_actions_test.gd` and its UID,
+  `tests/interaction_test.gd` updates Step 02 expectations for supported conditions
+  while retaining routing/discovery coverage; `tests/run_tests.gd` runs both suites.
+- Documentation: `README.md`, `docs/DESIGN.md`, `docs/STEPS.md`, this record,
+  `docs/steps/03-inventory-and-actions.md`, and the OpenSpec task checklist.
+
+Pickup validates capacity before committing oil and its flag. A successful pickup
+hides its visual, label and hotspot. Selecting oil shows Use Oil flask with the
+hovered target; right-click clears selection. Oil on clerk/unsupported targets
+preserves oil, while oil on press consumes it and repairs once. Repair raises the
+press ram and updates its label; later bare Use/Look gives repaired feedback.
+There is no discard action. Transactions stage the entire rule and publish
+signals after both stores commit; deferred dialogue/completion effects reject
+an entire rule rather than executing a partial change.
+
+### Verification
+
+Run from `point-and-click/`:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --version
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --editor --import --quit
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/run_tests.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd -- --capture-dir=/private/tmp/closed-gate-step03-evidence
+```
+
+- Final import passed without script/resource errors. Final headless suite:
+  **211 passed, 0 failed**. Final native suite: **215 passed, 0 failed**, including
+  four saved viewport captures (error, initial room, selected oil, repaired press).
+- Fixtures prove full pickup preserves oil availability and flags, six-item cap,
+  unique/known IDs, failed late effects roll back without signals, duplicate grants
+  preserve reward flags, wrong targets retain oil, repeated repair is rejected,
+  observers see a complete transaction, and loaded content stays unchanged.
+- Injected viewport events verify pickup, inventory selection, cancellation,
+  normal verb restoration, modal blocking and inventory click-through prevention.
+  The capacity fixture uses six unique test IDs; shipped content has two item IDs.
+- All four native captures were inspected: readable item slot/prompt, repaired
+  label/ram, feedback and error panel, with no controls covering clickable props.
+  Captures remain temporary at `/private/tmp/closed-gate-step03-evidence`.
+- Agent computer-use mouse input independently confirmed pickup, selecting oil,
+  oil-on-clerk response while retaining the item, right-click cancellation,
+  oil-on-press repair, empty inventory after consumption and repeated bare Use
+  feedback. This is native input evidence, not a human timed playthrough.
+- Godot MCP confirmed 4.7.2, launched this project and returned no final debug
+  errors. This launch/debug check is separate from visual and input evidence.
+- All four new script UIDs are retained; no script UID is missing.
+
+The first restricted import exposed one type-inference error and macOS
+application-data permissions. The type was made explicit, and final checks ran
+with normal Godot application-data access. Two fixture expectations initially
+referenced the wrong JSON array indices; corrected expectations passed. A debug
+warning about an externally emitted inventory signal was resolved by giving its
+publication an explicit method. Capture inspection found a prop/UI overlap;
+local room positions and the item prompt were adjusted before final validation.
+
+### Boundaries and follow-ups
+
+Other games, engine/renderer settings, content schemas/loader, item/dialogue
+JSON, prop art, asset provenance, OpenSpec requirements and later-step guides
+are intentionally untouched. No dependencies, downloads, branch, commit, push
+or PR were added. Inventory uses text slots and description tooltips; icon scenes
+remain validated but are not rendered in this step.
+
+Next is Step 04: clerk dialogue, pass reward and complete puzzle chain. Human
+timed acceptance, controller checks, pause/restart and independent-copy completion
+or reskin checks were not performed; their applicable later-step gates remain
+pending. No full puzzle completion is claimed.

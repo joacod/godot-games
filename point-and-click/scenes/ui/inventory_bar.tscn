@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory_ui.gd" id="1"]
+
+[node name="InventoryBar" type="HBoxContainer"]
+offset_left = 20.0
+offset_top = 284.0
+offset_right = 620.0
+offset_bottom = 316.0
+mouse_filter = 0
+theme_override_constants/separation = 4
+script = ExtResource("1")

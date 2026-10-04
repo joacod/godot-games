@@ -1,6 +1,6 @@
 # Tasks
 
-Steps 01–02 are complete; Steps 03–06 are pending. Execute only the requested step
+Steps 01–03 are complete; Steps 04–06 are pending. Execute only the requested step
 and attach evidence before checking tasks. Research completion is not gameplay completion.
 
 ## 1. Standalone room and content schema
@@ -32,12 +32,14 @@ Step 02 evidence: [acceptance record](../../../point-and-click/docs/ACCEPTANCE.m
 
 [Detailed step guide](../../../point-and-click/docs/steps/03-inventory-and-actions.md)
 
-- [ ] 3.1 Store item IDs with a six-item capacity; disallow discarding required items and duplicate unique items.
-- [ ] 3.2 Picking up oil validates capacity before hiding its hotspot or setting oil_taken.
-- [ ] 3.3 Select an item to show Use [item] with [target], and support right-click cancellation.
-- [ ] 3.4 Validate conditions and capacity before applying all effects as one transaction. Repairing the press consumes oil and sets the repaired flag once.
-- [ ] 3.5 Wrong targets and repeated actions leave state unchanged with authored responses.
-- [ ] 3.6 Pass the step completion gate and record automated and native evidence in `point-and-click/docs/ACCEPTANCE.md`.
+- [x] 3.1 Store item IDs with a six-item capacity; disallow discarding required items and duplicate unique items.
+- [x] 3.2 Picking up oil validates capacity before hiding its hotspot or setting oil_taken.
+- [x] 3.3 Select an item to show Use [item] with [target], and support right-click cancellation.
+- [x] 3.4 Validate conditions and capacity before applying all effects as one transaction. Repairing the press consumes oil and sets the repaired flag once.
+- [x] 3.5 Wrong targets and repeated actions leave state unchanged with authored responses.
+- [x] 3.6 Pass the step completion gate and record automated and native evidence in `point-and-click/docs/ACCEPTANCE.md`.
+
+Step 03 evidence: [acceptance record](../../../point-and-click/docs/ACCEPTANCE.md#step-03--2026-10-03).
 
 ## 4. Data dialogue and complete puzzle chain
 

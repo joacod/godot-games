@@ -152,13 +152,16 @@ reference a speaker and offer at least one explicit choice. Choices without
 allowed for a choice; no expressions or scripts are evaluated.
 
 The shipped JSON contains the intended puzzle chain and text. Step 01 validates
-these definitions; Step 02 executes unconditional, text-only rules with no
-selected item. Conditions, item/flag changes and dialogue remain deferred.
+these definitions. Step 03 executes supported item, flag and text effects only
+after conditions and final inventory validity pass. Any rule containing dialogue
+or completion effects remains inactive in its entirety. Runtime flags and item
+IDs are separate from immutable content definitions.
 `data/theme.tres` is a native Theme: font sizing and Label colors are ordinary
 Theme properties, and `title`, `subtitle`, `foundation_note`, `content_error`
 metadata hold foundation UI text. Step 02 adds `verb_look`, `verb_use`,
 `verb_talk`, and `interaction_hint` for interaction UI text. Godot imports this
-resource; it is outside the JSON validator. Visual scene bindings live in room/item JSON.
+resource; it is outside the JSON validator. Step 03 adds `item_prompt` (two `%s`
+placeholders for item and target), `item_target` and `press_repaired` metadata. Visual scene bindings live in room/item JSON.
 
 ## Godot APIs and pitfalls
 
@@ -200,9 +203,9 @@ and gate if later seeking a coherent CraftPix companion set.
 
 ## Project boundary and status
 
-Research handoff dated 2026-10-03. Steps 01–02 implement the fixed room,
-validated content schema, hover names and Look/Use/Talk feedback. Inventory and
-the puzzle chain remain prospective. See
+Research handoff dated 2026-10-03. Steps 01–03 implement the fixed room,
+validated content schema, hover names, verbs, six-slot inventory and atomic oil
+pickup/press repair. Dialogue and the remaining puzzle chain are prospective. See
 [acceptance evidence](ACCEPTANCE.md) for completed foundation checks and gaps.
 Use Godot 4.7, verified locally as 4.7.2, GDScript, and Compatibility rendering.
 Each game owns its `project.godot`, scenes, scripts, data, assets, and
@@ -273,3 +276,23 @@ that evidence exists.
 ## Implementation steps
 
 See [the step index](STEPS.md) and [OpenSpec tasks](../../openspec/changes/add-point-and-click/tasks.md).
+
+
+## Step 03 runtime and presentation
+
+`Inventory` owns known, unique item IDs with a capacity of six. There is no player
+command to discard an item. `PuzzleState` stages flag and item changes on copies,
+rejects unmet conditions, duplicate rewards, missing consumables and invalid final
+inventory, then commits both stores before publishing change signals. Failed
+actions leave flags, selection, inventory and pickup availability unchanged.
+`Interaction` selects items, matches verb/item/target rules and clears selection
+on right-click, explicit verb selection or consumption. Unsupported dialogue and
+completion rules cannot apply any partial effects.
+
+`scenes/ui/inventory_bar.tscn` and `scripts/inventory_ui.gd` render six text buttons
+from item names, with description tooltips and selected-slot highlighting. The
+selected-item prompt uses the hovered target name. Empty slots still occupy the
+bar and consume GUI input. The press ram moves upward and its label says repaired;
+oil's visual, label and hit region hide together after a successful pickup. Oil,
+press and clerk positions in `data/room.json` leave space for the extra UI row;
+hotspot polygon sizes and the fixed camera are unchanged. No art is imported.

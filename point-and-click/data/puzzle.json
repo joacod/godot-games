@@ -31,7 +31,12 @@
       "verb": "look",
       "target_id": "press",
       "item_id": "",
-      "requires": [],
+      "requires": [
+        {
+          "flag": "press_repaired",
+          "value": false
+        }
+      ],
       "effects": [
         {
           "type": "show_text",
@@ -102,6 +107,10 @@
           "type": "set_flag",
           "flag_id": "oil_taken",
           "value": true
+        },
+        {
+          "type": "show_text",
+          "text": "You collect the oil flask. Select it below, then click the press."
         }
       ],
       "failure_text": "The flask has already been collected."
@@ -245,7 +254,12 @@
       "verb": "use",
       "target_id": "press",
       "item_id": "",
-      "requires": [],
+      "requires": [
+        {
+          "flag": "press_repaired",
+          "value": false
+        }
+      ],
       "effects": [
         {
           "type": "show_text",
@@ -267,6 +281,44 @@
         }
       ],
       "failure_text": "The clerk is not machinery. Try the oil on the stamp press."
+    },
+    {
+      "id": "look_repaired_press",
+      "verb": "look",
+      "target_id": "press",
+      "item_id": "",
+      "requires": [
+        {
+          "flag": "press_repaired",
+          "value": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "show_text",
+          "text": "The press is repaired. The clerk can stamp a pass now."
+        }
+      ],
+      "failure_text": "The press needs oil."
+    },
+    {
+      "id": "use_repaired_press",
+      "verb": "use",
+      "target_id": "press",
+      "item_id": "",
+      "requires": [
+        {
+          "flag": "press_repaired",
+          "value": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "show_text",
+          "text": "The press is repaired. The clerk can stamp a pass now."
+        }
+      ],
+      "failure_text": "The press needs oil."
     }
   ]
 }
