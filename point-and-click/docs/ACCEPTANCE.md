@@ -383,3 +383,96 @@ description area. The gate art and room remain displayed; open-gate visuals,
 completion screen, start/pause menus and restart are Step 05 work. Human timed
 acceptance and independent-copy completion/reskin checks remain Step 06. Controller
 checks were not performed; controller support is outside this slice.
+
+## Step 05 — 2026-10-04
+
+Implementation complete: start, pause/resume, completion, fresh-scene restart,
+open-gate presentation and bounded text layout. OpenSpec tasks 5.1–5.5 are checked.
+Task 5.6 remains unchecked: its new-player two-to-four-minute completion gate
+needs human evidence. Step 06 remains pending; no timed human playthrough or
+independent-copy reskin is claimed.
+
+Engine: `4.7.2.stable.official.ed1daf0bf`, Compatibility renderer, OpenGL 4.1
+on Apple M2. Native viewport captures are 1280×720, with the fixed 640×360 logical
+room and camera retained.
+
+### Verification commands and results
+
+Run from `point-and-click/`:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --version
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --editor --import --quit
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/run_tests.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd -- --capture-dir=/private/tmp/closed-gate-step05-evidence
+```
+
+- Import exited 0 with no script/resource errors using normal application-data
+  access. Initial restricted runs reported macOS certificate, editor-settings
+  and log-write errors; final import/headless/native runs used normal Godot access
+  and emitted no errors.
+- Headless suite: **352 passed, 0 failed**, exit 0. The previous 243 checks remain
+  covered; existing suites explicitly start the run before testing gameplay.
+- Native suite: **367 passed, 0 failed**, exit 0. Fifteen additional assertions
+  save viewport images under `/private/tmp/closed-gate-step05-evidence`.
+- `restart_test.gd` exercises start blocking, native GUI event routing, Escape
+  precedence for item/dialogue cancellation and pause, preserved dialogue across
+  pause/resume, and GUI restart from initial, selected-oil, repaired-press,
+  dialogue-open and completed states. Every rebuilt run completes again.
+- Restart assertions cover all initial flags, completion latch, empty inventory,
+  fresh definitions, default verb, cleared item selection/dialogue cursor/choices/
+  feedback, no modal, original oil/press/gate visuals and fixed camera.
+- Repeat completion dispatch/pause attempts preserve the terminal state and pass.
+  Existing wrong-target/order and atomic-action checks still pass.
+- Long fixtures verify scrollable feedback stays inside the viewport, all six
+  inventory slots fit, full names remain in tooltips, long dialogue/choices scroll,
+  and a choice remains clickable after scrolling. Fixtures never change shipped
+  JSON files. A fresh run restores original content after these fixtures.
+- All fifteen captures were visually inspected: content errors, room, selected
+  inventory, repair, four dialogue states, puzzle completion, start/pause/completion
+  menus, long feedback/dialogue and fresh restart. Authored text is readable at
+  the target resolution; long fixtures remain reachable through scrolling.
+- Capture review prompted shorter pause instructions so the shipped sentence
+  fits without scrolling. Completion also clears the selected-item prompt.
+- Separate computer-use native mouse/keyboard input confirmed Start, Pause,
+  Escape resume, oil pickup/repair, pause during clerk dialogue, Resume restoring
+  that dialogue, pass request, completion/open gate and clean restart afterward.
+  This is agent native-input evidence, not a human timed playthrough.
+- Godot MCP independently confirmed 4.7.2, launched this exact project and reported
+  no debug errors after that native route and restart; its run was stopped afterward.
+- New `menu_ui.gd` and `restart_test.gd` have generated `.gd.uid` files retained
+  alongside them. No script in this game is missing its UID.
+
+### Files changed
+
+- `point-and-click/scripts/main.gd`
+- `point-and-click/scripts/menu_ui.gd` and `.gd.uid`
+- `point-and-click/scripts/interaction_ui.gd`
+- `point-and-click/scripts/inventory_ui.gd`
+- `point-and-click/scenes/main.tscn`
+- `point-and-click/scenes/ui/menus.tscn`
+- `point-and-click/scenes/ui/verbs.tscn`
+- `point-and-click/data/theme.tres`
+- `point-and-click/tests/restart_test.gd` and `.gd.uid`
+- `point-and-click/tests/run_tests.gd`
+- `point-and-click/tests/inventory_actions_test.gd`
+- `point-and-click/tests/puzzle_chain_test.gd`
+- `point-and-click/README.md`
+- `point-and-click/docs/DESIGN.md`
+- `point-and-click/docs/STEPS.md`
+- `point-and-click/docs/steps/05-lifecycle-and-presentation.md`
+- `point-and-click/docs/ACCEPTANCE.md`
+- `openspec/changes/add-point-and-click/tasks.md`
+
+### Boundaries and follow-ups
+
+Other games, engine/renderer configuration, camera scene, hotspot geometry,
+content loader/schema, all JSON content, inventory/rule/dialogue mechanics,
+visual scene assets, provenance, Step 01 committed images, OpenSpec requirements
+and Step 06 guide are untouched. The existing placeholder gate uses its authored
+bar/crossbar nodes for the open state; no replacement art, asset downloads,
+dependencies, loss condition, branch, commit, push or PR was added.
+
+Human new-player timing is the remaining Step 05 completion-gate gap. Step 06
+adds the full timed human checklist and independent copied/reskinned project
+acceptance. Controller support remains outside this slice and was not checked.

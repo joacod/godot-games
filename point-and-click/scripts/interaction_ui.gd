@@ -33,7 +33,9 @@ func _show_hover(text: String) -> void:
 
 func _show_prompt() -> void:
 	$ItemPrompt.text = ""
+	$ItemPrompt.tooltip_text = ""
 	if not interaction.selected_item.is_empty():
 		var item_name: String = interaction.inventory.definitions[interaction.selected_item].name
 		var target: String = interaction.hovered_name if not interaction.hovered_name.is_empty() else theme.get_meta("item_target")
 		$ItemPrompt.text = theme.get_meta("item_prompt") % [item_name, target]
+		$ItemPrompt.tooltip_text = $ItemPrompt.text

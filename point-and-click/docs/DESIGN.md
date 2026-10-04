@@ -205,8 +205,9 @@ and gate if later seeking a coherent CraftPix companion set.
 
 Research handoff dated 2026-10-03. Steps 01–03 implement the fixed room,
 validated content schema, hover names, verbs, six-slot inventory and atomic oil
-pickup/press repair. Step 04 adds JSON dialogue, a pass reward and one-time gate completion. Menus,
-restart and terminal presentation remain Step 05 work. See
+pickup/press repair. Step 04 adds JSON dialogue, a pass reward and one-time gate
+completion. Step 05 adds start/pause/completion menus, fresh-scene restart and
+readable presentation. Human timing acceptance and Step 06 remain pending. See
 [acceptance evidence](ACCEPTANCE.md) for completed foundation checks and gaps.
 Use Godot 4.7, verified locally as 4.7.2, GDScript, and Compatibility rendering.
 Each game owns its `project.godot`, scenes, scripts, data, assets, and
@@ -321,5 +322,40 @@ the issued-pass reminder on repeat Talk. The reward atomically grants one pass
 and sets `pass_granted`. Using that pass on the gate sets `complete` and emits
 `PuzzleState.finished` once after committed state is visible to observers.
 The gate's success and repeat responses come from `data/puzzle.json`. Step 04
-keeps the room displayed with completion feedback; open-gate art, a completion
-screen, pause/start menus and restart reconstruction belong to Step 05.
+originally kept the room displayed with completion feedback. Step 05 now opens
+the gate, presents completion and offers restart.
+
+
+## Step 05 lifecycle and readable presentation
+
+`scripts/main.gd` owns start, playing, pause and complete states. The menu scene
+and `scripts/menu_ui.gd` render labels from `data/theme.tres` and emit user intent.
+Start, pause and completion lock room dispatch. A visible Pause button remains
+available above dialogue; pause hides the conversation without clearing its
+cursor, disables its cancel input, and resume restores its panel and modal lock.
+Escape cancels an item or conversation first, pauses idle gameplay, and resumes
+from pause. Right-click retains its item/dialogue cancellation behavior.
+
+Restart instantiates the same main scene, detaches the old run, updates the
+SceneTree current scene when applicable, and immediately starts the new run.
+Content is loaded afresh and runtime nodes, signal connections, feedback,
+selection and dialogue cursor are rebuilt. Immutable content resources are not
+used as mutable run state. Repeated restart requests on the old run are ignored.
+
+Completion clears item selection, hides the gate bars and crossbar, changes its
+label to open, locks room interaction and shows a restart screen. Existing oil
+and press visual changes remain intact. The gate panel is placed beside the
+completion screen so the open shape remains visible. The fixed camera, recoverable
+puzzle and lack of a loss condition are unchanged.
+
+Feedback uses a bounded scrollable RichTextLabel. Inventory names and the item
+prompt stay within their allotted widths with ellipses and full hover tooltips.
+Dialogue already wraps its lines and choices in a ScrollContainer; long text
+fixtures verify that choices remain reachable and actionable after scrolling.
+Menu titles, instructions and button labels are editable theme metadata with
+`menu_` keys; `gate_open` supplies the completion label. No artwork is imported.
+
+`tests/restart_test.gd` covers startup blocking, Escape precedence, pause/resume
+with dialogue, restart from initial/oil-selected/repaired/dialogue-open/completed
+states, completing every rebuilt run, repeat terminal actions and long text.
+Human new-player completion timing remains an explicit acceptance gap.

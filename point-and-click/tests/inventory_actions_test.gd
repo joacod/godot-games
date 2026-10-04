@@ -8,6 +8,7 @@ var messages: Array[String] = []
 func run(tree: SceneTree, check: Callable, capture: Callable) -> void:
 	var main := MainScene.instantiate()
 	tree.root.add_child(main)
+	main.start_game()
 	await tree.process_frame
 	var inventory: Node = main.get_node("Inventory")
 	var state: Node = main.get_node("PuzzleState")

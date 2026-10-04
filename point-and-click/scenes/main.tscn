@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/room.tscn" id="2"]
@@ -13,6 +13,8 @@
 
 [ext_resource type="Script" path="res://scripts/dialogue.gd" id="9"]
 [ext_resource type="PackedScene" path="res://scenes/ui/dialogue_panel.tscn" id="10"]
+
+[ext_resource type="PackedScene" path="res://scenes/ui/menus.tscn" id="11"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1")
@@ -88,4 +90,7 @@ visible = false
 script = ExtResource("9")
 
 [node name="DialoguePanel" parent="UI/Presentation" instance=ExtResource("10")]
+theme = ExtResource("3")
+
+[node name="Menus" parent="UI/Presentation" instance=ExtResource("11")]
 theme = ExtResource("3")
