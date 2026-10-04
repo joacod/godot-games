@@ -24,9 +24,15 @@ func _ready() -> void:
 	build_room()
 	$Room.show()
 	$UI/Presentation/Footer.hide()
-	$Interaction.configure(content, $Room/Hotspots)
+	$Inventory.configure(content.items)
+	$PuzzleState.configure(content.puzzle.initial_flags, $Inventory)
+	$PuzzleState.changed.connect(_refresh_room)
+	$Interaction.configure(content, $Room/Hotspots, $Inventory, $PuzzleState)
 	$UI/Presentation/InteractionUI.configure($Interaction)
 	$UI/Presentation/InteractionUI.show()
+	$UI/Presentation/InventoryBar.configure($Inventory, $Interaction)
+	$UI/Presentation/InventoryBar.show()
+	_refresh_room()
 
 
 func build_room() -> void:
@@ -43,6 +49,7 @@ func build_room() -> void:
 		$Room/Hotspots.add_child(area)
 		var vertices: PackedVector2Array = area.get_node("CollisionPolygon2D").polygon
 		var label := Label.new()
+		label.name = definition.id + "Label"
 		label.text = definition.name
 		label.theme = $UI/Presentation.theme
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -53,3 +60,13 @@ func build_room() -> void:
 		label.size = Vector2(bounds.size.x + 40, 22)
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		$Room.add_child(label)
+
+
+func _refresh_room() -> void:
+	var taken: bool = $PuzzleState.flags.oil_taken
+	$Room/Props/oil.visible = not taken
+	$Room/Hotspots/oil.visible = not taken
+	$Room/oilLabel.visible = not taken
+	var repaired: bool = $PuzzleState.flags.press_repaired
+	$Room/Props/press/Shape4.position.y = -10.0 if repaired else 0.0
+	$Room/pressLabel.text = $UI/Presentation.theme.get_meta("press_repaired") if repaired else $Room/Hotspots/press.display_name

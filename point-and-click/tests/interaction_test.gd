@@ -32,13 +32,13 @@ func run(tree: SceneTree, main: Node, check: Callable) -> void:
 		interaction.dispatch(region.hotspot_id)
 		check.call(not messages.is_empty() and messages.back() == authored_look(main.content, region.hotspot_id), "Authored Look: " + region.hotspot_id)
 		check.call(ui.get_node("Description/Text").text == messages.back(), "Look rendered: " + region.hotspot_id)
-		for verb in ["use", "talk"]:
+		for verb in (["talk"] if region.hotspot_id == "oil" else ["use", "talk"]):
 			interaction.select_verb(verb)
 			var before := messages.size()
 			interaction.dispatch(region.hotspot_id)
 			check.call(messages.size() == before + 1 and not messages.back().is_empty(), "Use/Talk feedback: " + region.hotspot_id)
 	check.call(main.content == unchanged, "All verbs leave content, flags and reward definitions unchanged")
-	check.call(regions.get_child_count() == 5 and main.get_node("Room/Props/oil").visible, "Use does not collect oil or hide props")
+	check.call(regions.get_child_count() == 5 and main.get_node("Room/Props/oil").visible, "Non-pickup verbs do not hide props")
 	interaction.select_verb("use")
 	interaction.dispatch("noticeboard")
 	check.call(messages.back() == main.content.puzzle.failure_responses.use, "Unsupported Use uses authored fallback")
@@ -110,15 +110,15 @@ func run(tree: SceneTree, main: Node, check: Callable) -> void:
 	interaction.dispatch("press")
 	check.call(ui.get_node("Verbs/Look").button_pressed and not ui.get_node("Verbs/Use").button_pressed and not ui.get_node("Verbs/Talk").button_pressed, "Only the selected verb remains pressed")
 
-	# Never execute the text portion of a transaction or a conditional rule.
+	# Never partially execute a rule containing deferred dialogue effects.
 	var effects: Array = main.content.puzzle.rules[0].effects.duplicate(true)
-	main.content.puzzle.rules[0].effects.append({"type": "set_flag", "flag_id": "oil_taken", "value": true})
+	main.content.puzzle.rules[0].effects.append({"type": "start_dialogue", "node_id": "jammed"})
 	interaction.dispatch("oil")
-	check.call(messages.back() == main.content.puzzle.failure_responses.look and not main.content.puzzle.initial_flags.oil_taken, "Mixed effects are skipped entirely")
+	check.call(messages.back() == main.content.puzzle.failure_responses.look and not main.content.puzzle.initial_flags.oil_taken, "Deferred mixed effects are skipped entirely")
 	main.content.puzzle.rules[0].effects = effects
 	main.content.puzzle.rules[0].requires = [{"flag": "oil_taken", "value": false}]
 	interaction.dispatch("oil")
-	check.call(messages.back() == main.content.puzzle.failure_responses.look, "Conditional rules remain deferred")
+	check.call(messages.back() == original_text, "Supported conditions execute text rules")
 	main.content.puzzle.rules[0].requires = []
 	interaction.dispatch("press")
 

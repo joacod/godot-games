@@ -160,5 +160,6 @@ func run() -> void:
 	check(reordered_label_rect == oil_label_rect, "Reordered polygon preserves label position and width")
 	reordered_main.queue_free()
 	await process_frame
-	print("Foundation + interaction checks: %d passed, %d failed" % [checks - failures, failures])
+	await preload("res://tests/inventory_actions_test.gd").new().run(self, check, capture)
+	print("Foundation + interaction + inventory checks: %d passed, %d failed" % [checks - failures, failures])
 	quit(1 if failures else 0)
