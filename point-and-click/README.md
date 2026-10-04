@@ -4,7 +4,8 @@ A standalone Godot point-and-click adventure: one fixed gatehouse, five named
 placeholder props, and data-authored Look/Use/Talk feedback. Steps 01–04 are
 complete. Step 05 implements start/pause/completion menus, clean restart and
 readable presentation alongside the six-slot inventory and full puzzle chain.
-Its human timing gate remains pending; Step 06 acceptance/reskin work is pending.
+Step 06 automated/native acceptance and standalone reskin checks are verified.
+Human timing gates for Steps 05–06 remain pending.
 
 ## Run
 
@@ -55,6 +56,24 @@ error panel, room, inventory selection, repair, dialogue states, capacity feedba
 completion, start/pause/restart, long text and injected GUI input, then exits. This does not substitute for a
 human playthrough.
 See [acceptance evidence](docs/ACCEPTANCE.md) for checks and remaining gaps.
+
+## Verify a standalone reskin
+
+From this folder, use Python 3 (standard library only):
+
+```sh
+python3 tests/create_reskin_copy.py
+```
+
+The script creates a fresh `harbor-gate` copy under `/private/tmp/`, omits
+`.godot/`, changes the backdrop palette, clerk/item names and dialogue, and
+writes `reskin-audit.json` beside the copy. It checks unchanged runtime script/UID
+and scene hashes (except the backdrop), stable content IDs/geometry/rules, and
+project-local runtime references. Run the import and behavioral commands above
+with `--path` set to the printed copy path, then launch that copy and complete
+its puzzle. Source game content and mechanics stay unchanged.
+See [Step 06 evidence](docs/ACCEPTANCE.md#step-06--2026-10-04) for results and
+remaining human playtest requirements.
 
 ## Edit or copy
 

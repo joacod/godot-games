@@ -2,7 +2,9 @@
 
 ## Entry condition
 
-Complete Step 05 and retain its passing checks. Read [the design](../DESIGN.md).
+Retain Step 05’s passing implementation checks. Its human new-player timing
+gate remains pending; the authorized Step 06 automated/native and copy checks
+proceed with that gap explicit. Read [the design](../DESIGN.md).
 
 ## Scope
 
@@ -31,8 +33,8 @@ claimed to exist yet. Follow the established paths from earlier steps if refined
 ## Completion gate
 
 - [ ] Under-five-minute completion, invalid-action recovery and restart all pass with no errors.
-- [ ] Reskinned standalone copy completes the same puzzle; all dialogue remains external.
-- [ ] No claim of controller, save/load, extra rooms or unseen final art is added.
+- [x] Reskinned standalone copy completes the same puzzle; all dialogue remains external.
+- [x] No claim of controller, save/load, extra rooms or unseen final art is added.
 
 Run the import and test commands in [DESIGN.md](../DESIGN.md), extending
 `tests/run_tests.gd` to include this step's behavioral checks. Run the native
@@ -46,3 +48,11 @@ sibling new games, engine version and renderer remain untouched. Do not add
 later-step mechanics while completing this step. Do not commit, branch, push,
 or publish unless separately requested. Report exact files changed, behavior,
 commands/results, manual checks, intentionally untouched files and next step.
+
+## Current evidence
+
+Automated/native checks and the independent reskin are recorded in
+[ACCEPTANCE.md](../ACCEPTANCE.md#step-06--2026-10-04).
+Run `python3 tests/create_reskin_copy.py` from the game folder to reproduce the
+copy and audit. Human timing and the overall completion gate remain pending;
+agent route timing cannot satisfy the new-player criterion.

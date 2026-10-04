@@ -130,9 +130,9 @@ func run() -> void:
 		if child is Label:
 			names.append(child.text)
 			check(child.mouse_filter == Control.MOUSE_FILTER_IGNORE, "Decorative label ignores clicks")
-			if child.text == "Oil flask":
+			if child.name == "oilLabel":
 				oil_label_rect = child.get_rect()
-	check(names.size() == 5 and "Noticeboard" in names and "Exit gate" in names, "Every prop has an authored label")
+	check(names.size() == 5 and main.get_node("Room/noticeboardLabel").text == baseline.room.hotspots[3].name and main.get_node("Room/gateLabel").text == baseline.room.hotspots[4].name, "Every prop has an authored label")
 	check(main.get_node("UI/Presentation/InteractionUI").visible, "Validated startup reveals interaction UI")
 	for action in ["interact", "cancel", "pause"]:
 		check(InputMap.has_action(action) and not InputMap.action_get_events(action).is_empty(), "Input configured: " + action)
@@ -156,7 +156,7 @@ func run() -> void:
 	await process_frame
 	var reordered_label_rect: Rect2
 	for child in reordered_main.get_node("Room").get_children():
-		if child is Label and child.text == "Oil flask":
+		if child is Label and child.name == "oilLabel":
 			reordered_label_rect = child.get_rect()
 	check(reordered_label_rect == oil_label_rect, "Reordered polygon preserves label position and width")
 	reordered_main.queue_free()

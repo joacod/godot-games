@@ -27,7 +27,7 @@ func run(tree: SceneTree, check: Callable, capture: Callable) -> void:
 	interaction.select_verb("talk")
 	interaction.dispatch("clerk")
 	check.call(dialogue.current_node_id == "jammed" and panel.visible and interaction.modal_open, "Early Talk opens modal clue")
-	check.call(panel.get_node("Panel/Margin/Rows/Speaker").text == "Gate clerk", "JSON speaker displayed")
+	check.call(panel.get_node("Panel/Margin/Rows/Speaker").text == original.dialogue.speakers[0].name, "JSON speaker displayed")
 	check.call(panel.get_node("Panel/Margin/Rows/Scroll/Content/Line").text == original.dialogue.nodes[0].text, "JSON line displayed")
 	check.call(list.get_child_count() == 1 and list.get_child(0).text == original.dialogue.nodes[0].choices[0].text, "JSON choice displayed")
 	await capture.call("dialogue-jammed")
@@ -35,7 +35,8 @@ func run(tree: SceneTree, check: Callable, capture: Callable) -> void:
 	interaction.dispatch("oil")
 	check.call(interaction.selected_verb == "talk" and not state.flags.oil_taken, "Modal rejects verbs and dispatch")
 	var oil: Node2D = main.get_node("Room/Hotspots/oil")
-	await inputs.click(tree, oil.get_global_transform_with_canvas() * Vector2(20, 20))
+	# Use the lower part of oil, below choices even when the clue wraps.
+	await inputs.click(tree, oil.get_global_transform_with_canvas() * Vector2(20, 65))
 	check.call(not state.flags.oil_taken and dialogue.current_node_id == "jammed", "Modal backdrop consumes room click")
 	# Move oil beneath a choice: accepting the clue cannot pick it up.
 	var old_position := oil.position
@@ -108,7 +109,7 @@ func run(tree: SceneTree, check: Callable, capture: Callable) -> void:
 	dialogue.close()
 	# Choice conditions are rechecked at commit, including stale rendered choices.
 	dialogue.open("repaired")
-	check.call(dialogue.choices.size() == 1 and dialogue.choices[0].text == "Not yet.", "Reward choice filtered after grant")
+	check.call(dialogue.choices.size() == 1 and dialogue.choices[0].text == original.dialogue.nodes[1].choices[1].text, "Reward choice filtered after grant")
 	dialogue.close()
 	state.flags.pass_granted = false
 	dialogue.open("repaired")
@@ -122,7 +123,7 @@ func run(tree: SceneTree, check: Callable, capture: Callable) -> void:
 	dialogue.nodes.jammed.choices[0].text = "Fixture choice"
 	dialogue.open("jammed")
 	check.call(panel.get_node("Panel/Margin/Rows/Speaker").text == "Fixture clerk" and panel.get_node("Panel/Margin/Rows/Scroll/Content/Line").text == "Fixture oil clue" and list.get_child(0).text == "Fixture choice", "Replacement JSON text renders in speaker, line and choice")
-	dialogue.speakers.clerk = "Gate clerk"
+	dialogue.speakers.clerk = original.dialogue.speakers[0].name
 	dialogue.nodes.jammed.text = original.dialogue.nodes[0].text
 	dialogue.nodes.jammed.choices[0].text = original.dialogue.nodes[0].choices[0].text
 	dialogue.close()
