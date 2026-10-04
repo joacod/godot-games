@@ -7,6 +7,7 @@ const InputChecks := preload("res://tests/interaction_test.gd")
 func run(tree: SceneTree, check: Callable, capture: Callable) -> void:
 	var main := MainScene.instantiate()
 	tree.root.add_child(main)
+	main.start_game()
 	await tree.process_frame
 	var state: Node = main.get_node("PuzzleState")
 	var inventory: Node = main.get_node("Inventory")

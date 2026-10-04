@@ -3,6 +3,8 @@ extends Node
 const HotspotScene := preload("res://scenes/hotspot.tscn")
 const ContentLoader := preload("res://scripts/content_loader.gd")
 @export var content_directory := "res://data"
+var lifecycle := "start"
+var restart_pending := false
 var content: Dictionary = {}
 var content_errors: PackedStringArray = []
 
@@ -34,7 +36,75 @@ func _ready() -> void:
 	$UI/Presentation/InteractionUI.show()
 	$UI/Presentation/InventoryBar.configure($Inventory, $Interaction)
 	$UI/Presentation/InventoryBar.show()
+	$UI/Presentation/Menus.start_requested.connect(start_game)
+	$UI/Presentation/Menus.resume_requested.connect(resume_game)
+	$UI/Presentation/Menus.pause_requested.connect(pause_game)
+	$UI/Presentation/Menus.restart_requested.connect(func(): restart_game.call_deferred())
+	$PuzzleState.finished.connect(_complete_game)
+	$UI/Presentation/Menus.show()
+	$Interaction.modal_open = true
+	$UI/Presentation/Menus.show_screen("start")
 	_refresh_room()
+
+
+func start_game() -> void:
+	if lifecycle != "start" or content.is_empty():
+		return
+	lifecycle = "playing"
+	$Interaction.modal_open = false
+	$UI/Presentation/Menus.show_screen("")
+
+
+func pause_game() -> void:
+	if lifecycle != "playing":
+		return
+	lifecycle = "pause"
+	$Interaction.modal_open = true
+	$Dialogue.set_process_input(false)
+	$UI/Presentation/DialoguePanel.hide()
+	$UI/Presentation/Menus.show_screen("pause")
+
+
+func resume_game() -> void:
+	if lifecycle != "pause":
+		return
+	lifecycle = "playing"
+	$Dialogue.set_process_input(true)
+	$UI/Presentation/DialoguePanel.refresh()
+	$Interaction.modal_open = not $Dialogue.current_node_id.is_empty()
+	$UI/Presentation/Menus.show_screen("")
+
+
+func _complete_game() -> void:
+	lifecycle = "complete"
+	$Interaction.cancel_selection()
+	$Interaction.modal_open = true
+	$UI/Presentation/Menus.show_screen("complete")
+	_refresh_room()
+
+
+func restart_game() -> Node:
+	if restart_pending or content.is_empty():
+		return null
+	restart_pending = true
+	var replacement: Node = load(scene_file_path).instantiate()
+	replacement.content_directory = content_directory
+	var parent := get_parent()
+	var was_current := get_tree().current_scene == self
+	var tree := get_tree()
+	parent.remove_child(self)
+	parent.add_child(replacement)
+	if was_current:
+		tree.current_scene = replacement
+	replacement.start_game()
+	queue_free()
+	return replacement
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if lifecycle == "playing" and event.is_action_pressed("pause"):
+		pause_game()
+		get_viewport().set_input_as_handled()
 
 
 func build_room() -> void:
@@ -72,3 +142,7 @@ func _refresh_room() -> void:
 	var repaired: bool = $PuzzleState.flags.press_repaired
 	$Room/Props/press/Shape4.position.y = -10.0 if repaired else 0.0
 	$Room/pressLabel.text = $UI/Presentation.theme.get_meta("press_repaired") if repaired else $Room/Hotspots/press.display_name
+	var complete: bool = $PuzzleState.completed
+	for index in range(1, 6):
+		$Room/Props/gate.get_node("Shape" + str(index)).visible = not complete
+	$Room/gateLabel.text = $UI/Presentation.theme.get_meta("gate_open") if complete else $Room/Hotspots/gate.display_name

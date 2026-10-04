@@ -14,6 +14,8 @@ func configure(item_store: Node, controller: Node) -> void:
 		slot.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		slot.add_theme_font_size_override("font_size", 12)
 		slot.toggle_mode = true
+		slot.clip_text = true
+		slot.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		slot.pressed.connect(_select.bind(index))
 		add_child(slot)
 		slots.append(slot)
@@ -33,5 +35,5 @@ func refresh() -> void:
 		var slot := slots[index]
 		slot.disabled = not occupied
 		slot.text = inventory.definitions[inventory.items[index]].name if occupied else "—"
-		slot.tooltip_text = inventory.definitions[inventory.items[index]].description if occupied else ""
+		slot.tooltip_text = "%s\n%s" % [inventory.definitions[inventory.items[index]].name, inventory.definitions[inventory.items[index]].description] if occupied else ""
 		slot.set_pressed_no_signal(occupied and inventory.items[index] == interaction.selected_item)

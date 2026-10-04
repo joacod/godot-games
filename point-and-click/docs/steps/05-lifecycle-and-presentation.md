@@ -29,14 +29,18 @@ claimed to exist yet. Follow the established paths from earlier steps if refined
 
 ## Completion gate
 
-- [ ] Restart at initial, mid-puzzle, dialogue-open and complete states returns the same fresh puzzle.
+- [x] Restart at initial, mid-puzzle, dialogue-open and complete states returns the same fresh puzzle.
 - [ ] A new player can follow hints and finish in two to four minutes.
-- [ ] Wrong actions and rapid repeated clicks produce no console errors or accidental transitions.
+- [x] Wrong actions and rapid repeated clicks produce no console errors or accidental transitions.
 
 Run the import and test commands in [DESIGN.md](../DESIGN.md), extending
 `tests/run_tests.gd` to include this step's behavioral checks. Run the native
 launch command for its visual/input checks. Record results and unresolved gaps
 in `docs/ACCEPTANCE.md`, including generated `.gd.uid` coverage.
+
+Implementation and automated/native evidence are recorded in
+[ACCEPTANCE.md](../ACCEPTANCE.md#step-05--2026-10-04). The new-player timing gate
+remains unchecked until a human playthrough is recorded.
 
 ## Boundaries and handoff
 

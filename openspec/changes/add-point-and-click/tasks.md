@@ -1,6 +1,7 @@
 # Tasks
 
-Steps 01–04 are complete; Steps 05–06 are pending. Execute only the requested step
+Steps 01–04 are complete; Step 05 is implemented with its human timing gate
+pending; Step 06 is pending. Execute only the requested step
 and attach evidence before checking tasks. Research completion is not gameplay completion.
 
 ## 1. Standalone room and content schema
@@ -58,12 +59,16 @@ Step 04 evidence: [acceptance record](../../../point-and-click/docs/ACCEPTANCE.m
 
 [Detailed step guide](../../../point-and-click/docs/steps/05-lifecycle-and-presentation.md)
 
-- [ ] 5.1 Add start, pause/restart and completion presentation, preserving the fixed camera.
-- [ ] 5.2 Restart reconstructs room, inventory, puzzle flags and dialogue cursor; no stale selected item or modal remains.
-- [ ] 5.3 Use visual state changes for taken oil, repaired press and open gate; labels supplement shapes and color.
-- [ ] 5.4 Check full sentences and choices at the target resolution; fit inventory slots and avoid clipping long data text.
-- [ ] 5.5 Do not add a loss condition to a puzzle designed to be recoverable. Completion and restart satisfy this game’s terminal flow.
+- [x] 5.1 Add start, pause/restart and completion presentation, preserving the fixed camera.
+- [x] 5.2 Restart reconstructs room, inventory, puzzle flags and dialogue cursor; no stale selected item or modal remains.
+- [x] 5.3 Use visual state changes for taken oil, repaired press and open gate; labels supplement shapes and color.
+- [x] 5.4 Check full sentences and choices at the target resolution; fit inventory slots and avoid clipping long data text.
+- [x] 5.5 Do not add a loss condition to a puzzle designed to be recoverable. Completion and restart satisfy this game’s terminal flow.
 - [ ] 5.6 Pass the step completion gate and record automated and native evidence in `point-and-click/docs/ACCEPTANCE.md`.
+
+Step 05 automated/native evidence: [acceptance record](../../../point-and-click/docs/ACCEPTANCE.md#step-05--2026-10-04).
+Task 5.6 remains unchecked because the new-player two-to-four-minute timing gate
+has no human evidence. Implementation and the other completion gates are verified.
 
 ## 6. Acceptance and independent adventure reskin
 

@@ -2,8 +2,9 @@
 
 A standalone Godot point-and-click adventure: one fixed gatehouse, five named
 placeholder props, and data-authored Look/Use/Talk feedback. Steps 01–04 are
-complete, including a six-slot inventory, clerk dialogue and the full puzzle
-chain. Menus, restart and completion presentation arrive in Step 05.
+complete. Step 05 implements start/pause/completion menus, clean restart and
+readable presentation alongside the six-slot inventory and full puzzle chain.
+Its human timing gate remains pending; Step 06 acceptance/reskin work is pending.
 
 ## Run
 
@@ -14,7 +15,7 @@ Open this folder's `project.godot` in Godot, or run from this folder on macOS:
 /Applications/Godot.app/Contents/MacOS/Godot --path .
 ```
 
-The 640×360 logical room opens at 1280×720. The camera stays fixed. Hover a prop
+The 640×360 logical room opens at 1280×720. Click Start; the camera stays fixed. Hover a prop
 to read its name; select Look, Use or Talk and left-click it for authored feedback.
 Use on the oil flask collects it. Select its inventory slot, then click the clerk
 for wrong-target feedback or the press to repair it. Right-click cancels item
@@ -23,8 +24,13 @@ shape and label. Use on the gate gives a clue. Talk to the clerk before repair f
 after repair, request a stamped pass. Select the pass and use it on the gate to
 complete the puzzle once. Dialogue blocks room clicks until you choose a response
 or cancel with the leave button, right-click or Escape. Repeated Talk gives the
-current hint without granting another pass. Pause menus, restart, an open-gate
-visual and a completion screen remain pending.
+current hint without granting another pass. Completion visibly opens the gate
+and offers Restart. Use Pause to suspend play, including an open conversation;
+Resume restores progress. Escape first cancels a selected item or conversation,
+then pauses idle play; Escape in the pause menu resumes. Restart from pause or
+completion immediately begins a fresh puzzle. There is no timer or loss state.
+Long responses and dialogue scroll; shortened inventory names and item prompts
+retain their full text in hover tooltips.
 
 ## Validate
 
@@ -36,17 +42,17 @@ Run from this folder:
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/run_tests.gd
 ```
 
-Expected behavioral result: `Foundation + interaction + inventory + puzzle checks: 243 passed, 0 failed`.
+Expected behavioral result: `Foundation + interaction + inventory + puzzle + lifecycle checks: 352 passed, 0 failed`.
 An import exit code alone is insufficient: inspect output for script/resource
 errors. For native rendering checks and optional viewport captures:
 
 ```sh
-/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd -- --capture-dir=/private/tmp/closed-gate-step04-evidence
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd -- --capture-dir=/private/tmp/closed-gate-step05-evidence
 ```
 
-The native capture run adds nine image-save checks (252 total). It validates the
+The native capture run adds fifteen image-save checks (367 total). It validates the
 error panel, room, inventory selection, repair, dialogue states, capacity feedback,
-completion and injected GUI input, then exits. This does not substitute for a
+completion, start/pause/restart, long text and injected GUI input, then exits. This does not substitute for a
 human playthrough.
 See [acceptance evidence](docs/ACCEPTANCE.md) for checks and remaining gaps.
 
@@ -60,8 +66,8 @@ See [acceptance evidence](docs/ACCEPTANCE.md) for checks and remaining gaps.
   `data/theme.tres`. Inventory slots use item names and description tooltips;
   item icon scenes remain validated content for later presentation work.
 - Overlapping hotspots resolve in `room.json` array order: the first match wins.
-  Step 03 executes conditions and atomic item/flag/text effects. Rules with
-  dialogue or completion effects stay inactive in their entirety.
+  Puzzle actions execute conditions and atomic item/flag/text/dialogue/completion
+  effects. Failed actions leave progress and required items available.
 - Content errors hide the room and name the file and offending ID in a scrollable
   error panel. All four JSON files must validate before any props are built.
 

@@ -112,6 +112,7 @@ func run() -> void:
 	await process_frame
 	var main := MainScene.instantiate()
 	root.add_child(main)
+	main.start_game()
 	await process_frame
 	check(main.content_errors.is_empty() and main.get_node("Room").visible, "Valid startup must reveal room")
 	check(main.get_node("Room/Hotspots").get_child_count() == 5, "Five hotspot definitions instantiated")
@@ -162,5 +163,6 @@ func run() -> void:
 	await process_frame
 	await preload("res://tests/inventory_actions_test.gd").new().run(self, check, capture)
 	await preload("res://tests/puzzle_chain_test.gd").new().run(self, check, capture)
-	print("Foundation + interaction + inventory + puzzle checks: %d passed, %d failed" % [checks - failures, failures])
+	await preload("res://tests/restart_test.gd").new().run(self, check, capture)
+	print("Foundation + interaction + inventory + puzzle + lifecycle checks: %d passed, %d failed" % [checks - failures, failures])
 	quit(1 if failures else 0)
