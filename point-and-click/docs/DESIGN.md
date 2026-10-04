@@ -152,15 +152,20 @@ reference a speaker and offer at least one explicit choice. Choices without
 allowed for a choice; no expressions or scripts are evaluated.
 
 The shipped JSON contains the intended puzzle chain and text. Step 01 validates
-these definitions only; conditions, effects and dialogue do not execute yet.
+these definitions; Step 02 executes unconditional, text-only rules with no
+selected item. Conditions, item/flag changes and dialogue remain deferred.
 `data/theme.tres` is a native Theme: font sizing and Label colors are ordinary
 Theme properties, and `title`, `subtitle`, `foundation_note`, `content_error`
-metadata hold foundation UI text. Godot imports this resource; it is outside
-the JSON validator. Visual scene bindings live in room/item JSON.
+metadata hold foundation UI text. Step 02 adds `verb_look`, `verb_use`,
+`verb_talk`, and `interaction_hint` for interaction UI text. Godot imports this
+resource; it is outside the JSON validator. Visual scene bindings live in room/item JSON.
 
 ## Godot APIs and pitfalls
 
-Use `Area2D.input_event` with collision shapes for scene hotspots; use `Control`,
+Hotspots use `Area2D` collision polygons. Step 02 centrally hit-tests their
+authored polygons in room-definition order and dispatches through
+`_unhandled_input`, so GUI controls consume clicks before room dispatch and
+overlap priority does not depend on physics picking. Use `Control`,
 `Button`, containers, and `CanvasLayer` for verbs/inventory/dialogue.
 [Control mouse filtering](https://docs.godotengine.org/en/stable/classes/class_control.html)
 requires deliberate configuration: decorative overlays ignore input; interactive
@@ -195,8 +200,9 @@ and gate if later seeking a coherent CraftPix companion set.
 
 ## Project boundary and status
 
-Research handoff dated 2026-10-03. Step 01 now implements the static room and
-validated content schema; later gameplay remains prospective. See
+Research handoff dated 2026-10-03. Steps 01–02 implement the fixed room,
+validated content schema, hover names and Look/Use/Talk feedback. Inventory and
+the puzzle chain remain prospective. See
 [acceptance evidence](ACCEPTANCE.md) for completed foundation checks and gaps.
 Use Godot 4.7, verified locally as 4.7.2, GDScript, and Compatibility rendering.
 Each game owns its `project.godot`, scenes, scripts, data, assets, and
@@ -250,8 +256,10 @@ Run these implemented foundation commands from this game's folder:
 /Applications/Godot.app/Contents/MacOS/Godot --path .
 ```
 
-The Step 01 test runner validates content boundaries and static startup.
-Extend it with behavior checks when implementing later steps.
+The test runner validates content boundaries, static startup and Step 02
+interaction through `tests/interaction_test.gd`, including injected viewport
+mouse events, click-through prevention and modal locking. Extend it with
+behavior checks when implementing later steps.
 Test observable behavior and boundary cases, not merely node existence.
 Record engine version, commands, results, and remaining gaps in
 `docs/ACCEPTANCE.md`. Separately record native rendering/input and a timed human

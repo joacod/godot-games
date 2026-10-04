@@ -1,5 +1,6 @@
 extends Node
 
+const HotspotScene := preload("res://scenes/hotspot.tscn")
 const ContentLoader := preload("res://scripts/content_loader.gd")
 @export var content_directory := "res://data"
 var content: Dictionary = {}
@@ -22,6 +23,10 @@ func _ready() -> void:
 	content = result.content
 	build_room()
 	$Room.show()
+	$UI/Presentation/Footer.hide()
+	$Interaction.configure(content, $Room/Hotspots)
+	$UI/Presentation/InteractionUI.configure($Interaction)
+	$UI/Presentation/InteractionUI.show()
 
 
 func build_room() -> void:
@@ -33,18 +38,10 @@ func build_room() -> void:
 		visual.name = definition.id
 		visual.position = Vector2(definition.position[0], definition.position[1])
 		$Room/Props.add_child(visual)
-		var area := Area2D.new()
-		area.name = definition.id
-		area.position = visual.position
-		area.set_meta("hotspot_id", definition.id)
-		area.input_pickable = false # Dispatch and hover belong to Step 02.
-		var collision := CollisionPolygon2D.new()
-		var vertices := PackedVector2Array()
-		for point in definition.polygon:
-			vertices.append(Vector2(point[0], point[1]))
-		collision.polygon = vertices
-		area.add_child(collision)
+		var area := HotspotScene.instantiate()
+		area.configure(definition)
 		$Room/Hotspots.add_child(area)
+		var vertices: PackedVector2Array = area.get_node("CollisionPolygon2D").polygon
 		var label := Label.new()
 		label.text = definition.name
 		label.theme = $UI/Presentation.theme

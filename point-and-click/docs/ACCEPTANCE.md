@@ -138,3 +138,78 @@ Only this game and its OpenSpec task checklist changed:
 
 Sibling games, root guidance/configuration, OpenSpec requirements, and Step 02–06
 guides were intentionally untouched. Git delivery is separate from foundation acceptance.
+
+## Step 02 — 2026-10-03
+
+Look/Use/Talk dispatch complete; OpenSpec tasks 2.1–2.5 are checked. Steps 03–06
+remain pending. Godot `4.7.2.stable.official.ed1daf0bf`, Compatibility rendering,
+640×360 logical viewport and 1280×720 native window are retained.
+
+### Behavior
+
+All five authored polygons support hover names and Look descriptions. The first
+matching hotspot in `room.json` order wins overlaps. GUI controls consume clicks;
+decorative controls ignore them. `Interaction.modal_open` clears hover and blocks
+room dispatch, including direct calls; later dialogue UI will own this lock.
+
+Dispatch executes only unconditional, text-only rules with no selected item.
+Use on the press/gate shows an authored clue; other Use/Talk requests show the
+verb's authored fallback. Conditional, mixed-effect, item, flag, dialogue and
+completion rules remain inactive, so oil is not picked up and progress never
+changes. No puzzle or dialogue strings live in mechanics scripts.
+
+### Automated verification
+
+Run from `point-and-click/`:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --editor --import --quit
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/run_tests.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd -- --capture-dir=/private/tmp/closed-gate-step02-evidence
+```
+
+- Import passed with no script/resource errors using normal application-data
+  access. The first restricted attempt could not save macOS editor settings.
+- Final headless suite: **179 passed, 0 failed**. Final native suite:
+  **181 passed, 0 failed**, including two viewport image saves.
+- Retained foundation checks and added all-prop center/edge discovery, Look
+  rendering, Use/Talk feedback, no content/progress mutation, invalid target/verb
+  handling, deterministic overlap, exclusive verb selection, mixed-effect and
+  conditional-rule deferral, and data-text replacement.
+- Injected viewport events verify hover, one room dispatch per click, verb GUI
+  selection, no verb-click dispatch, overlay click consumption, modal blocking
+  and resumed room input. These are automated event-routing checks.
+- New scripts retain generated UIDs: `scripts/hotspot.gd`,
+  `scripts/interaction.gd`, `scripts/interaction_ui.gd`,
+  `tests/interaction_test.gd`. No script UID is missing.
+
+### Native visual and input evidence
+
+Agent computer-use clicks in the native game confirmed hover/readable feedback
+for all five hotspots (oil, press, clerk, noticeboard and gate), explicit Talk
+selection with the gate's unsupported-action response, and Use selection with
+the press clue. Props and camera stayed fixed. Native captures of the room and
+startup error panel were separately inspected for readable text and no clipping.
+Captures are temporary outputs at `/private/tmp/closed-gate-step02-evidence`.
+
+The Godot MCP reported version 4.7.2, launched this exact project, and returned
+no debug errors. This establishes a native launch/debug smoke check separately
+from computer-use input and visual inspection. No controller or human playthrough
+is claimed. Modal/overlap fixtures were checked by injected events, not a finished
+dialogue UI. The independent-copy/reskin route remains Step 06 work.
+
+### Changed files and follow-ups
+
+- Runtime: `scripts/main.gd`, `scripts/hotspot.gd`, `scripts/interaction.gd`,
+  `scripts/interaction_ui.gd`, `scenes/main.tscn`, `scenes/hotspot.tscn`,
+  `scenes/ui/verbs.tscn`, `data/theme.tres`, and new script UIDs.
+- Verification: `tests/run_tests.gd`, `tests/interaction_test.gd` and its UID.
+- Documentation: `README.md`, `docs/DESIGN.md`, `docs/STEPS.md`,
+  `docs/steps/02-hotspots-and-verbs.md`, this evidence record and the OpenSpec
+  task checklist.
+- Intentionally untouched: other games, engine/renderer configuration, JSON
+  schemas/content, content loader, prop art/provenance, OpenSpec requirements,
+  and later-step guides. No dependency, downloaded asset, branch, commit, push
+  or PR was added.
+- Next: Step 03, six-slot inventory and atomic item use. Human timed puzzle
+  acceptance and independent-copy completion remain later work.

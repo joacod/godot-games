@@ -1,6 +1,6 @@
 # Tasks
 
-Step 01 is complete; Steps 02–06 are pending. Execute only the requested step
+Steps 01–02 are complete; Steps 03–06 are pending. Execute only the requested step
 and attach evidence before checking tasks. Research completion is not gameplay completion.
 
 ## 1. Standalone room and content schema
@@ -20,11 +20,13 @@ Step 01 evidence: [acceptance record](../../../point-and-click/docs/ACCEPTANCE.m
 
 [Detailed step guide](../../../point-and-click/docs/steps/02-hotspots-and-verbs.md)
 
-- [ ] 2.1 Add hover names and generous hotspot shapes for oil, press, clerk, noticeboard and gate.
-- [ ] 2.2 Provide explicit verb selection and dispatch a verb plus target ID to the content rules.
-- [ ] 2.3 Render data-authored Look descriptions and unsupported-action feedback; scripts contain no dialogue strings.
-- [ ] 2.4 Set decorative UI mouse filters to ignore; interactive controls consume clicks. Resolve overlapping hotspots deterministically and disable room clicks for modal UI.
-- [ ] 2.5 Pass the step completion gate and record automated and native evidence in `point-and-click/docs/ACCEPTANCE.md`.
+- [x] 2.1 Add hover names and generous hotspot shapes for oil, press, clerk, noticeboard and gate.
+- [x] 2.2 Provide explicit verb selection and dispatch a verb plus target ID to the content rules.
+- [x] 2.3 Render data-authored Look descriptions and unsupported-action feedback; scripts contain no dialogue strings.
+- [x] 2.4 Set decorative UI mouse filters to ignore; interactive controls consume clicks. Resolve overlapping hotspots deterministically and disable room clicks for modal UI.
+- [x] 2.5 Pass the step completion gate and record automated and native evidence in `point-and-click/docs/ACCEPTANCE.md`.
+
+Step 02 evidence: [acceptance record](../../../point-and-click/docs/ACCEPTANCE.md#step-02--2026-10-03).
 
 ## 3. Six-slot inventory and atomic item use
 

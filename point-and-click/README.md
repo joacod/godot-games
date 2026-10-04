@@ -1,8 +1,8 @@
 # The Closed Gate
 
-A standalone Godot point-and-click adventure foundation: one fixed gatehouse,
-five labeled placeholder props, and validated local puzzle content.
-Step 01 is complete. Interaction and the playable puzzle arrive in later steps.
+A standalone Godot point-and-click adventure: one fixed gatehouse, five named
+placeholder props, and data-authored Look/Use/Talk feedback. Steps 01–02 are
+complete. Inventory and the playable puzzle chain arrive in later steps.
 
 ## Run
 
@@ -13,10 +13,12 @@ Open this folder's `project.godot` in Godot, or run from this folder on macOS:
 /Applications/Godot.app/Contents/MacOS/Godot --path .
 ```
 
-The 640×360 logical room opens at 1280×720. The camera stays fixed. Hotspots
-are labeled, but Look/Use/Talk, inventory, dialogue, pause menus and completion
-are not implemented yet. Left-click, right-click/Escape cancellation and Escape
-pause actions are configured for later use.
+The 640×360 logical room opens at 1280×720. The camera stays fixed. Hover a prop
+to read its name; select Look, Use or Talk and left-click it for authored feedback.
+Use on the press or gate gives a clue. Picking up oil and starting conversations
+are deferred, with fallback feedback until their steps are implemented. Inventory,
+dialogue, pause menus and completion remain pending; cancellation and pause input
+actions are configured for later use.
 
 ## Validate
 
@@ -28,16 +30,17 @@ Run from this folder:
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/run_tests.gd
 ```
 
-Expected behavioral result: `Foundation checks: 128 passed, 0 failed`.
+Expected behavioral result: `Foundation + interaction checks: 179 passed, 0 failed`.
 An import exit code alone is insufficient: inspect output for script/resource
 errors. For native rendering checks and optional viewport captures:
 
 ```sh
-/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd -- --capture-dir=/tmp/closed-gate-step01-evidence
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd -- --capture-dir=/private/tmp/closed-gate-step02-evidence
 ```
 
-The native capture run adds two image-save checks (130 total). It validates the
-error panel and room, then exits. This does not substitute for a human playthrough.
+The native capture run adds two image-save checks (181 total). It validates the
+error panel, room and injected GUI input, then exits. This does not substitute
+for a human playthrough.
 See [acceptance evidence](docs/ACCEPTANCE.md) for checks and remaining gaps.
 
 ## Edit or copy
@@ -46,7 +49,10 @@ See [acceptance evidence](docs/ACCEPTANCE.md) for checks and remaining gaps.
 - Replace visual packed scenes under `scenes/visuals/`; keep their roots `Node2D`.
 - Edit items, conversation text and rules in `data/*.json` according to the
   [content schema](docs/DESIGN.md#implemented-content-schema-step-01).
-- Edit fonts, label colors and UI text metadata in `data/theme.tres`.
+- Edit fonts, label colors, verb names and instructions in `data/theme.tres`.
+- Overlapping hotspots resolve in `room.json` array order: the first match wins.
+  Text-only rules with no conditions or selected item execute in Step 02; all
+  other rules stay inactive.
 - Content errors hide the room and name the file and offending ID in a scrollable
   error panel. All four JSON files must validate before any props are built.
 
