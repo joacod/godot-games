@@ -1,11 +1,9 @@
 # The Closed Gate
 
-A standalone Godot point-and-click adventure: one fixed gatehouse, five named
-placeholder props, and data-authored Look/Use/Talk feedback. Steps 01–04 are
-complete. Step 05 implements start/pause/completion menus, clean restart and
-readable presentation alongside the six-slot inventory and full puzzle chain.
-Step 06 automated/native acceptance and standalone reskin checks are verified.
-Human timing gates for Steps 05–06 remain pending.
+A complete standalone Godot point-and-click adventure: one fixed gatehouse,
+five named placeholder props, Look/Use/Talk interactions, a six-slot inventory,
+and one recoverable puzzle chain. Human playtest accepted on 2026-10-04; see
+[acceptance evidence](docs/ACCEPTANCE.md).
 
 ## Run
 
@@ -48,14 +46,14 @@ An import exit code alone is insufficient: inspect output for script/resource
 errors. For native rendering checks and optional viewport captures:
 
 ```sh
-/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd -- --capture-dir=/private/tmp/closed-gate-step05-evidence
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd -- --capture-dir=/private/tmp/closed-gate-evidence
 ```
 
 The native capture run adds fifteen image-save checks (367 total). It validates the
 error panel, room, inventory selection, repair, dialogue states, capacity feedback,
 completion, start/pause/restart, long text and injected GUI input, then exits. This does not substitute for a
 human playthrough.
-See [acceptance evidence](docs/ACCEPTANCE.md) for checks and remaining gaps.
+See [acceptance evidence](docs/ACCEPTANCE.md) for results and evidence boundaries.
 
 ## Verify a standalone reskin
 
@@ -72,18 +70,17 @@ and scene hashes (except the backdrop), stable content IDs/geometry/rules, and
 project-local runtime references. Run the import and behavioral commands above
 with `--path` set to the printed copy path, then launch that copy and complete
 its puzzle. Source game content and mechanics stay unchanged.
-See [Step 06 evidence](docs/ACCEPTANCE.md#step-06--2026-10-04) for results and
-remaining human playtest requirements.
+See [standalone reskin evidence](docs/ACCEPTANCE.md#standalone-reskin) for recorded results.
 
 ## Edit or copy
 
 - Edit names, hotspot positions and polygons in `data/room.json`.
 - Replace visual packed scenes under `scenes/visuals/`; keep their roots `Node2D`.
 - Edit items, conversation text and rules in `data/*.json` according to the
-  [content schema](docs/DESIGN.md#implemented-content-schema-step-01).
+  [content schema](docs/DESIGN.md#content-schema).
 - Edit fonts, label colors, verb names, item prompts and instructions in
   `data/theme.tres`. Inventory slots use item names and description tooltips;
-  item icon scenes remain validated content for later presentation work.
+  item icon scenes are validated content, but the inventory displays text buttons.
 - Overlapping hotspots resolve in `room.json` array order: the first match wins.
   Puzzle actions execute conditions and atomic item/flag/text/dialogue/completion
   effects. Failed actions leave progress and required items available.
@@ -92,5 +89,5 @@ remaining human playtest requirements.
 
 Copy this entire folder, including script `.gd.uid` files. Omit `.godot/`.
 No sibling game, repository-level resource, account or asset download is needed.
-The [design](docs/DESIGN.md), [steps](docs/STEPS.md) and
-[asset provenance](assets/PROVENANCE.md) explain the boundaries and next work.
+The [design and editing reference](docs/DESIGN.md) and
+[asset provenance](assets/PROVENANCE.md) document the content and reskin boundaries.

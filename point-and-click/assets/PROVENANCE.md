@@ -1,13 +1,13 @@
 # Asset provenance
 
-## Used in Step 01
+## Shipped assets
 
 All room, prop and item visuals are project-authored `Polygon2D` packed scenes
 under `scenes/visuals/`: background, oil, press, clerk, noticeboard, gate and pass.
 They contain no downloaded artwork. Fonts use Godot's built-in default.
 Hotspot geometry lives separately in `data/room.json`; replacing a visual does
-not change its interaction shape. The pass visual is future inventory content;
-it is not a sixth room hotspot.
+not change its interaction shape. The pass visual is validated item content; inventory uses text buttons.
+It is not a sixth room hotspot.
 
 ## CraftPix candidate
 
@@ -30,7 +30,7 @@ art. Any later companion assets should be transparent pixel PNGs with readable
 silhouettes; a clerk portrait or silhouette is sufficient for this static stage.
 
 
-## Step 06 coverage and reskin — 2026-10-04
+## Coverage and verified reskin — 2026-10-04
 
 The shipped game retains its original project-authored placeholders. The
 standalone temporary Harbor Gate copy changes only backdrop polygon colors;
@@ -49,7 +49,7 @@ No external art, generated raster media, account access or downloads were used.
 The [CraftPix candidate listing](https://craftpix.net/freebies/free-castle-interior-pixel-game-backgrounds/)
 was rechecked on 2026-10-04: four 576×324 PNG/PSD backgrounds remain listed.
 Archive files, prop coverage and in-engine fit remain unverified.
-The [current license page](https://craftpix.net/file-licenses/) permits game use
+The [license page checked on 2026-10-04](https://craftpix.net/file-licenses/) permits game use
 and modification of freebies, while restricting retrievable art redistribution
 and providing separate template/enterprise terms. No source-template
 redistribution approval or account entitlement is claimed. These are candidate

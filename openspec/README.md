@@ -1,13 +1,14 @@
 # OpenSpec game research handoff
 
-Research dated 2026-10-03. The three changes below are proposals with complete
-designs and future implementation steps. No gameplay has been implemented by
-this handoff. All implementation tasks remain unchecked.
+The original research handoff was dated 2026-10-03. Consult each change's task
+checklist for current delivery status. Point-and-click implementation and
+user-reported human acceptance are complete as of 2026-10-04; its completed step
+guides have been removed in favor of maintenance guidance and acceptance history.
 
-| Game | Design | Steps | Requirements |
+| Game | Design | Delivery | Requirements |
 | --- | --- | --- | --- |
 | Survivors | [Design](../survivors/docs/DESIGN.md) | [Six steps](../survivors/docs/STEPS.md) | [Spec](changes/add-survivors/specs/survivors-slice/spec.md) |
-| Point-and-click | [Design](../point-and-click/docs/DESIGN.md) | [Six steps](../point-and-click/docs/STEPS.md) | [Spec](changes/add-point-and-click/specs/point-and-click-slice/spec.md) |
+| Point-and-click | [Design](../point-and-click/docs/DESIGN.md) | [Acceptance](../point-and-click/docs/ACCEPTANCE.md) | [Spec](changes/add-point-and-click/specs/point-and-click-slice/spec.md) |
 | Shooter | [Design](../shooter/docs/DESIGN.md) | [Six steps](../shooter/docs/STEPS.md) | [Spec](changes/add-shooter/specs/shooter-slice/spec.md) |
 
 ## Workflow
@@ -38,7 +39,7 @@ implementation, not a completed game. Archive only after gameplay acceptance;
 
 Official Godot API documentation and CraftPix product/license pages are linked
 beside the relevant findings in each design. Candidate art has not been downloaded
-or inspected. No project.godot, gameplay scripts, scenes or tests exist in these
-three folders yet; they are explicit future deliverables. The installed Godot
-binary reported `4.7.2.stable.official.ed1daf0bf`; no game operation was needed
+or inspected during the original handoff. At that time, project.godot, gameplay
+scripts, scenes and tests were future deliverables. The installed Godot binary
+reported `4.7.2.stable.official.ed1daf0bf`; no game operation was needed
 for this research. Existing game folders and the root README are untouched.
