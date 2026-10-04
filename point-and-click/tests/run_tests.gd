@@ -161,5 +161,6 @@ func run() -> void:
 	reordered_main.queue_free()
 	await process_frame
 	await preload("res://tests/inventory_actions_test.gd").new().run(self, check, capture)
-	print("Foundation + interaction + inventory checks: %d passed, %d failed" % [checks - failures, failures])
+	await preload("res://tests/puzzle_chain_test.gd").new().run(self, check, capture)
+	print("Foundation + interaction + inventory + puzzle checks: %d passed, %d failed" % [checks - failures, failures])
 	quit(1 if failures else 0)

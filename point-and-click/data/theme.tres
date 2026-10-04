@@ -17,3 +17,4 @@ metadata/interaction_hint = "Choose a verb, then click a prop. Select an invento
 metadata/item_prompt = "Use %s with %s"
 metadata/item_target = "…"
 metadata/press_repaired = "Stamp press (repaired)"
+metadata/dialogue_cancel = "Leave conversation"

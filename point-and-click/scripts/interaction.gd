@@ -65,7 +65,8 @@ func dispatch(target_id: String) -> void:
 				failed_text = rule.failure_text
 			continue
 		var result: Dictionary = puzzle_state.apply(rule)
-		feedback_changed.emit(content.puzzle.failure_responses.capacity if result.capacity else result.text)
+		if result.capacity or not result.text.is_empty():
+			feedback_changed.emit(content.puzzle.failure_responses.capacity if result.capacity else result.text)
 		return
 	feedback_changed.emit(failed_text if not failed_text.is_empty() else content.puzzle.failure_responses[selected_verb])
 

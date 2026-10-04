@@ -101,8 +101,8 @@ func run(tree: SceneTree, check: Callable, capture: Callable) -> void:
 	check.call(not state.apply(bad).ok and inventory.items == ["oil"] and not state.flags.press_repaired and observations.is_empty(), "Late failed effect rolls back entire action with no signals")
 	var duplicate := {"requires": [], "failure_text": "Duplicate", "effects": [{"type": "grant_item", "item_id": "oil"}, {"type": "set_flag", "flag_id": "pass_granted", "value": true}]}
 	check.call(not state.apply(duplicate).ok and not state.flags.pass_granted and inventory.items == ["oil"], "Duplicate grant cannot commit reward flag")
-	var deferred := {"requires": [], "failure_text": "Deferred", "effects": [{"type": "consume_item", "item_id": "oil"}, {"type": "finish"}]}
-	check.call(not state.apply(deferred).ok and inventory.items == ["oil"], "Deferred completion cannot partially consume")
+	var deferred := {"requires": [], "failure_text": "Deferred", "effects": [{"type": "consume_item", "item_id": "oil"}, {"type": "unsupported_fixture"}]}
+	check.call(not state.apply(deferred).ok and inventory.items == ["oil"], "Unsupported effect cannot partially consume")
 	await inputs.click(tree, press.get_global_transform_with_canvas() * Vector2(30, 30))
 	check.call(state.flags.press_repaired and inventory.items.is_empty() and interaction.selected_item.is_empty(), "Mouse repair consumes once and clears selection")
 	check.call(observations == [true], "State observers see complete transaction exactly once")
@@ -112,7 +112,8 @@ func run(tree: SceneTree, check: Callable, capture: Callable) -> void:
 	check.call(not state.apply(main.content.puzzle.rules[6]).ok and observations == [true], "Repeated repair rejected without further state change")
 	interaction.select_verb("talk")
 	interaction.dispatch("clerk")
-	check.call(not state.flags.pass_granted and not state.flags.complete and inventory.items.is_empty(), "Dialogue and completion remain deferred")
+	check.call(not state.flags.pass_granted and not state.flags.complete and inventory.items.is_empty(), "Opening dialogue alone does not grant pass or complete")
+	main.get_node("Dialogue").close()
 	check.call(main.content == content_before, "Actions never mutate content definitions")
 	await capture.call("press-repaired")
 	main.queue_free()

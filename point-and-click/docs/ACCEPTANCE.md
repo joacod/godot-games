@@ -297,3 +297,89 @@ Next is Step 04: clerk dialogue, pass reward and complete puzzle chain. Human
 timed acceptance, controller checks, pause/restart and independent-copy completion
 or reskin checks were not performed; their applicable later-step gates remain
 pending. No full puzzle completion is claimed.
+
+## Step 04 — 2026-10-04
+
+Complete: JSON clerk dialogue, conditional choices, atomic pass reward and the
+full oil → press → clerk/pass → gate puzzle chain. OpenSpec tasks 4.1–4.6 are
+complete; Steps 05–06 remain pending. Godot version is
+`4.7.2.stable.official.ed1daf0bf`; Compatibility rendering is unchanged.
+
+### Verification
+
+Run from `point-and-click/`:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --version
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --editor --import --quit
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/run_tests.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd -- --capture-dir=/private/tmp/closed-gate-step04-evidence
+```
+
+- Import passed without script/resource errors. Headless checks: **243 passed,
+  0 failed**. Native checks: **252 passed, 0 failed**, including nine image-save
+  checks. Existing foundation, interaction and inventory checks remain covered;
+  assertions that formerly deferred dialogue/finish now test unsupported effects.
+- Full-chain assertions cover early gate, early Talk, wrong item/target, repair,
+  one pass, next-node transition, repeat Talk, condition-filtered and stale choices,
+  capacity failure/retry, data text replacement and one-time completion. Signals
+  observe committed state; a late transaction failure emits neither dialogue nor
+  completion. The six-item capacity fixture uses local test IDs, not shipped items.
+- Injected viewport events prove modal room/verb blocking, choice click-through
+  prevention, explicit choice, leave button, right-click and Escape cancellation,
+  GUI pass request and pass-on-gate completion.
+- Nine native captures were inspected: error, initial room, selected oil, repaired
+  press, jammed/repaired/issued conversations, modal capacity feedback and completed
+  puzzle. Text is readable at 1280×720. Captures remain temporary under
+  `/private/tmp/closed-gate-step04-evidence`; original Step 01 images are untouched.
+- Separate agent computer-use mouse input confirmed the oil clue, modal click
+  blocking, early gate clue, oil pickup/repair, declining and retrying the pass,
+  requesting one pass, repeat issued dialogue and pass-on-gate success feedback.
+  This is native input evidence, not a human timed playthrough.
+- Godot MCP verified 4.7.2, launched this exact project and returned no debug errors
+  after the route. MCP launch/debug evidence is separate from visual/input checks.
+- New `dialogue.gd`, `dialogue_ui.gd` and `puzzle_chain_test.gd` each have generated
+  `.gd.uid` files; no script in this game is missing its UID.
+
+The first restricted import could not save macOS Godot editor settings; subsequent
+checks used normal application-data access. The first behavioral run exposed a
+missing explicit theme binding on the dialogue instance; it was fixed before the
+passing runs. Initial capture inspection showed scenery behind dialogue text,
+so the panel now has an opaque background and border. Final native captures and
+mouse checks use that corrected panel.
+
+### Files changed
+
+- `point-and-click/scripts/dialogue.gd` and `.gd.uid`
+- `point-and-click/scripts/dialogue_ui.gd` and `.gd.uid`
+- `point-and-click/scripts/puzzle_state.gd`
+- `point-and-click/scripts/interaction.gd`
+- `point-and-click/scripts/main.gd`
+- `point-and-click/scenes/ui/dialogue_panel.tscn`
+- `point-and-click/scenes/main.tscn`
+- `point-and-click/data/puzzle.json`
+- `point-and-click/data/theme.tres`
+- `point-and-click/tests/puzzle_chain_test.gd` and `.gd.uid`
+- `point-and-click/tests/interaction_test.gd`
+- `point-and-click/tests/inventory_actions_test.gd`
+- `point-and-click/tests/run_tests.gd`
+- `point-and-click/README.md`
+- `point-and-click/docs/DESIGN.md`
+- `point-and-click/docs/STEPS.md`
+- `point-and-click/docs/ACCEPTANCE.md`
+- `openspec/changes/add-point-and-click/tasks.md`
+
+### Boundaries and follow-ups
+
+Other games, engine/renderer settings, schemas/content loader, existing dialogue
+JSON, item/room JSON, inventory implementation, placeholder art, asset provenance,
+OpenSpec requirements and later-step guides are untouched. Existing dialogue and
+puzzle definitions supplied the graph; puzzle JSON only gains gate success text,
+and theme metadata gains the leave-button label. No dependencies, asset downloads,
+branch, commit, push or PR were added.
+
+Step 04 emits completion once and shows authored success feedback in the existing
+description area. The gate art and room remain displayed; open-gate visuals,
+completion screen, start/pause menus and restart are Step 05 work. Human timed
+acceptance and independent-copy completion/reskin checks remain Step 06. Controller
+checks were not performed; controller support is outside this slice.

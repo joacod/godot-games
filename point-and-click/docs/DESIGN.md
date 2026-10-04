@@ -152,9 +152,9 @@ reference a speaker and offer at least one explicit choice. Choices without
 allowed for a choice; no expressions or scripts are evaluated.
 
 The shipped JSON contains the intended puzzle chain and text. Step 01 validates
-these definitions. Step 03 executes supported item, flag and text effects only
-after conditions and final inventory validity pass. Any rule containing dialogue
-or completion effects remains inactive in its entirety. Runtime flags and item
+these definitions. Step 04 executes all six effects only after conditions and final inventory
+validity pass. Dialogue and completion signals are emitted after the transaction
+commits; completion emits once per run. Runtime flags and item
 IDs are separate from immutable content definitions.
 `data/theme.tres` is a native Theme: font sizing and Label colors are ordinary
 Theme properties, and `title`, `subtitle`, `foundation_note`, `content_error`
@@ -205,7 +205,8 @@ and gate if later seeking a coherent CraftPix companion set.
 
 Research handoff dated 2026-10-03. Steps 01–03 implement the fixed room,
 validated content schema, hover names, verbs, six-slot inventory and atomic oil
-pickup/press repair. Dialogue and the remaining puzzle chain are prospective. See
+pickup/press repair. Step 04 adds JSON dialogue, a pass reward and one-time gate completion. Menus,
+restart and terminal presentation remain Step 05 work. See
 [acceptance evidence](ACCEPTANCE.md) for completed foundation checks and gaps.
 Use Godot 4.7, verified locally as 4.7.2, GDScript, and Compatibility rendering.
 Each game owns its `project.godot`, scenes, scripts, data, assets, and
@@ -286,8 +287,8 @@ rejects unmet conditions, duplicate rewards, missing consumables and invalid fin
 inventory, then commits both stores before publishing change signals. Failed
 actions leave flags, selection, inventory and pickup availability unchanged.
 `Interaction` selects items, matches verb/item/target rules and clears selection
-on right-click, explicit verb selection or consumption. Unsupported dialogue and
-completion rules cannot apply any partial effects.
+on right-click, explicit verb selection or consumption. Step 04 adds dialogue and completion effects to the same transaction; failed
+actions cannot open a conversation or emit completion.
 
 `scenes/ui/inventory_bar.tscn` and `scripts/inventory_ui.gd` render six text buttons
 from item names, with description tooltips and selected-slot highlighting. The
@@ -296,3 +297,29 @@ bar and consume GUI input. The press ram moves upward and its label says repaire
 oil's visual, label and hit region hide together after a successful pickup. Oil,
 press and clerk positions in `data/room.json` leave space for the extra UI row;
 hotspot polygon sizes and the fixed camera are unchanged. No art is imported.
+
+
+## Step 04 dialogue and puzzle execution
+
+`scripts/dialogue.gd` indexes the validated dialogue nodes and speaker names.
+A room rule's `start_dialogue` effect selects the node appropriate to the puzzle
+state. Only choices whose `requires` conditions pass are displayed; the same
+conditions are checked again when a choice is committed. A successful choice
+follows `next_id`, opens an effect's dialogue target, or closes the conversation.
+A failed reward leaves the current node available, with authored feedback inside
+the panel, so a capacity failure can be retried without committing reward flags.
+
+`scenes/ui/dialogue_panel.tscn` and `scripts/dialogue_ui.gd` show JSON speaker,
+line and choice text in a scrollable modal panel. The whole overlay consumes
+mouse input; `Interaction.modal_open` also blocks direct room dispatch, verb
+changes and item selection. Explicit choices, the leave button, right-click or
+Escape end a conversation. `dialogue_cancel` in `data/theme.tres` supplies the
+leave button label. No scripts contain player-visible conversation text.
+
+The clerk gives an oil clue before repair, offers a pass afterward, and returns
+the issued-pass reminder on repeat Talk. The reward atomically grants one pass
+and sets `pass_granted`. Using that pass on the gate sets `complete` and emits
+`PuzzleState.finished` once after committed state is visible to observers.
+The gate's success and repeat responses come from `data/puzzle.json`. Step 04
+keeps the room displayed with completion feedback; open-gate art, a completion
+screen, pause/start menus and restart reconstruction belong to Step 05.

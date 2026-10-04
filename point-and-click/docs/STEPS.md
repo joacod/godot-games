@@ -1,6 +1,6 @@
 # point-and-click implementation steps
 
-Status: Steps 01–03 complete; Steps 04–06 pending. See [acceptance evidence](ACCEPTANCE.md).
+Status: Steps 01–04 complete; Steps 05–06 pending. See [acceptance evidence](ACCEPTANCE.md).
 Implement one requested step at a time, in order. Each step depends on the preceding one;
 Step 01 depends on [DESIGN.md](DESIGN.md) and the researched content decisions.
 Mark progress only when implementation and its evidence exist.
