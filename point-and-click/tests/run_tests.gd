@@ -118,7 +118,7 @@ func run() -> void:
 	check(main.get_node("Room/Props").get_child_count() == 5, "Five independent prop visuals instantiated")
 	check(main.get_node("Room/Camera2D").position == Vector2(320, 180), "Camera framing is fixed")
 	for area in main.get_node("Room/Hotspots").get_children():
-		check(not area.input_pickable, "Hotspot dispatch must wait for Step 02")
+		check(not area.input_pickable, "Physics picking disabled for ordered central dispatch")
 		check(area.get_meta("hotspot_id") == str(area.name), "Stable hotspot IDs retained")
 		check(area.get_child(0).polygon.size() == 4, "Authored collision geometry retained")
 		var rect := Rect2(area.position, area.get_child(0).polygon[2])
@@ -132,12 +132,13 @@ func run() -> void:
 			if child.text == "Oil flask":
 				oil_label_rect = child.get_rect()
 	check(names.size() == 5 and "Noticeboard" in names and "Exit gate" in names, "Every prop has an authored label")
-	check(main.get_node("UI/Presentation/Footer").text.contains("Step 02"), "Foundation status is clear")
+	check(main.get_node("UI/Presentation/InteractionUI").visible, "Validated startup reveals interaction UI")
 	for action in ["interact", "cancel", "pause"]:
 		check(InputMap.has_action(action) and not InputMap.action_get_events(action).is_empty(), "Input configured: " + action)
 	check(ProjectSettings.get_setting("display/window/size/viewport_width") == 640, "Logical viewport width")
 	check(ProjectSettings.get_setting("display/window/size/viewport_height") == 360, "Logical viewport height")
 	check(ProjectSettings.get_setting("rendering/renderer/rendering_method") == "gl_compatibility", "Compatibility renderer retained")
+	await preload("res://tests/interaction_test.gd").new().run(self, main, check)
 	await capture("room")
 	main.queue_free()
 	await process_frame
@@ -159,5 +160,5 @@ func run() -> void:
 	check(reordered_label_rect == oil_label_rect, "Reordered polygon preserves label position and width")
 	reordered_main.queue_free()
 	await process_frame
-	print("Foundation checks: %d passed, %d failed" % [checks - failures, failures])
+	print("Foundation + interaction checks: %d passed, %d failed" % [checks - failures, failures])
 	quit(1 if failures else 0)

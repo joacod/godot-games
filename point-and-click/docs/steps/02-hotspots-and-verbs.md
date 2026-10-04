@@ -1,5 +1,7 @@
 # Step 02 — Look, Use and Talk dispatch
 
+Status: complete. See [acceptance evidence](../ACCEPTANCE.md#step-02--2026-10-03).
+
 ## Entry condition
 
 Complete Step 01 and retain its passing checks. Read [the design](../DESIGN.md).
@@ -29,9 +31,9 @@ claimed to exist yet. Follow the established paths from earlier steps if refined
 
 ## Completion gate
 
-- [ ] Every hotspot supports Look; unsupported Talk/Use returns feedback without state change.
-- [ ] Clicking a verb or overlay never also activates scenery underneath.
-- [ ] All five hotspots can be found without pixel hunting or camera movement.
+- [x] Every hotspot supports Look; unsupported Talk/Use returns feedback without state change.
+- [x] Clicking a verb or overlay never also activates scenery underneath.
+- [x] All five hotspots can be found without pixel hunting or camera movement.
 
 Run the import and test commands in [DESIGN.md](../DESIGN.md), extending
 `tests/run_tests.gd` to include this step's behavioral checks. Run the native
