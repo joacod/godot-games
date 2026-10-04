@@ -1,9 +1,9 @@
 # The Closed Gate
 
 A standalone Godot point-and-click adventure: one fixed gatehouse, five named
-placeholder props, and data-authored Look/Use/Talk feedback. Steps 01–03 are
-complete, including a six-slot inventory and oil-on-press repair. Dialogue and
-the remaining puzzle chain arrive in later steps.
+placeholder props, and data-authored Look/Use/Talk feedback. Steps 01–04 are
+complete, including a six-slot inventory, clerk dialogue and the full puzzle
+chain. Menus, restart and completion presentation arrive in Step 05.
 
 ## Run
 
@@ -19,8 +19,12 @@ to read its name; select Look, Use or Talk and left-click it for authored feedba
 Use on the oil flask collects it. Select its inventory slot, then click the clerk
 for wrong-target feedback or the press to repair it. Right-click cancels item
 selection without discarding it. Repair consumes oil once and changes the press
-shape and label. Use on the gate gives a clue. Conversations, pass rewards,
-pause menus, restart and completion remain pending.
+shape and label. Use on the gate gives a clue. Talk to the clerk before repair for an oil hint;
+after repair, request a stamped pass. Select the pass and use it on the gate to
+complete the puzzle once. Dialogue blocks room clicks until you choose a response
+or cancel with the leave button, right-click or Escape. Repeated Talk gives the
+current hint without granting another pass. Pause menus, restart, an open-gate
+visual and a completion screen remain pending.
 
 ## Validate
 
@@ -32,17 +36,18 @@ Run from this folder:
 /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/run_tests.gd
 ```
 
-Expected behavioral result: `Foundation + interaction + inventory checks: 211 passed, 0 failed`.
+Expected behavioral result: `Foundation + interaction + inventory + puzzle checks: 243 passed, 0 failed`.
 An import exit code alone is insufficient: inspect output for script/resource
 errors. For native rendering checks and optional viewport captures:
 
 ```sh
-/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd -- --capture-dir=/private/tmp/closed-gate-step03-evidence
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd -- --capture-dir=/private/tmp/closed-gate-step04-evidence
 ```
 
-The native capture run adds four image-save checks (215 total). It validates the
-error panel, room, inventory selection, repair and injected GUI input, then exits. This does not substitute
-for a human playthrough.
+The native capture run adds nine image-save checks (252 total). It validates the
+error panel, room, inventory selection, repair, dialogue states, capacity feedback,
+completion and injected GUI input, then exits. This does not substitute for a
+human playthrough.
 See [acceptance evidence](docs/ACCEPTANCE.md) for checks and remaining gaps.
 
 ## Edit or copy

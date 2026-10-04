@@ -28,6 +28,8 @@ func _ready() -> void:
 	$PuzzleState.configure(content.puzzle.initial_flags, $Inventory)
 	$PuzzleState.changed.connect(_refresh_room)
 	$Interaction.configure(content, $Room/Hotspots, $Inventory, $PuzzleState)
+	$Dialogue.configure(content, $PuzzleState, $Interaction)
+	$UI/Presentation/DialoguePanel.configure($Dialogue)
 	$UI/Presentation/InteractionUI.configure($Interaction)
 	$UI/Presentation/InteractionUI.show()
 	$UI/Presentation/InventoryBar.configure($Inventory, $Interaction)

@@ -1,6 +1,6 @@
 # Tasks
 
-Steps 01–03 are complete; Steps 04–06 are pending. Execute only the requested step
+Steps 01–04 are complete; Steps 05–06 are pending. Execute only the requested step
 and attach evidence before checking tasks. Research completion is not gameplay completion.
 
 ## 1. Standalone room and content schema
@@ -45,12 +45,14 @@ Step 03 evidence: [acceptance record](../../../point-and-click/docs/ACCEPTANCE.m
 
 [Detailed step guide](../../../point-and-click/docs/steps/04-dialogue-and-puzzle.md)
 
-- [ ] 4.1 Load the clerk dialogue graph, filter choices by state and display speaker/line/choice text from JSON.
-- [ ] 4.2 Before repair, the clerk hints at oil; after repair, requesting a pass grants it once. Repeated Talk chooses relevant nonduplicating dialogue.
-- [ ] 4.3 Use pass on gate to emit completion once. Block invalid exit attempts with data-authored feedback.
-- [ ] 4.4 Lock scene interaction while dialogue is open; require an explicit choice/cancel instead of allowing room clicks through.
-- [ ] 4.5 Exercise the full chain and plausible wrong action orders with state assertions.
-- [ ] 4.6 Pass the step completion gate and record automated and native evidence in `point-and-click/docs/ACCEPTANCE.md`.
+- [x] 4.1 Load the clerk dialogue graph, filter choices by state and display speaker/line/choice text from JSON.
+- [x] 4.2 Before repair, the clerk hints at oil; after repair, requesting a pass grants it once. Repeated Talk chooses relevant nonduplicating dialogue.
+- [x] 4.3 Use pass on gate to emit completion once. Block invalid exit attempts with data-authored feedback.
+- [x] 4.4 Lock scene interaction while dialogue is open; require an explicit choice/cancel instead of allowing room clicks through.
+- [x] 4.5 Exercise the full chain and plausible wrong action orders with state assertions.
+- [x] 4.6 Pass the step completion gate and record automated and native evidence in `point-and-click/docs/ACCEPTANCE.md`.
+
+Step 04 evidence: [acceptance record](../../../point-and-click/docs/ACCEPTANCE.md#step-04--2026-10-04).
 
 ## 5. Completion, restart and readable room
 

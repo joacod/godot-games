@@ -36,7 +36,11 @@ func run(tree: SceneTree, main: Node, check: Callable) -> void:
 			interaction.select_verb(verb)
 			var before := messages.size()
 			interaction.dispatch(region.hotspot_id)
-			check.call(messages.size() == before + 1 and not messages.back().is_empty(), "Use/Talk feedback: " + region.hotspot_id)
+			if verb == "talk" and region.hotspot_id == "clerk":
+				check.call(main.get_node("Dialogue").current_node_id == "jammed", "Talk opens authored dialogue")
+				main.get_node("Dialogue").close()
+			else:
+				check.call(messages.size() == before + 1 and not messages.back().is_empty(), "Use/Talk feedback: " + region.hotspot_id)
 	check.call(main.content == unchanged, "All verbs leave content, flags and reward definitions unchanged")
 	check.call(regions.get_child_count() == 5 and main.get_node("Room/Props/oil").visible, "Non-pickup verbs do not hide props")
 	interaction.select_verb("use")
@@ -110,11 +114,11 @@ func run(tree: SceneTree, main: Node, check: Callable) -> void:
 	interaction.dispatch("press")
 	check.call(ui.get_node("Verbs/Look").button_pressed and not ui.get_node("Verbs/Use").button_pressed and not ui.get_node("Verbs/Talk").button_pressed, "Only the selected verb remains pressed")
 
-	# Never partially execute a rule containing deferred dialogue effects.
+	# Unsupported effects must still reject the entire action.
 	var effects: Array = main.content.puzzle.rules[0].effects.duplicate(true)
-	main.content.puzzle.rules[0].effects.append({"type": "start_dialogue", "node_id": "jammed"})
+	main.content.puzzle.rules[0].effects.append({"type": "unsupported_fixture"})
 	interaction.dispatch("oil")
-	check.call(messages.back() == main.content.puzzle.failure_responses.look and not main.content.puzzle.initial_flags.oil_taken, "Deferred mixed effects are skipped entirely")
+	check.call(messages.back() == main.content.puzzle.failure_responses.look and not main.content.puzzle.initial_flags.oil_taken, "Unsupported mixed effects are skipped entirely")
 	main.content.puzzle.rules[0].effects = effects
 	main.content.puzzle.rules[0].requires = [{"flag": "oil_taken", "value": false}]
 	interaction.dispatch("oil")

@@ -231,6 +231,10 @@
         },
         {
           "type": "finish"
+        },
+        {
+          "type": "show_text",
+          "text": "The stamped pass opens the gate. You may pass through."
         }
       ],
       "failure_text": "The gate has already opened."
