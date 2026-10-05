@@ -159,6 +159,7 @@ func run(suite: SceneTree) -> void:
     suite._check(main.run.get_node("Enemies/Enemy/Health").current == 20, "retry restores enemy health")
     await suite.process_frame
     suite._check(not is_instance_valid(old_run), "retry frees old rack and targets")
+    main.run.get_node("SpawnDirector").next_spawn = INF
     for frame in range(130):
         await suite.physics_frame
     suite._check(main.run.get_node("Enemies").get_child_count() == 0, "normal rack automatically kills crawler without fire input")

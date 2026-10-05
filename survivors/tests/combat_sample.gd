@@ -9,6 +9,7 @@ func _sample() -> void:
     root.add_child(main)
     main.start_run()
     var run: Node2D = main.run
+    run.set_physics_process(false)
     preload("res://tests/combat_fixture.gd").equip_all(run)
     for offset in [Vector2(-100, 0), Vector2(0, -130), Vector2(0, 120), Vector2(170, 80), Vector2(36, 0)]:
         preload("res://tests/combat_fixture.gd").add_enemy(run, run.get_node("Player").position + offset, 500)

@@ -18,7 +18,7 @@ claimed to exist yet. Follow the established paths from earlier steps if refined
 - `scenes/ui/hud.tscn`
 - `scenes/ui/result.tscn`
 - `data/run.tres`
-- `data/enemies/elite.tres`
+- `data/enemies/elite_crawler.tres`
 - `tests/run_lifecycle_test.gd`
 
 ## Work
@@ -30,9 +30,13 @@ claimed to exist yet. Follow the established paths from earlier steps if refined
 
 ## Completion gate
 
-- [ ] Fast-forward controlled test time across 60/120/180-second boundaries; no duplicate elite or late spawns.
-- [ ] Pause leaves timer and schedule unchanged; living-enemy cap holds.
-- [ ] Finish a real 180-second run, then a short loss/retry route, with no errors. Record actual timings and progression.
+- [x] Fast-forward controlled test time across 60/120/180-second boundaries; no duplicate elite or late spawns.
+- [x] Pause leaves timer and schedule unchanged; living-enemy cap holds.
+- [x] Finish a real 180-second run, then a short loss/retry route, with no errors. Record actual timings and progression.
+
+The timed route above was completed with scripted native input on 2026-10-05.
+Physical input and human balance acceptance remain pending; see
+[acceptance evidence](../ACCEPTANCE.md).
 
 Run the import and test commands in [DESIGN.md](../DESIGN.md), extending
 `tests/run_tests.gd` to include this step's behavioral checks. Run the native

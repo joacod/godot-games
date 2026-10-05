@@ -411,3 +411,123 @@ base stat/upgrade Resources, content schemas, engine/renderer and OpenSpec
 requirements remain untouched. No spawn pacing, elite, timer, victory, separate
 pause menu, art download, dependency, branch, commit, push or PR was added.
 Step 05 is the next implementation slice; human acceptance remains as above.
+
+## Step 05 — spawn pacing, elite and outcomes — 2026-10-05
+
+### Implemented behavior
+
+The run advances its active timer after player/contact physics, then advances a
+separate spawn director. The three existing data cadences apply at 0/60/120 s;
+ordinary living enemies and pending ordinary entries share the cap of 60.
+Skipped slots at the cap are consumed, preventing a later backlog burst.
+One elite appears at 120 s independently of that cap. Entries prefer offscreen
+edges at least 160 px from the player. If no offscreen edge exists, a cross/ring
+warns for 0.7 s. Ordinary threats enter after the warning; the elite appears on
+its deadline but is harmless and invulnerable until its warning ends.
+
+The HUD shows HP/shield, XP, level, four distinct geometric weapon icons/ranks
+and active time. Escape/P opens a working pause panel. Choices and manual pause
+freeze active time, spawn schedule, warning activation, movement, damage,
+attacks and pickups. A living player wins at 180 s; lethal contact on that
+physics tick takes precedence. Either outcome disables the run and damage,
+clears attacks and pending warnings, and blocks delayed drops/pickups. Retry
+rebuilds timer, spawn history, enemies, combat and all progression. New pause,
+result and retry text is editable in the theme Resource.
+
+### Commands and automated evidence
+
+Run from `survivors/` with Godot **4.7.2**, Compatibility:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --version
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --editor --import --quit
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/run_tests.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_tests.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_sample.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/run_sample.gd -- --panels
+```
+
+From the repository root:
+
+```sh
+OPENSPEC_TELEMETRY=0 openspec validate add-survivors --strict --no-interactive
+git diff --check
+```
+
+Final import exited 0 without console errors. Headless and native regression
+suites each reported **241 passed, 0 failed**, exit 0. The 37 additional checks
+cover phase crossings, cap/backlog behavior, exactly one elite, elite
+stats/silhouette/label, safe edge selection, warned entry/activation, pause and
+resume, timeout, stopped post-outcome damage/pickup/drop/spawn, both result
+labels, physical final-tick lethal contact, and victory/loss retry. The older
+combat regression now isolates spawning when asserting that its supplied
+crawler has died. The older native combat/progression samples also hold run
+scheduling, retaining their original fixture scope.
+
+Initial sandbox execution produced macOS certificate, editor-settings and log
+access errors. Final validation used normal Godot application-data access.
+Early fixture failures (unsettled overlap and frame timing) and a temporary
+type-inference error were corrected before the final passing suites. Godot MCP
+was confirmed at 4.7.2; final MCP startup/debug output contained no errors or
+warnings. This MCP check covered startup at the menu, not a played run.
+All **32 scripts** have `.gd.uid` companions, including the four new scripts.
+
+### Real-time native route and visual evidence
+
+`tests/run_sample.gd` completed a normal-content route using scripted movement,
+injected Enter choices, normal enemy damage, automatic attacks and collected
+XP drops. No supplied XP, altered player HP/speed, fast-forwarded combat,
+extra equipped weapons or altered enemy stats were used in this route.
+
+| Milestone | Active time |
+| --- | --- |
+| Halo unlock | 5.38 s |
+| Pulse unlock | 11.00 s |
+| Shard chosen / all four observed equipped | 16.00 / 16.02 s |
+| Lens | 21.17 s |
+| Spark rank 2 | 27.65 s |
+| Spark rank 3 / evolution observed | 34.38 / 34.40 s |
+| Elite | 120 s, one spawn |
+| Victory | 180.00 s; 182.85 s wall time including choices |
+| Separate deliberate-contact defeat | 19.58 s; HP 0 |
+| Retry | HP 100, level 1, XP 0, one weapon, elite history cleared |
+
+The complete victory/loss/retry fixture exited 0 without console errors.
+The victory route ended at level 23, HP 100 and shield 280; it supports
+reachable progression and the timed lifecycle, not a conclusion about human
+challenge. Initial XP/cadence values already met the by-150-second goal and
+were retained. Human balance tuning remains unaccepted.
+
+Ten native viewport captures were inspected: `45s`, `90s`, `121s`, `150s`,
+`result`, `loss`, `retry`, `pause`, `elite` and `warning`, each named
+`/private/tmp/survivors-step05-<label>.png`. The short `--panels` fixture uses
+controlled elite placement/time and camera zoom to show the fallback warning;
+its extra elite is presentation setup, not the ordinary route. It reported
+unchanged active time during manual pause and one scheduled warned elite.
+The HUD and focused pause/result controls fit the 640×360 logical viewport;
+the elite has a larger silhouette and readable label. Weapon/pickup feedback
+remains visible in the inspected mid-run stills. Moving effects can cross the
+HUD region, so stills do not establish continuous readability.
+
+Physical keyboard/mouse, human movement/pause feel, controller use and human
+balance remain unverified. No 15-second mid-run video or independent-copy/reskin
+proof was produced in Step 05; those remain Step 06 work. Tasks 5.1–5.4 are
+checked with this evidence; task 5.5 remains unchecked for human acceptance.
+The prior Step 02 and Step 04 human gates remain unchanged.
+
+### Exact files and boundaries
+
+Added `scripts/spawn_director.gd`, `scripts/hud.gd`,
+`tests/run_lifecycle_test.gd`, `tests/run_sample.gd`, their four `.gd.uid`
+companions, and `scenes/ui/hud.tscn`, `pause.tscn`, `result.tscn`.
+Updated `scripts/run.gd`, `main.gd`, `enemy.gd`, `health.gd`, `xp_gem.gd`,
+`scripts/content/theme_data.gd`, `content_validator.gd`, `scenes/run.tscn`,
+`main.tscn`, `data/theme.tres`, `tests/run_tests.gd`, `weapons_test.gd`,
+`combat_sample.gd`, `progression_sample.gd`, README, provenance, DESIGN, STEPS,
+the Step 05 guide, this acceptance record, and
+`openspec/changes/add-survivors/tasks.md`.
+
+Run/stat/weapon/upgrade Resources, player movement, arena geometry, weapon and
+progression mechanics, existing games, sibling projects, engine/renderer,
+OpenSpec requirements and Step 06 implementation remain untouched. No asset
+import, dependency, branch, commit, push or PR was added.

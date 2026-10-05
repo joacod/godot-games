@@ -121,7 +121,7 @@ static func validate(content: SurvivorRunData, theme: SurvivorThemeData) -> Pack
     if theme == null:
         errors.append("theme: required Resource is missing")
     else:
-        for field in ["title", "start_label", "return_label", "foundation_label", "foundation_note"]:
+        for field in ["title", "start_label", "return_label", "victory_label", "defeat_label", "pause_label", "resume_label", "retry_label", "foundation_label", "foundation_note"]:
             if str(theme.get(field)).strip_edges().is_empty():
                 errors.append("theme.%s: required text is empty" % field)
         if theme.ui_theme == null:

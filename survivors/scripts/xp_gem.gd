@@ -20,7 +20,7 @@ func _physics_process(delta: float) -> void:
             collect()
 
 func collect() -> void:
-    if spent or get_tree().paused or actor.get_node("Health").current == 0:
+    if spent or not actor.get_node("Health").active or get_tree().paused or actor.get_node("Health").current == 0:
         return
     spent = true
     hide()
