@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SurvivorUpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/content/upgrade_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"arc_spark"
+display_name = "Arc Spark"
+description = "Rank-3 Spark plus Lens; replace Spark and chain to 3 targets."
+icon_scene = "res://scenes/visuals/attack.tscn"
+kind = 5
+target_id = &"spark"
+required_weapon_id = &"spark"
+required_weapon_rank = 3
+required_passive_id = &"lens"
+replacement_id = &"arc_spark"
+chain_limit = 3

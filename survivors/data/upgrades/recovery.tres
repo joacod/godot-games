@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SurvivorUpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/content/upgrade_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"recovery"
+display_name = "Recovery"
+description = "Heal 20 HP; unused healing becomes shield."
+icon_scene = "res://scenes/visuals/attack.tscn"
+kind = 2
+target_id = &"recovery"
+max_rank = 0
+modifier = 20

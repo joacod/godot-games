@@ -1,0 +1,47 @@
+[gd_scene load_steps=3 format=3]
+
+[sub_resource type="RectangleShape2D" id="horizontal"]
+size = Vector2(1024, 32)
+
+[sub_resource type="RectangleShape2D" id="vertical"]
+size = Vector2(32, 640)
+
+[node name="Arena" type="Node2D"]
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Boundaries" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Top" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(480, -16)
+shape = SubResource("horizontal")
+
+[node name="TopEdge" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-32, -32, 992, -32, 992, 0, -32, 0)
+color = Color(0.44, 0.56, 0.46, 1)
+
+[node name="Bottom" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(480, 656)
+shape = SubResource("horizontal")
+
+[node name="BottomEdge" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-32, 640, 992, 640, 992, 672, -32, 672)
+color = Color(0.44, 0.56, 0.46, 1)
+
+[node name="Left" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(-16, 320)
+shape = SubResource("vertical")
+
+[node name="LeftEdge" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-32, 0, 0, 0, 0, 640, -32, 640)
+color = Color(0.44, 0.56, 0.46, 1)
+
+[node name="Right" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(976, 320)
+shape = SubResource("vertical")
+
+[node name="RightEdge" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(960, 0, 992, 0, 992, 640, 960, 640)
+color = Color(0.44, 0.56, 0.46, 1)

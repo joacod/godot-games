@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="SurvivorThemeData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/content/theme_data.gd" id="1"]
+[ext_resource type="Theme" path="res://data/ui_theme.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+title = "Last Light Clearing"
+start_label = "Start"
+return_label = "Back to menu"
+foundation_label = "STEP 01 / ARENA FOUNDATION"
+foundation_note = "Static markers. Movement begins in Step 02."
+background_color = Color(0.063, 0.106, 0.137, 1)
+floor_color = Color(0.137, 0.235, 0.231, 1)
+boundary_color = Color(0.443, 0.561, 0.463, 1)
+player_color = Color(0.976, 0.847, 0.518, 1)
+enemy_color = Color(0.902, 0.522, 0.443, 1)
+arena_visual_scene = "res://scenes/visuals/floor.tscn"
+ui_theme = ExtResource("2")

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SurvivorUpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/content/upgrade_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"lens"
+display_name = "Lens"
+description = "Set pickup radius to 80 px."
+icon_scene = "res://scenes/visuals/attack.tscn"
+kind = 1
+target_id = &"lens"
+max_rank = 1
+modifier = 80

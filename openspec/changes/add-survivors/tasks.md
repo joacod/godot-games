@@ -1,18 +1,20 @@
 # Tasks
 
-Implementation is pending. Execute only the requested step and attach evidence
+Step 01 is complete; Steps 02–06 are pending. See
+[Step 01 evidence](../../../survivors/docs/ACCEPTANCE.md).
+Execute only the requested step and attach evidence
 before checking tasks. Research completion is not gameplay completion.
 
 ## 1. Standalone arena and content contracts
 
 [Detailed step guide](../../../survivors/docs/steps/01-foundation.md)
 
-- [ ] 1.1 Configure Compatibility, 640×360 logical viewport, 1280×720 window, preserved aspect and nearest filtering. Declare movement, confirm, cancel and pause actions.
-- [ ] 1.2 Create explicit content Resource schemas from DESIGN.md. Validate required IDs, numeric ranges, scene paths and four weapon definitions before starting a run.
-- [ ] 1.3 Build a bounded arena with contrasting floor, player marker and enemy marker. Put visuals under replaceable children; collision and movement dimensions are independent.
-- [ ] 1.4 Inspect chosen CraftPix files if acquiring art in this step; record provenance and actual animation mappings. Otherwise record candidate status and retain complete placeholders. No pack or account must be required at runtime.
-- [ ] 1.5 Create a SceneTree test entry point and document local import, test and launch commands. Record generated UIDs alongside each new script.
-- [ ] 1.6 Pass the step completion gate and record automated and native evidence in `survivors/docs/ACCEPTANCE.md`.
+- [x] 1.1 Configure Compatibility, 640×360 logical viewport, 1280×720 window, preserved aspect and nearest filtering. Declare movement, confirm, cancel and pause actions.
+- [x] 1.2 Create explicit content Resource schemas from DESIGN.md. Validate required IDs, numeric ranges, scene paths and four weapon definitions before starting a run.
+- [x] 1.3 Build a bounded arena with contrasting floor, player marker and enemy marker. Put visuals under replaceable children; collision and movement dimensions are independent.
+- [x] 1.4 Inspect chosen CraftPix files if acquiring art in this step; record provenance and actual animation mappings. Otherwise record candidate status and retain complete placeholders. No pack or account must be required at runtime.
+- [x] 1.5 Create a SceneTree test entry point and document local import, test and launch commands. Record generated UIDs alongside each new script.
+- [x] 1.6 Pass the step completion gate and record automated and native evidence in `survivors/docs/ACCEPTANCE.md`.
 
 ## 2. Movement, health and a pursuer
 

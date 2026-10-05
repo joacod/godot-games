@@ -154,8 +154,9 @@ use small geometric effects and labeled gems as the runnable baseline.
 
 ## Project boundary and status
 
-Research handoff dated 2026-10-03. This document specifies future behavior;
-no gameplay implementation or playable acceptance is claimed yet.
+Research handoff dated 2026-10-03. Step 01 foundation was implemented on
+2026-10-05; see [acceptance evidence](ACCEPTANCE.md). This document describes
+the complete future slice; gameplay and full playable acceptance remain pending.
 Use Godot 4.7, verified locally as 4.7.2, GDScript, and Compatibility rendering.
 Each game owns its eventual `project.godot`, scenes, scripts, data, assets, and
 checks. No shared launcher, autoload, source imports, symlinks, or sibling-game

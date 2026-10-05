@@ -1,6 +1,7 @@
 # survivors implementation steps
 
-Status: research complete; all implementation steps are pending. Implement one
+Status: Step 01 completed on 2026-10-05; Steps 02–06 are pending. See
+[acceptance evidence](ACCEPTANCE.md). Implement one
 requested step at a time, in order. Each step depends on the preceding one;
 Step 01 depends on [DESIGN.md](DESIGN.md) and the researched content decisions.
 Do not mark an implementation checkbox complete for writing this handoff.

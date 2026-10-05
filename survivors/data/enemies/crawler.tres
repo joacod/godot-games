@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SurvivorEnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/content/enemy_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"crawler"
+display_name = "Crawler"
+max_health = 20
+speed = 45.0
+contact_damage = 10
+xp_reward = 5
+elite = false
+visual_scene = "res://scenes/visuals/crawler.tscn"

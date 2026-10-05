@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[node name="Visual" type="Node2D"]
+
+[node name="Floor" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 0, 960, 0, 960, 640, 0, 640)
+color = Color(1, 1, 1, 1)
+
+[node name="Clearing" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(150, 100, 750, 80, 850, 490, 240, 550, 100, 320)
+color = Color(1, 1, 1, 0.035)

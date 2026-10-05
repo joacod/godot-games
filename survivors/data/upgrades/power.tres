@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SurvivorUpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/content/upgrade_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"power"
+display_name = "Power"
+description = "Add 5% base weapon damage."
+icon_scene = "res://scenes/visuals/attack.tscn"
+kind = 3
+target_id = &"power"
+max_rank = 0
+modifier = 0.05
