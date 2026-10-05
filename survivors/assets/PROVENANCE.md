@@ -67,3 +67,12 @@ created for Step 04. Gem collision lives in `scenes/xp_gem.tscn`, outside the
 replaceable visual child. `scenes/ui/upgrade_menu.tscn` uses existing Theme
 styles, Godot Controls and the built-in font. Arc Spark reuses Spark art with
 runtime tint after a chain hit. No external media or new dependencies were added.
+
+## Step 05 HUD and elite — 2026-10-05
+
+The earlier CraftPix UI and enemy candidates remain unimported. Step 05 reuses
+`scenes/visuals/crawler.tscn` at 1.7× visual scale for the labeled elite, with
+its collision shape defined separately by run mechanics. `scripts/hud.gd`
+draws original geometric weapon symbols; `scripts/spawn_director.gd` draws
+edge warning crosses/rings. Pause and result panels reuse the existing local
+Theme and built-in font. No external asset, archive or account access was used.

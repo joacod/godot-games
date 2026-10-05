@@ -32,6 +32,7 @@ func _sample() -> void:
     root.add_child(main)
     main.start_run()
     var run: Node2D = main.run
+    run.set_physics_process(false)
     var player := run.get_node("Player")
     run.get_node("Enemies/Enemy").get_node("Health").take_damage(100)
     await process_frame

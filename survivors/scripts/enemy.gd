@@ -3,6 +3,7 @@ extends CharacterBody2D
 var target: CharacterBody2D
 var content: SurvivorEnemyData
 var flash_remaining := 0.0
+var entry_delay := 0.0
 
 signal died(enemy: CharacterBody2D)
 
@@ -27,6 +28,12 @@ func _on_death() -> void:
     queue_free()
 
 func _physics_process(delta: float) -> void:
+    if entry_delay > 0:
+        entry_delay = maxf(0.0, entry_delay - delta)
+        if entry_delay <= 0:
+            collision_layer = 4
+            $Health.active = true
+        return
     flash_remaining = maxf(0.0, flash_remaining - delta)
     $Visual.modulate = Color(2, 2, 2, 1) if flash_remaining > 0 else Color.WHITE
     if not is_instance_valid(target) or target.get_node("Health").current == 0:
@@ -39,4 +46,4 @@ func _physics_process(delta: float) -> void:
     move_and_slide()
 
 func get_contact_damage() -> int:
-    return content.contact_damage if is_alive() else 0
+    return content.contact_damage if is_alive() and entry_delay <= 0 else 0

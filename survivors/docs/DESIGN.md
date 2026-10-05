@@ -154,10 +154,12 @@ use small geometric effects and labeled gems as the runnable baseline.
 
 ## Project boundary and status
 
-Research handoff dated 2026-10-03. Steps 01–04 were implemented on
+Research handoff dated 2026-10-03. Steps 01–05 were implemented on
 2026-10-05; Step 02 physical keyboard/movement feel and Step 04 physical input
-and attraction/pause/resume feel acceptance are pending. See [acceptance evidence](ACCEPTANCE.md). This document describes
-the complete future slice; later gameplay steps and full playable acceptance remain pending.
+and attraction/pause/resume feel acceptance are pending. Step 05 has a scripted
+180-second native victory and loss/retry route; physical input and human balance
+acceptance remain pending. See [acceptance evidence](ACCEPTANCE.md). This document describes
+the full slice; Step 06 independent reskin and human acceptance remain pending.
 Use Godot 4.7, verified locally as 4.7.2, GDScript, and Compatibility rendering.
 Each game owns its eventual `project.godot`, scenes, scripts, data, assets, and
 checks. No shared launcher, autoload, source imports, symlinks, or sibling-game
@@ -201,7 +203,7 @@ No purchase, account access, download, or asset inclusion occurred in this hando
 
 ## Verification and evidence
 
-These are future implementation commands, run from this game's folder:
+Run these commands from this game's folder:
 
 ```sh
 /Applications/Godot.app/Contents/MacOS/Godot --version
@@ -213,7 +215,8 @@ These are future implementation commands, run from this game's folder:
 The test runner exists and covers content contracts, movement, pursuit, health,
 defeat, retry, four automatic weapons, attack cleanup, enemy death, gems,
 XP thresholds/overflow, queued choices, pause/input release, shield/modifiers,
-and both evolution orders. Extend it for each later step.
+both evolution orders, spawn phase boundaries/cap, elite timing and warning,
+manual pause, active time, victory, final-tick defeat precedence, and full retry.
 Test observable behavior and boundary cases, not merely node existence.
 Record engine version, commands, results, and remaining gaps in
 `docs/ACCEPTANCE.md`. Separately record native rendering/input and a timed human

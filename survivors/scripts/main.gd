@@ -7,6 +7,8 @@ const RUN_SCENE = preload("res://scenes/run.tscn")
 @export var presentation: SurvivorThemeData = preload("res://data/theme.tres")
 var run: Node2D
 
+@onready var pause_menu: Control = $UI/Root/Pause
+
 @onready var upgrade_menu: Control = $UI/Root/UpgradeMenu
 
 @onready var defeat: Control = $UI/Root/Defeat
@@ -16,6 +18,9 @@ var run: Node2D
 @onready var arena_ui: Control = $UI/Root/ArenaUI
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	pause_menu.get_node("Center/Column/Resume").pressed.connect(resume_run)
+	pause_menu.get_node("Center/Column/Back").pressed.connect(return_to_menu)
 	upgrade_menu.chosen.connect(_choose_upgrade)
 	column.get_node("Start").pressed.connect(start_run)
 	defeat.get_node("Center/Column/Retry").pressed.connect(retry_run)
@@ -27,6 +32,11 @@ func _ready() -> void:
 		column.get_node("Error").show()
 		return
 	$UI/Root.theme = presentation.ui_theme
+	pause_menu.get_node("Center/Column/Title").text = presentation.pause_label
+	pause_menu.get_node("Center/Column/Resume").text = presentation.resume_label
+	pause_menu.get_node("Center/Column/Back").text = presentation.return_label
+	defeat.get_node("Center/Column/Retry").text = presentation.retry_label
+	defeat.get_node("Center/Column/Back").text = presentation.return_label
 	RenderingServer.set_default_clear_color(presentation.background_color)
 	menu.color = presentation.background_color
 	column.get_node("Eyebrow").text = presentation.foundation_label
@@ -49,13 +59,17 @@ func start_run() -> bool:
 	run = RUN_SCENE.instantiate()
 	run.content = content
 	run.presentation = presentation
+	run.process_mode = Node.PROCESS_MODE_PAUSABLE
 	run.defeated.connect(_show_defeat)
+	run.victorious.connect(_show_victory)
+	run.time_changed.connect(_update_time)
 	run.health_changed.connect(_update_health)
 	run.get_node("XP").choices_needed.connect(_show_upgrades)
 	run.get_node("XP").changed.connect(_update_progression)
 	add_child(run)
 	_update_health(content.character.max_health, content.character.max_health)
 	_update_progression()
+	_update_time(0.0)
 	defeat.hide()
 	menu.hide()
 	arena_ui.show()
@@ -64,6 +78,7 @@ func start_run() -> bool:
 
 func return_to_menu() -> void:
 	get_tree().paused = false
+	pause_menu.hide()
 	upgrade_menu.hide()
 	upgrade_menu.selected = -1
 	if is_instance_valid(run):
@@ -76,16 +91,46 @@ func return_to_menu() -> void:
 	column.get_node("Start").grab_focus()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("cancel") and is_instance_valid(run):
-		return_to_menu()
+	if event.is_action_pressed("pause") and not event.is_echo() and is_instance_valid(run):
+		if run.ended:
+			return_to_menu()
+		elif not upgrade_menu.visible:
+			if pause_menu.visible:
+				resume_run()
+			else:
+				pause_run()
 		get_viewport().set_input_as_handled()
+
+func pause_run() -> void:
+	if not is_instance_valid(run) or run.ended or upgrade_menu.visible:
+		return
+	get_tree().paused = true
+	pause_menu.show()
+	pause_menu.get_node("Center/Column/Resume").grab_focus()
+
+func resume_run() -> void:
+	pause_menu.hide()
+	get_tree().paused = false
+
+func _update_time(seconds: float) -> void:
+	arena_ui.get_node("Time").text = "%02d:%02d / %02d:%02d" % [floori(seconds / 60.0), int(seconds) % 60, floori(content.duration / 60.0), int(content.duration) % 60]
 
 func _update_health(remaining: int, maximum: int) -> void:
 	arena_ui.get_node("Header").text = "HP %d / %d" % [remaining, maximum]
 	if is_instance_valid(run) and run.get_node("Player/Health").shield > 0:
 		arena_ui.get_node("Header").text += " • Shield %d" % run.get_node("Player/Health").shield
 
+func _show_victory() -> void:
+	_show_result(presentation.victory_label)
+
 func _show_defeat() -> void:
+	_show_result(presentation.defeat_label)
+
+func _show_result(title: String) -> void:
+	get_tree().paused = false
+	upgrade_menu.hide()
+	pause_menu.hide()
+	defeat.get_node("Center/Column/Title").text = title
 	defeat.show()
 	defeat.get_node("Center/Column/Retry").grab_focus()
 
@@ -123,4 +168,5 @@ func _update_progression() -> void:
 		if rack.chain_limits.has(index):
 			label = run.get_node("Upgrades").recipe().display_name
 		loadout.append("%s %d" % [label, rack.ranks[index]])
-	arena_ui.get_node("Progress").text = "Lv %d • XP %d / %d • %s" % [xp.level, xp.xp, xp.threshold(), ", ".join(loadout)]
+	arena_ui.get_node("Progress").text = "Lv %d • XP %d / %d" % [xp.level, xp.xp, xp.threshold()]
+	arena_ui.set_loadout(loadout, rack.equipped)

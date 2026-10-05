@@ -3,7 +3,9 @@
 Step 01 is complete. Step 02 implementation is complete; physical keyboard
 and movement-feel acceptance remains pending. Steps 03–04 are implemented with
 automated and native fixture evidence. Step 04 physical input and human
-attraction/pause/resume acceptance remain pending. Steps 05–06 are pending. See
+attraction/pause/resume acceptance remain pending. Step 05 is implemented with
+automated and scripted native route evidence;
+physical input and human balance acceptance remain pending. Step 06 is pending. See
 [acceptance evidence](../../../survivors/docs/ACCEPTANCE.md).
 Execute only the requested step and attach evidence
 before checking tasks. Research completion is not gameplay completion.
@@ -54,10 +56,10 @@ before checking tasks. Research completion is not gameplay completion.
 
 [Detailed step guide](../../../survivors/docs/steps/05-three-minute-run.md)
 
-- [ ] 5.1 Implement the three spawn phases, population cap and one elite at 120 seconds. Mark safe edge entry when offscreen spawning is impossible.
-- [ ] 5.2 Display HP, XP, level, equipped weapon icons and time. Victory occurs at 180 active seconds if still alive; evaluate lethal damage before victory when both occur in the same physics tick.
-- [ ] 5.3 Stop spawning, attacks and pickups on outcome. Retry reconstructs all run state and does not retain signal connections or delayed callbacks.
-- [ ] 5.4 Tune XP and enemy cadence so a normal completion can unlock all weapons and evolve Spark by 150 seconds. Keep the content count locked.
+- [x] 5.1 Implement the three spawn phases, population cap and one elite at 120 seconds. Mark safe edge entry when offscreen spawning is impossible.
+- [x] 5.2 Display HP, XP, level, equipped weapon icons and time. Victory occurs at 180 active seconds if still alive; evaluate lethal damage before victory when both occur in the same physics tick.
+- [x] 5.3 Stop spawning, attacks and pickups on outcome. Retry reconstructs all run state and does not retain signal connections or delayed callbacks.
+- [x] 5.4 Tune XP and enemy cadence so a normal completion can unlock all weapons and evolve Spark by 150 seconds. Keep the content count locked.
 - [ ] 5.5 Pass the step completion gate and record automated and native evidence in `survivors/docs/ACCEPTANCE.md`.
 
 ## 6. Acceptance and independent reskin proof
