@@ -44,7 +44,7 @@ func _run() -> void:
     _invalid(fixture.upgrades[8], theme, "required_passive_id", &"missing", "recipe", fixture)
     _invalid(fixture.spawn_phases[0], theme, "start_seconds", 1, "start_seconds", fixture)
     _invalid(fixture.spawn_phases[1], theme, "interval", 0, "interval", fixture)
-    _invalid(theme, theme, "arena_visual_scene", "res://scenes/run.tscn", "physics", fixture)
+    _invalid(theme, theme, "arena_visual_scene", "res://scenes/arena.tscn", "physics", fixture)
     _check(not Validator.validate(content, null).is_empty(), "missing theme rejected")
     for field in ["weapons", "enemies", "upgrades", "spawn_phases"]:
         var saved: Array = fixture.get(field).duplicate()
@@ -72,23 +72,24 @@ func _run() -> void:
     _check(not main.start_run(), "duplicate Start does not create second arena")
     _check(main.run == first_run, "duplicate Start preserves original run")
     _check(main.run.get_node("Player/Label").text == content.character.display_name, "character label comes from data")
-    _check(main.run.get_node("EnemyMarker/Label").text == content.enemies[0].display_name, "enemy label comes from data")
+    _check(main.run.get_node("Enemy/Label").text == content.enemies[0].display_name, "enemy label comes from data")
     var position_before: Vector2 = main.run.get_node("Player").position
     Input.action_press("move_right")
     await physics_frame
     await physics_frame
     Input.action_release("move_right")
-    _check(main.run.get_node("Player").position == position_before, "foundation marker remains static")
+    _check(main.run.get_node("Player").position.x > position_before.x, "player moves with input")
     # Visual replacement must not change actor collision dimensions.
     var player: CharacterBody2D = main.run.get_node("Player")
     var collision := player.get_node("CollisionShape2D") as CollisionShape2D
     var shape_before := collision.shape
+    player.set_physics_process(false)
     player.get_node("Visual").free()
     _check(collision.shape == shape_before and is_equal_approx((collision.shape as CircleShape2D).radius, 10), "collision survives visual removal")
     for wall in ["Top", "Bottom", "Left", "Right"]:
         var boundary := main.run.get_node("Arena/Boundaries/" + wall) as CollisionShape2D
         _check(not boundary.disabled and boundary.shape is RectangleShape2D, "solid boundary: %s" % wall)
-    # Exercise actual wall collisions with test-only motion, without adding gameplay.
+    # Exercise actual physical wall blocking.
     await physics_frame
     var origin := player.position
     for direction in [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN]:
@@ -105,6 +106,7 @@ func _run() -> void:
     _check(Validator.validate(content, theme).is_empty(), "rebuilding does not mutate content")
     main.queue_free()
     await process_frame
+    await preload("res://tests/movement_health_test.gd").new().run(self)
     print("Results: %d passed, %d failed" % [passed, failed])
     quit(1 if failed else 0)
 

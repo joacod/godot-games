@@ -1,6 +1,7 @@
 # survivors implementation steps
 
-Status: Step 01 completed on 2026-10-05; Steps 02–06 are pending. See
+Status: Step 01 completed on 2026-10-05. Step 02 is implemented; its physical
+keyboard and movement-feel acceptance remains pending. Steps 03–06 are pending. See
 [acceptance evidence](ACCEPTANCE.md). Implement one
 requested step at a time, in order. Each step depends on the preceding one;
 Step 01 depends on [DESIGN.md](DESIGN.md) and the researched content decisions.

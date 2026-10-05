@@ -154,9 +154,9 @@ use small geometric effects and labeled gems as the runnable baseline.
 
 ## Project boundary and status
 
-Research handoff dated 2026-10-03. Step 01 foundation was implemented on
-2026-10-05; see [acceptance evidence](ACCEPTANCE.md). This document describes
-the complete future slice; gameplay and full playable acceptance remain pending.
+Research handoff dated 2026-10-03. Steps 01–02 were implemented on
+2026-10-05; Step 02 physical keyboard and movement-feel acceptance is pending. See [acceptance evidence](ACCEPTANCE.md). This document describes
+the complete future slice; later gameplay steps and full playable acceptance remain pending.
 Use Godot 4.7, verified locally as 4.7.2, GDScript, and Compatibility rendering.
 Each game owns its eventual `project.godot`, scenes, scripts, data, assets, and
 checks. No shared launcher, autoload, source imports, symlinks, or sibling-game
@@ -209,7 +209,8 @@ These are future implementation commands, run from this game's folder:
 /Applications/Godot.app/Contents/MacOS/Godot --path .
 ```
 
-The test runner is a planned deliverable, not an existing command target.
+The test runner exists and covers content contracts, movement, pursuit, health,
+defeat, and retry. Extend it for each later step.
 Test observable behavior and boundary cases, not merely node existence.
 Record engine version, commands, results, and remaining gaps in
 `docs/ACCEPTANCE.md`. Separately record native rendering/input and a timed human
