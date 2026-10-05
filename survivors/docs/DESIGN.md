@@ -1,232 +1,157 @@
-# Survivors — one arena, three minutes
+# Survivors design and editing
 
-## Core loop
+Last Light Clearing is one bounded arena, one player, one ordinary enemy type,
+one elite variant, four automatic weapons, XP upgrades and one evolution.
+It has start, pause, victory, defeat and retry menus. There are no saves, meta
+progression, manual attacks, procedural maps or cross-game runtime dependencies.
 
-Move a lone ward keeper around a small top-down clearing while four automatic
-weapons repel approaching creatures. Defeated enemies leave XP gems; moving
-near them pulls them toward the player. Level-ups pause the action and offer
-three upgrades, building toward one weapon evolution. Read enemy silhouettes,
-keep an escape lane open, defeat or avoid the elite, and survive 180 seconds.
-Health reaching zero loses the run; retry starts a clean arena.
+## Rules and content
 
-## Slice and exclusions
+The values below describe the shipped Resources. Human acceptance is recorded
+in [ACCEPTANCE.md](ACCEPTANCE.md); future tuning should retain a playable full
+route and run the regression checks.
 
-- One character, one bounded arena, one ordinary enemy type and one elite variant.
-- Four base weapons, one passive, one evolution, XP, exactly three choices per level-up.
-- WASD/arrows for movement; mouse or keyboard for menus. No aim or fire controls.
-- Start, pause, victory, defeat, and retry. Gameplay timer excludes menu pauses.
-- No meta progression, saves, multiple biomes, boss marathon, quests, procedural
-  maps, manual attacks, multiplayer, or unlock economy.
-
-## Content and balance proposal
-
-Working theme: **Last Light Clearing**. Names and numbers below are initial
-tuning decisions, not measured balance. Use a 640×360 logical viewport and an
-approximately 960×640 arena with following camera and bounded edges.
-
-| Content | Initial behavior |
+| Content | Behavior |
 | --- | --- |
-| Keeper | 100 HP, 150 px/s, clear outline and facing cue |
-| Spark (weapon A) | Auto-target nearest living enemy every 0.7 s; 10 damage |
-| Halo | Orbiting contact effect, 6 damage per target per 0.5 s |
-| Pulse | Local radial hit every 2 s, 14 damage |
-| Shard | Four cardinal projectiles every 1.4 s, 8 damage each |
-| Lens (passive B) | Increases pickup radius from 48 to 80 px |
-| Arc Spark (evolution) | Replaces rank-3 Spark when Lens is owned; chains to at most 3 distinct targets |
-| Crawler | 20 HP, 45 px/s, 10 contact damage; player damage cooldown 0.7 s |
-| Elite crawler | One spawn at 120 s, 240 HP, 38 px/s, 20 contact damage; larger outline and label |
+| Keeper | 100 HP, 150 px/s; normalized movement |
+| Spark | Nearest living target; 0.7 s cadence; damage 10 / 12.5 / 15 |
+| Halo | Radius 36; orbit contact; 0.5 s per-target hit window; damage 6 / 7.5 / 9 |
+| Pulse | Radius 72; one radial hit per activation every 2 s; damage 14 / 17.5 / 21 |
+| Shard | Four cardinal projectiles every 1.4 s; damage 8 / 10 / 12 |
+| Lens | Pickup radius increases from 48 to 80 px; existing Reach bonuses remain |
+| Arc Spark | Rank-3 Spark plus Lens; replaces Spark once and chains to at most three distinct targets |
+| Crawler | 20 HP, 45 px/s, 10 contact damage, 5 XP |
+| Elite crawler | Once at 120 s; 240 HP, 38 px/s, 20 contact damage, 50 XP; larger visual and label |
 
-Start with rank-1 Spark. Halo, Pulse, and Shard are available as level-up
-unlocks, not additional characters or pickups. Base weapons have three ranks;
-rank upgrades change values in data. Lens has one rank. Evaluate evolution
-immediately after a relevant upgrade, in either acquisition order, once only;
-it replaces Spark in its slot and is not a fifth equipped weapon.
+Fractional damage rounds up to integer HP. Contact damage shares the player's
+0.7-second invulnerability window and produces a short hit flash. Shield absorbs
+damage before HP. Health reaching zero ends the run once.
 
-Each level-up offers three distinct eligible choices. Prioritize at least one
-unowned weapon while any remain; offer Lens by level 3 and prioritize Spark
-rank upgrades until evolution is possible. Fill exhausted pools with three
-distinct repeatable choices: Recovery (heal 20 HP, converting unused healing
-to an additive damage-absorbing shield), Power (+5% base weapon damage), and
-Reach (+8 px pickup radius). Shield, Power and Reach have no upgrade cap in
-this three-minute slice, so each remains effective even at full health. These
-are run modifiers, not additional equipped weapons or passive item types. Filter
-no-effect choices. Never show duplicates or an unavailable rank. Queue multiple
-levels and resolve one panel at a time. Aim for evolution by 90–150 seconds
-without requiring lucky random choices; validate and adjust XP pacing.
+### Upgrades and XP
 
-Initial spawn schedule: 0–60 s one crawler each 1.0 s; 60–120 s each 0.65 s;
-120–180 s each 0.4 s; cap ordinary living enemies at 60. Spawn outside the
-camera view where arena bounds allow and never on the player; use marked edge
-entry otherwise. No navigation maze is needed. XP starts at 5 per crawler;
-thresholds, elite reward, gem merge behavior, and population cap are data.
-Start at level 1 with the next level costing 10 XP; each later threshold costs
-5 XP more than the previous one. Keep threshold values in `data/run.tres` and
-preserve overflow. The elite drops 50 XP. Initially use one gem per kill with
-no merge behavior; add merging only if measured gem counts justify it.
-Ranks 2 and 3 initially multiply base damage by 1.25 and 1.5 respectively;
-store the resulting per-rank values in each weapon Resource. Arc Spark inherits
-rank-3 damage and cadence and adds its chain behavior. These values must be
-tuned against the normal route rather than accepted from a fast-forward test.
+The starting loadout is rank-1 Spark. Other weapons unlock through choices;
+all base weapons have three ranks and Lens can be acquired once. Every level
+panel offers exactly three distinct effective choices. Priority is one unowned
+weapon, Lens from level 3 when unowned, then eligible Spark ranks and remaining
+choices. After those are exhausted, repeatable choices remain effective:
 
-A 15-second mid-run clip should show player, enemies, projectile directions,
-hit flashes, HP loss, gem attraction, and an open movement lane. Avoid flashes
-covering the player or permanent full-screen effects.
+- Recovery heals 20 HP and converts unused healing into shield.
+- Power adds 5% of each weapon's rank-1 damage per selection.
+- Reach adds 8 px pickup radius per selection.
 
-## Scene tree and script responsibilities
+These modifiers have no cap within the three-minute game. XP starts at a cost
+of 10, then each next level costs 5 more. Excess XP is preserved and earned
+panels queue in order. Action remains paused across queued choices and resumes
+only after the confirmation input is released.
 
-```text
-Main (Node; menu/run transitions)
-├── Run (Node2D; timer, outcome)
-│   ├── Arena (Node2D; TileMapLayer or placeholder floor, boundary bodies)
-│   ├── Player (CharacterBody2D; movement only)
-│   │   ├── CollisionShape2D
-│   │   ├── Visual (Node2D; replaceable packed scene)
-│   │   ├── Hurtbox (Area2D)
-│   │   ├── Magnet (Area2D)
-│   │   ├── WeaponRack (Node; weapon cadence and targeting)
-│   │   └── Camera2D
-│   ├── Enemies (Node2D; enemy scene instances)
-│   ├── Attacks (Node2D; projectile/effect scene instances)
-│   ├── Gems (Node2D)
-│   └── SpawnDirector (Node; schedule only)
-└── UI (CanvasLayer)
-    ├── HUD (Control)
-    ├── UpgradeMenu (Control; processes during pause)
-    └── Menus (Control; start/pause/result)
-```
+One gem drops per enemy death. Within pickup radius it starts moving toward the
+player at 240 px/s, retains attraction if the player moves away, and collects
+once within 12 px. Spark evolves immediately when rank 3 and Lens are both
+owned, in either acquisition order. Evolution preserves the original loadout
+slot, rank/cadence and other weapons; old Spark projectiles are cleared.
 
-Separate scripts own movement, enemy pursuit, damage/health, attack lifetime,
-gem attraction, XP/choices, spawn schedule, run outcome, and UI. Use signals
-for damage, death, XP, and outcome; one death grants XP once. The run owns
-mutable HP, elapsed time, ranks, and acquired passives.
+### Spawning and outcomes
 
-## External data
-
-| Local content | Externalized fields |
+| Active time | Ordinary spawn interval |
 | --- | --- |
-| `data/characters/*.tres` | ID, name, HP, speed, visual PackedScene |
-| `data/weapons/*.tres` | ID, behavior kind, rank values, cadence, damage, radius, attack scene |
-| `data/upgrades/*.tres` | Choice text/icon, eligibility, modifier, caps, evolution recipe |
-| `data/enemies/*.tres` | HP, speed, damage, XP, visual scene, elite marker |
-| `data/run.tres` | 180 s duration, spawn schedule, cap, thresholds, starting loadout |
-| `data/theme.tres` | Palette, UI labels, optional audio, arena visual scene |
+| 0–60 s | 1.0 s |
+| 60–120 s | 0.65 s |
+| 120–180 s | 0.4 s |
 
-Behavior kinds are a small closed set (nearest shot, orbit, pulse, cardinal
-burst); names never select behavior. Reskin these resources and `Visual`
-scenes. Leave movement, damage, targeting, XP, and outcome scripts untouched.
+Living ordinary enemies and pending ordinary entries share a cap of 60.
+Skipped spawn slots are discarded. Entries prefer offscreen arena edges at
+least 160 px from the player. Visible entry uses a 0.7-second cross/ring warning;
+the elite is harmless and invulnerable until its warning ends. The single elite
+spawn is independent of the ordinary cap.
 
-## Godot APIs and pitfalls
+Upgrade panels and manual pause freeze active time, movement, damage, spawning,
+attacks and pickups. A living player wins at 180 seconds. Lethal contact on the
+same physics tick takes precedence over victory. Outcomes stop combat and
+pending spawns/drops/pickups. Retry or a new Start constructs a fresh run rather
+than mutating loaded Resources.
 
-Use `CharacterBody2D.move_and_slide()`, `Input.get_vector()`, `Area2D` signals,
-`Timer`, `PackedScene.instantiate()`, and `CanvasLayer`.
-[Area2D](https://docs.godotengine.org/en/stable/classes/class_area2d.html)
-overlap information updates with physics; do not assume a newly spawned
-attack immediately has a fresh overlap list. Use signals and per-target hit
-cooldowns; disable dead targets before awarding XP.
+## Editing locations
 
-[SceneTree pause and process modes](https://docs.godotengine.org/en/stable/tutorials/scripting/pausing_games.html)
-must freeze spawning, attacks, damage, and run time while the upgrade UI still
-accepts input. Unpausing must not trigger gameplay with the menu-confirm event.
+| Path | Responsibility |
+| --- | --- |
+| `data/characters/keeper.tres` | Character ID, name, HP, speed and visual scene |
+| `data/weapons/*.tres` | Behavior kind, rank damage, cadence, radius, projectile speed/lifetime and attack visual |
+| `data/enemies/*.tres` | HP, speed, contact damage, XP, elite flag and visual |
+| `data/upgrades/*.tres` | Choice text, eligibility, modifiers, ranks and evolution recipe |
+| `data/run.tres` | Duration, spawn phases/cap, XP costs, starting loadout, contact cooldown and pickup radius |
+| `data/theme.tres` | Palette, menu labels, arena visual path and UI Theme |
+| `data/ui_theme.tres` | UI styling |
+| `scenes/visuals/*.tscn` | Replaceable art with Node2D roots and no physics nodes |
+| `scenes/arena.tscn`, `scenes/player.tscn`, `scenes/enemy.tscn`, `scenes/attacks/`, `scenes/xp_gem.tscn` | Physical geometry and collision contracts |
 
-## CraftPix candidates and gaps
+`content_validator.gd` checks content before Start. Missing or invalid content
+leaves the menu open with field-specific diagnostics. Scene paths must be local
+`res://` `.tscn` files. Stable IDs and behavior enums choose mechanics; display
+names do not. The optional `music` field in the theme schema is not played by
+the current game.
 
-Primary candidate: [Free Island Adventure Pixel Top-Down Minigame Kit](https://craftpix.net/freebies/free-island-adventure-pixel-top-down-minigame-kit/).
-Its listing includes island tiles, animated heroes/creatures, and UI. Select
-one hero and one creature only; derive the elite's visual distinction from
-scale, outline, and label, while keeping its stats separate. This is a coherent
-candidate for the arena and actors, pending actual sheet inspection.
+### Runtime ownership
 
-Alternative enemy candidate: [Free Slime Mobs Pixel Art Top-Down Sprite Pack](https://craftpix.net/freebies/free-slime-mobs-pixel-art-top-down-sprite-pack/),
-listed as PNG/PSD with movement, hurt, and death animations. Do not mix it in
-unless scale and palette fit. No verified weapon-effects or XP-gem coverage;
-use small geometric effects and labeled gems as the runnable baseline.
+`scenes/main.tscn` is the entry point. `main.gd` owns menu/run transitions,
+pause and upgrade panels. Each `scenes/run.tscn` instance owns fresh mutable
+state and contains Arena, Player, Enemies, Attacks, Gems, XP, Upgrades and
+SpawnDirector. The player's WeaponRack owns equipped weapons and cadence.
 
-## Acceptance route — under five minutes
+| Scripts under `scripts/` | Responsibility |
+| --- | --- |
+| `player_movement.gd`, `enemy.gd`, `health.gd` | Movement, pursuit, health/contact damage and death |
+| `weapon_rack.gd` | Targeting, cadence, ranks and evolution slot state |
+| `projectile.gd`, `orbit_attack.gd`, `pulse_attack.gd` | Attack lifetime, collision and per-target hit rules |
+| `xp_gem.gd`, `xp_progression.gd`, `upgrade_choices.gd` | Attraction/collection, XP queue and upgrade effects |
+| `spawn_director.gd`, `run.gd` | Spawn scheduling, active timer and outcome |
+| `hud.gd`, `upgrade_menu.gd`, `main.gd` | Display and menu input |
+| `content/*.gd` | Resource schemas and validation |
 
-- [ ] Start in under 10 s; movement alone fires Spark and keeps the player readable.
-- [ ] During the first minute, kill, see hit feedback, attract XP, and select one of exactly three choices.
-- [ ] Open pause/upgrade UI: timer, spawning, damage, and weapons stop; resume cleanly.
-- [ ] Acquire all four weapons and Lens, upgrade Spark, and see exactly one evolution replacing Spark.
-- [ ] See the elite at 120 s and win at 180 s of active play; defeat is not required for victory.
-- [ ] Total route including concise upgrade choices finishes under five minutes.
-- [ ] On a separate short run, stand in danger, lose, and retry with fresh HP, XP, timer, and enemies.
-- [ ] Record a 15 s mid-run clip and assess readability manually; no console errors in either route.
+Area overlap information updates with physics. Projectile sweeps and overlaps
+share one hit guard; dead enemies disable contact immediately. Gem drops are
+deferred out of physics callbacks. Paused/outcome state rejects delayed damage
+and collection. Preserve these boundaries when extending the game.
 
-## Project boundary and status
+### Geometry and layers
 
-Research handoff dated 2026-10-03. Steps 01–05 were implemented on
-2026-10-05; Step 02 physical keyboard/movement feel and Step 04 physical input
-and attraction/pause/resume feel acceptance are pending. Step 05 has a scripted
-180-second native victory and loss/retry route; physical input and human balance
-acceptance remain pending. See [acceptance evidence](ACCEPTANCE.md). This document describes
-the full slice; Step 06 independent reskin and human acceptance remain pending.
-Use Godot 4.7, verified locally as 4.7.2, GDScript, and Compatibility rendering.
-Each game owns its eventual `project.godot`, scenes, scripts, data, assets, and
-checks. No shared launcher, autoload, source imports, symlinks, or sibling-game
-resources. OpenSpec at the repository root is planning tooling only.
+The arena has fixed 960×640 physical geometry. The following camera includes a
+64 px presentation margin; it does not enlarge the arena. Changing `arena_size`
+alone does not change walls. Keep matching scene geometry when changing bounds.
 
-## Copy and reskin contract
+| Layer bit | Role |
+| --- | --- |
+| 1 | Walls |
+| 2 | Player |
+| 4 | Enemies |
+| 8 | Attacks |
+| 16 | Pickups |
 
-Copy this entire game folder to a new location, including `project.godot`,
-`scenes/`, `scripts/`, script `.gd.uid` files, `data/`, `assets/`, `docs/`, and
-`tests/` once implemented. Omit generated `.godot/`, export builds, and local
-logs. OpenSpec and all sibling folders are unnecessary to run the copy.
-All runtime references must resolve within the copied project's `res://`.
+The player blocks against walls; its Hurtbox scans enemies without blocking
+their movement. Attacks scan only enemies. Art attaches below `Arena/Visual`
+and actor/attack `Visual` children; collisions stay outside those children.
 
-Change the project display name, data values, text, and visual packed scenes.
-Preserve stable content IDs, data schemas, signal contracts, collision layers,
-and the documented visual attachment points. Replacing art must not change
-hitboxes, interaction regions, or mechanics scripts. A new mechanic is a code
-change; a new theme using existing mechanics is not.
+## Copy and reskin
 
-Keep immutable content Resources separate from mutable run state. Reset runtime
-state by rebuilding the run, not by mutating loaded content assets. Use focused
-scripts for input, rules, content loading, actor behavior, and UI; do not create
-an all-purpose controller or a reusable framework spanning these games.
-Godot [Resources](https://docs.godotengine.org/en/stable/tutorials/scripting/resources.html)
-and packed scenes provide the local data/presentation boundary.
+Copy the whole game, including `project.godot`, scenes, scripts, `.gd.uid` files,
+data, assets, tests and docs. Omit `.godot/`, exports, logs and Python caches.
+Import and run tests before editing. Sibling games and repository-level OpenSpec
+files are not required at runtime.
 
-## Asset research policy
+Change labels, palette, stat values and local visual paths in Resources; replace
+visual packed scenes when needed. Preserve stable IDs, schemas, signal contracts,
+collision layers/shapes and attachment points. Keep immutable content separate
+from per-run state. New mechanics need code changes; presentation and existing
+stat tuning do not.
 
-Candidate product descriptions were checked on 2026-10-03. Archives, exact
-frame layouts, account entitlements, and in-engine appearance are not verified.
-Before import, record source URL, archive name, used files, frame dimensions,
-animation mapping, modifications, and license evidence in `assets/PROVENANCE.md`.
-Use only the files needed by this game, stored inside this game.
+`tests/prepare_reskin.py` provides a repeatable example from the base game. It
+requires Python 3.9+, a new absolute destination outside the repository, and no
+source symlinks. It changes exactly three copied Resources: character name and
+existing actor visual, theme title/palette, and Spark lifetime 3.0 → 3.2 s.
+It writes a sibling SHA-256 manifest and verifies all other file hashes remain
+identical, including runtime scripts, UIDs and scenes. This example was verified
+through a native win, loss and retry; see [the commands](ACCEPTANCE.md#independent-copy-check).
 
-CraftPix's [license page](https://craftpix.net/file-licenses/) distinguishes
-use in games from distribution of retrievable artwork and templates. Do not
-assume a free download or account subscription grants unrestricted template
-redistribution. Keep a complete placeholder presentation available; verify the
-applicable terms before including art in a distributed source template.
-No purchase, account access, download, or asset inclusion occurred in this handoff.
-
-## Verification and evidence
-
-Run these commands from this game's folder:
-
-```sh
-/Applications/Godot.app/Contents/MacOS/Godot --version
-/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --editor --import --quit
-/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/run_tests.gd
-/Applications/Godot.app/Contents/MacOS/Godot --path .
-```
-
-The test runner exists and covers content contracts, movement, pursuit, health,
-defeat, retry, four automatic weapons, attack cleanup, enemy death, gems,
-XP thresholds/overflow, queued choices, pause/input release, shield/modifiers,
-both evolution orders, spawn phase boundaries/cap, elite timing and warning,
-manual pause, active time, victory, final-tick defeat precedence, and full retry.
-Test observable behavior and boundary cases, not merely node existence.
-Record engine version, commands, results, and remaining gaps in
-`docs/ACCEPTANCE.md`. Separately record native rendering/input and a timed human
-playthrough. Capture console output through win, invalid actions or loss, and
-restart; require no errors. Headless success does not prove visual clarity,
-feel, physical input, or balance. Controller support is outside this slice.
-Repeat launch and the completion route from a copy outside this repository,
-with no sibling projects available. Keep all acceptance items unchecked until
-that evidence exists.
-
-## Implementation steps
-
-See [the step index](STEPS.md) and [OpenSpec tasks](../../openspec/changes/add-survivors/tasks.md).
+Regression fixtures assume the base damage/cadence balance. Deliberate tuning
+changes may require updating the relevant behavioral expectations, while keeping
+boundary and reset checks. Record any imported art in
+[asset provenance](../assets/PROVENANCE.md) before adding it.

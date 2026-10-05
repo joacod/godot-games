@@ -1,9 +1,12 @@
 # survivors design decisions
 
+Historical planning record. Implementation and user-reported manual acceptance
+are complete; see [current game documentation](../../../survivors/README.md).
+
 ## Context
 
 The researched, canonical game design is
-[docs/DESIGN.md](../../../survivors/docs/DESIGN.md). It contains the core loop,
+[docs/DESIGN.md](../../../survivors/docs/history/DESIGN.md). It contains the core loop,
 scene tree, data contracts, CraftPix candidates, API sources, scope limits,
 reskin boundaries and under-five-minute acceptance route. Keep those details
 there to avoid divergent copies. Research is complete; gameplay is pending.

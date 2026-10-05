@@ -1,78 +1,46 @@
 # Survivors asset provenance
 
+All included presentation is original geometric placeholder art created for
+this game on 2026-10-05. No external texture, sprite sheet, font, audio, archive
+or account download is included. UI uses Godot's built-in font.
+
 ## Included presentation
 
-All included visuals are original geometric placeholders created for Step 01
-on 2026-10-05. No external art, texture, font, audio, archive, or account download
-is included. UI uses Godot's built-in font.
+| Local file | Presentation |
+| --- | --- |
+| `scenes/visuals/keeper.tscn` | Static polygon Keeper with a facing cue; tinted by theme |
+| `scenes/visuals/crawler.tscn` | Static crawler silhouette; also used at 1.7× visual scale for the labeled elite |
+| `scenes/visuals/floor.tscn` | 960×640 floor/clearing polygons; tinted by theme |
+| `scenes/visuals/attack.tscn` | Foundation diamond definition; no attack behavior |
+| `scenes/visuals/spark.tscn` | Yellow diamond; also reused by Arc Spark |
+| `scenes/visuals/halo.tscn` | Violet square |
+| `scenes/visuals/pulse.tscn` | Thin green ring |
+| `scenes/visuals/shard.tscn` | Cyan directional dart |
+| `scenes/visuals/xp_gem.tscn` | Cyan diamond with a dark border |
+| `scenes/arena.tscn` | Visible arena edges, outside replaceable floor art |
+| `data/ui_theme.tres`, `scenes/ui/` | Local button styles and Godot Control layouts |
+| `scripts/hud.gd` | Geometric weapon symbols |
+| `scripts/spawn_director.gd` | Entry-warning crosses/rings |
 
-| Local file | Presentation | Mapping and modifications |
-| --- | --- | --- |
-| `scenes/visuals/keeper.tscn` | Polygon keeper with facing cue | Static Node2D; no sheet or animation; tinted by theme |
-| `scenes/visuals/crawler.tscn` | Polygon crawler silhouette | Static Node2D; no sheet or animation; tinted by theme |
-| `scenes/visuals/floor.tscn` | 960×640 floor and clearing polygon | Static Node2D; tinted by theme |
-| `scenes/visuals/attack.tscn` | Diamond icon/effect placeholder | Static Node2D; definition only, no attack behavior |
-| `scenes/arena.tscn` | Four visible arena edges | Geometry outside replaceable art; colored by theme |
-| `data/ui_theme.tres` | Button styling and palette | Local Godot Theme/StyleBox resources |
+These visuals have no sprite-frame dimensions or animation mappings. Actor,
+attack and pickup collision shapes remain outside replaceable art. Elite
+collision size is defined separately from its visual scale.
 
-There are no sprite frame dimensions or animation mappings to verify for this
-placeholder baseline. Actor collisions remain outside presentation scenes.
+The verified Copper Marsh copy reuses the existing crawler visual for a cyan
+Lantern character; its changes are copied Resources only. Captured PNG/MP4 files
+are evidence of the running game, not runtime assets. See
+[validation](../docs/ACCEPTANCE.md).
 
-## Researched CraftPix candidates
+## Importing future art
 
-The [design](../docs/DESIGN.md) records listing research from 2026-10-03:
+Look for suitable free or already-owned CraftPix assets before making
+replacements. Inspect actual archives and record the source URL, archive name,
+used files, dimensions, animation mapping, modifications and applicable license
+evidence before import. Keep all used files local to this game and preserve the
+collision/visual boundary.
 
-- [Free Island Adventure Pixel Top-Down Minigame Kit](https://craftpix.net/freebies/free-island-adventure-pixel-top-down-minigame-kit/)
-  is the primary candidate for floor, one hero, one creature, and UI.
-- [Free Slime Mobs Pixel Art Top-Down Sprite Pack](https://craftpix.net/freebies/free-slime-mobs-pixel-art-top-down-sprite-pack/)
-  is an alternative enemy candidate, subject to scale and palette fit.
-
-These remain candidates. Step 01 did not refresh listings, access an account,
-inspect or download archives, verify entitlements, or import files. Exact frame
-layouts, fit, animation mapping, and source-template redistribution rights remain
-unverified. Weapon effects and XP gems have no verified candidate coverage.
-
-Before any later import, inspect the actual archive and record source URL,
-archive name, included files, dimensions, animation mapping, modifications, and
-applicable [license evidence](https://craftpix.net/file-licenses/). Keep the
-complete placeholder baseline runnable. Listing descriptions alone do not prove
-asset fit or permission to distribute retrievable art in a source template.
-
-## Step 03 effects — 2026-10-05
-
-CraftPix listing research found the
-[Free Water and Fire Magic Sprite Vector Pack](https://craftpix.net/freebies/free-water-and-fire-magic-sprite-vector-pack/)
-and [Top-Down Wind and Lightning Magic Effects Pack](https://craftpix.net/product/top-down-wind-and-lightning-magic-effects-pack/).
-These are candidate projectile/effect collections; actual archive fit, frame
-mapping, entitlements, and redistribution rights were not verified. No download,
-purchase, account access, or external asset inclusion occurred.
-
-The planned geometric baseline remains: `scenes/visuals/spark.tscn` is a yellow
-diamond, `halo.tscn` a violet square, `pulse.tscn` a thin green ring, and
-`shard.tscn` a cyan directional dart. These are original local shapes, created
-for Step 03, with no external licensing requirement. The weapon Resources
-reference them as replaceable art; physics stays in `scenes/attacks/`.
-
-## Step 04 gems and menus — 2026-10-05
-
-CraftPix listing research found
-[Free Mining Pixel 32×32 Icons](https://craftpix.net/freebies/free-mining-pixel-32x32-icons/)
-and [Gems Games – Free GUI](https://craftpix.net/freebies/gems-games-gui/).
-These are possible pickup/icon or menu sources, pending archive inspection,
-scale/palette fit and source redistribution review. No archive, entitlement,
-frame mapping or license applicability was verified; no files were downloaded.
-
-`scenes/visuals/xp_gem.tscn` uses an original cyan diamond with a dark border,
-created for Step 04. Gem collision lives in `scenes/xp_gem.tscn`, outside the
-replaceable visual child. `scenes/ui/upgrade_menu.tscn` uses existing Theme
-styles, Godot Controls and the built-in font. Arc Spark reuses Spark art with
-runtime tint after a chain hit. No external media or new dependencies were added.
-
-## Step 05 HUD and elite — 2026-10-05
-
-The earlier CraftPix UI and enemy candidates remain unimported. Step 05 reuses
-`scenes/visuals/crawler.tscn` at 1.7× visual scale for the labeled elite, with
-its collision shape defined separately by run mechanics. `scripts/hud.gd`
-draws original geometric weapon symbols; `scripts/spawn_director.gd` draws
-edge warning crosses/rings. Pause and result panels reuse the existing local
-Theme and built-in font. No external asset, archive or account access was used.
+Listing descriptions alone do not establish sheet fit, account entitlement or
+permission to redistribute retrievable art in a source project. Preserve the
+runnable original presentation while evaluating a pack. The earlier candidate
+research is retained in [asset history](../docs/history/PROVENANCE.md); it was
+not imported or verified at archive level and is not a runtime requirement.
