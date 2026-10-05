@@ -1,8 +1,9 @@
 # Tasks
 
 Step 01 is complete. Step 02 implementation is complete; physical keyboard
-and movement-feel acceptance remains pending. Step 03 is implemented with automated and native fixture evidence. Steps 04–06
-are pending. See
+and movement-feel acceptance remains pending. Steps 03–04 are implemented with
+automated and native fixture evidence. Step 04 physical input and human
+attraction/pause/resume acceptance remain pending. Steps 05–06 are pending. See
 [acceptance evidence](../../../survivors/docs/ACCEPTANCE.md).
 Execute only the requested step and attach evidence
 before checking tasks. Research completion is not gameplay completion.
@@ -42,11 +43,11 @@ before checking tasks. Research completion is not gameplay completion.
 
 [Detailed step guide](../../../survivors/docs/steps/04-xp-and-evolution.md)
 
-- [ ] 4.1 Award gem XP once per enemy death. Attract nearby gems toward the player and collect each once; do not mutate content Resources.
-- [ ] 4.2 Use data thresholds, preserve excess XP, and queue multiple earned levels. Pause run time, spawning, physics damage and attack cadence while resolving choices.
-- [ ] 4.3 Offer exactly three distinct effective choices; implement weapon-unlock priority, Lens offer by level 3, Spark rank priority and repeatable fallbacks from DESIGN.md.
-- [ ] 4.4 Handle either order of rank-3 Spark and Lens. Replace Spark in place with Arc Spark once; clear old attacks as appropriate and preserve other weapon slots.
-- [ ] 4.5 Consume menu confirmation before resuming. Extend retry to clear XP, choices, ranks, passives and gems.
+- [x] 4.1 Award gem XP once per enemy death. Attract nearby gems toward the player and collect each once; do not mutate content Resources.
+- [x] 4.2 Use data thresholds, preserve excess XP, and queue multiple earned levels. Pause run time, spawning, physics damage and attack cadence while resolving choices.
+- [x] 4.3 Offer exactly three distinct effective choices; implement weapon-unlock priority, Lens offer by level 3, Spark rank priority and repeatable fallbacks from DESIGN.md.
+- [x] 4.4 Handle either order of rank-3 Spark and Lens. Replace Spark in place with Arc Spark once; clear old attacks as appropriate and preserve other weapon slots.
+- [x] 4.5 Consume menu confirmation before resuming. Extend retry to clear XP, choices, ranks, passives and gems.
 - [ ] 4.6 Pass the step completion gate and record automated and native evidence in `survivors/docs/ACCEPTANCE.md`.
 
 ## 5. Spawn pacing, elite and outcomes

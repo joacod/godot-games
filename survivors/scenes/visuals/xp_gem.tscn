@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[node name="GemVisual" type="Node2D"]
+
+[node name="Outline" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, -7, 6, 0, 0, 7, -6, 0)
+color = Color(0.05, 0.15, 0.2, 1)
+
+[node name="Gem" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, -5, 4, 0, 0, 5, -4, 0)
+color = Color(0.3, 0.9, 1, 1)
