@@ -1,7 +1,8 @@
 # Tasks
 
-Step 01 is complete; Steps 02–06 are pending. See
-[Step 01 evidence](../../../survivors/docs/ACCEPTANCE.md).
+Step 01 is complete. Step 02 implementation is complete; physical keyboard
+and movement-feel acceptance remains pending. Steps 03–06 are pending. See
+[acceptance evidence](../../../survivors/docs/ACCEPTANCE.md).
 Execute only the requested step and attach evidence
 before checking tasks. Research completion is not gameplay completion.
 
@@ -20,10 +21,10 @@ before checking tasks. Research completion is not gameplay completion.
 
 [Detailed step guide](../../../survivors/docs/steps/02-movement-and-health.md)
 
-- [ ] 2.1 Use normalized Input.get_vector movement, bounded collisions and a camera limited to the arena.
-- [ ] 2.2 Add a crawler that pursues the player on the open ground plane; share no code with existing games.
-- [ ] 2.3 Implement health, per-player contact invulnerability, hit flash and death signals. Clamp HP and emit death once.
-- [ ] 2.4 Provide a minimal defeat panel and full run rebuild for retry; later steps extend reset coverage.
+- [x] 2.1 Use normalized Input.get_vector movement, bounded collisions and a camera limited to the arena.
+- [x] 2.2 Add a crawler that pursues the player on the open ground plane; share no code with existing games.
+- [x] 2.3 Implement health, per-player contact invulnerability, hit flash and death signals. Clamp HP and emit death once.
+- [x] 2.4 Provide a minimal defeat panel and full run rebuild for retry; later steps extend reset coverage.
 - [ ] 2.5 Pass the step completion gate and record automated and native evidence in `survivors/docs/ACCEPTANCE.md`.
 
 ## 3. Four automatic weapons
