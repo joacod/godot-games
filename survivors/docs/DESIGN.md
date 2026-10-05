@@ -154,7 +154,7 @@ use small geometric effects and labeled gems as the runnable baseline.
 
 ## Project boundary and status
 
-Research handoff dated 2026-10-03. Steps 01–02 were implemented on
+Research handoff dated 2026-10-03. Steps 01–03 were implemented on
 2026-10-05; Step 02 physical keyboard and movement-feel acceptance is pending. See [acceptance evidence](ACCEPTANCE.md). This document describes
 the complete future slice; later gameplay steps and full playable acceptance remain pending.
 Use Godot 4.7, verified locally as 4.7.2, GDScript, and Compatibility rendering.
@@ -210,7 +210,7 @@ These are future implementation commands, run from this game's folder:
 ```
 
 The test runner exists and covers content contracts, movement, pursuit, health,
-defeat, and retry. Extend it for each later step.
+defeat, retry, four automatic weapons, attack cleanup, and enemy death. Extend it for each later step.
 Test observable behavior and boundary cases, not merely node existence.
 Record engine version, commands, results, and remaining gaps in
 `docs/ACCEPTANCE.md`. Separately record native rendering/input and a timed human

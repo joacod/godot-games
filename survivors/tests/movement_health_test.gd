@@ -7,9 +7,10 @@ func run(suite: SceneTree) -> void:
     var main := preload("res://scenes/main.tscn").instantiate()
     suite.root.add_child(main)
     main.start_run()
+    main.run.get_node("Player/WeaponRack").set_physics_process(false)
     var run: Node2D = main.run
     var player: CharacterBody2D = run.get_node("Player")
-    var enemy: CharacterBody2D = run.get_node("Enemy")
+    var enemy: CharacterBody2D = run.get_node("Enemies/Enemy")
     var health: Node = player.get_node("Health")
     enemy.set_physics_process(false)
     await suite.physics_frame
@@ -83,7 +84,7 @@ func run(suite: SceneTree) -> void:
     main.defeat.get_node("Center/Column/Retry").pressed.emit()
     suite._check(main.run != run and not main.run.ended, "Retry constructs a new active run")
     suite._check(main.run.get_node("Player/Health").current == 100 and main.run.get_node("Player/Health").invulnerability_remaining == 0, "Retry restores health and clears immunity")
-    suite._check(main.run.get_node("Player").position == Vector2(430, 320) and main.run.get_node("Enemy").position == Vector2(640, 320), "Retry restores actor positions")
+    suite._check(main.run.get_node("Player").position == Vector2(430, 320) and main.run.get_node("Enemies/Enemy").position == Vector2(640, 320), "Retry restores actor positions")
     suite._check(not main.defeat.visible and not main.menu.visible, "Retry returns to gameplay")
     suite._check(main.content.character.max_health == 100 and main.content.enemies[0].contact_damage == 10, "damage and retry leave content immutable")
     await suite.process_frame

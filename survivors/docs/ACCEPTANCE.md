@@ -103,8 +103,7 @@ untouched. No branch, commit, push, PR, or publication was performed.
 
 ## Remaining work
 
-Step 02 evidence follows below. Step 03 adds automatic weapons and has not
-been started. CraftPix candidates retain their
+Step 02 evidence follows below. Step 03 evidence follows below. CraftPix candidates retain their
 previous researched status; no archives, entitlements, animation mapping, or
 source-template redistribution rights were verified in Step 01.
 
@@ -201,4 +200,104 @@ Arena geometry, existing visual assets, content schemas, stat Resources,
 engine/renderer configuration, OpenSpec requirements, other games, and all
 later-step mechanics remain untouched. No branch, commit, push, PR, or
 publication occurred. Finish native physical input acceptance before treating
-Step 02's gate as complete; Step 03 remains unstarted.
+Step 02's gate as complete. Step 03 evidence follows below.
+
+## Step 03 — implemented 2026-10-05
+
+Implemented Spark nearest-living-target projectiles, Halo orbital contact with
+per-target windows, Pulse activation-radius hits, and Shard cardinal bursts.
+The rack owns targeting and cadence; attack nodes own collision and lifetime.
+Normal Start equips rank-1 Spark only. All four weapons are exercised through
+`tests/combat_fixture.gd`; no extra controls or later progression are exposed.
+Enemy health, hit flash, immediate death/contact disabling, one death signal,
+and removal are implemented. Defeat stops the rack and removes attacks; retry
+rebuilds the starting loadout and enemy health. An empty arena can still end in
+defeat without accessing a freed enemy. Content Resources remain immutable.
+
+Damage rounds fractional rank values up to integer HP. Pulse samples its radius
+once on activation, excludes late arrivals, and fades its ring in 0.3 seconds
+while retaining its configured lifetime. Halo renews its equipped lifetime while
+preserving angle and target cooldowns; an unrenewed orbit expires. Spark misses
+consume their shot lifetime; no-target intervals do not accumulate a burst.
+Projectiles use enemy-only overlap and a center ray sweep, sharing one hit guard.
+Collision layer names document walls 1, player 2, enemies 4, attacks 8, and
+reserved pickups 16. Attacks do not scan the player or walls.
+
+### Automated checks
+
+Godot CLI and MCP both reported **4.7.2.stable.official.ed1daf0bf**. Commands
+from the repository root:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path survivors --editor --import --quit
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path survivors --script tests/run_tests.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path survivors --script tests/run_tests.gd
+OPENSPEC_TELEMETRY=0 openspec validate add-survivors --strict --no-interactive
+```
+
+Final import exited 0 with no errors. Headless and native suites each reported
+**150 passed, 0 failed**, exit 0, with no console errors. The 15-second failure
+timeout remains. Tests retain Steps 01–02 checks, isolate their movement/contact
+fixture from automatic combat, and add targeting, no-target cadence, all four
+behaviors, rank damage, hit-window limits, orbit renewal, radius boundaries,
+late pulse entrants, projectile consumption/expiry/sweep, dead/null targets,
+enemy flash, death once, stale contact suppression, defeat cleanup, fresh retry,
+automatic Spark kills without fire input, and defeat after all enemies are gone.
+
+All **22 scripts** have generated `.gd.uid` companions, including the seven new
+runtime/test scripts. Runtime references resolve inside this game. The missing
+scene in the negative validation fixture is intentional. OpenSpec strict
+validation and `git diff --check` passed. No independent-copy test was repeated;
+complete reskin and survival-route evidence remains Step 06.
+
+The first sandboxed import reported macOS certificate/settings access errors;
+the final import used normal application-data access. A rack parse error and
+cross-weapon damage in an insufficiently isolated Shard test were corrected
+before the final runs. The first native capture fixture waited on an undrawn
+viewport; explicit rendering fixed it. Final results above exclude those runs.
+
+### Native sample and visual evidence
+
+MCP launched the exact `survivors/` project in Compatibility/OpenGL on Apple M2.
+Debug and stop output reported no errors. This establishes native launch, not
+combat or physical input acceptance.
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --path survivors --script tests/combat_sample.gd
+```
+
+The separate native fixture ran for **15 seconds**, equipped all four weapons,
+placed high-health crawlers without a spawn director, and drove movement Input
+actions. It exited 0 without errors: `ended=false`, final HP **80**, three
+captures. Individually inspected viewport PNGs:
+
+- `/private/tmp/survivors-step03-2.08.png`
+- `/private/tmp/survivors-step03-6.08.png`
+- `/private/tmp/survivors-step03-12.08.png`
+
+Captures show the yellow Spark diamond, violet Halo square, thin green Pulse
+ring, cyan directional Shards, contrasting enemies, HP loss, and a visible Keeper
+with space to move. Dense crawler labels overlap in the clustered final fixture;
+this limits readability of labels, while player and attack shapes remain clear.
+The thin unfilled Pulse ring does not cover the player silhouette. These are
+scripted native execution and snapshot inspection, not continuous human motion
+review, physical keyboard acceptance, controller evidence, or balance proof.
+Step 02 physical input/movement-feel acceptance remains pending; full populated
+combat readability and the representative mid-run clip remain Step 06 work.
+
+### Files and boundaries
+
+Added four runtime scripts (`weapon_rack.gd`, `projectile.gd`, `orbit_attack.gd`,
+`pulse_attack.gd`), three attack scenes (`projectile.tscn`, `orbit.tscn`,
+`pulse.tscn`), four replaceable weapon visual scenes, three test/fixture scripts
+(`weapons_test.gd`, `combat_fixture.gd`, `combat_sample.gd`), and all seven new
+script UIDs. Updated enemy/run scripts and scenes, the existing test runner and
+movement fixture, four weapon visual references, theme text, collision layer
+names, README, provenance, design/status/evidence, and Step 03 OpenSpec progress.
+CraftPix effect listings were researched; no art was downloaded or imported.
+
+Arena geometry, player movement/health implementation, stat values, content
+schemas, upgrade Resources, engine/renderer, OpenSpec requirements, other games,
+and all later mechanics remain untouched. No XP, upgrades, evolution, spawning,
+pause, timer, victory, commit, branch, push, PR, or publication was added.
+Step 04 is the next implementation step; it has not been started.
