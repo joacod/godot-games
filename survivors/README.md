@@ -5,7 +5,9 @@ A standalone Godot Survivors project. **Step 05 is implemented:** survive
 alone fires your equipped weapons. Collect XP, choose upgrades, and combine
 rank-3 Spark with Lens to evolve Arc Spark. Pause and upgrade menus freeze the
 run; victory or defeat stops combat, and Retry builds a fresh attempt.
-Physical input, human feel/balance, and Step 06 acceptance/reskin remain pending.
+Step 06 adds repeatable acceptance capture and independent reskin proof.
+Physical input and human feel/balance remain pending; the slice is not yet
+fully accepted.
 
 ## Run and check
 
@@ -125,7 +127,44 @@ All runtime files are local. Repository-level OpenSpec links are planning aids.
 Change text, palette, and local visual paths in the Resources to reskin the
 foundation. Keep stable IDs and collision shapes intact. Placeholder artwork is
 available without external licensing or download requirements; see
-[asset provenance](assets/PROVENANCE.md). A full gameplay reskin proof is Step 06.
+[asset provenance](assets/PROVENANCE.md). Step 06 verified a complete scripted
+native win, loss and retry from an isolated copy with changed data and unchanged mechanics; human acceptance remains pending.
+
+To reproduce the data-only reskin proof from this folder, use Python 3 and a
+**new absolute destination outside the repository**:
+
+```sh
+python3 tests/prepare_reskin.py /private/tmp/survivors-reskin-example
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path /private/tmp/survivors-reskin-example --editor --import --quit
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path /private/tmp/survivors-reskin-example --script tests/run_tests.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path /private/tmp/survivors-reskin-example --script tests/run_sample.gd
+```
+
+The helper refuses existing destinations and symlinks. It copies local files,
+omits `.godot/`, `exports/`, logs and Python caches, then changes only
+`data/characters/keeper.tres` (name and existing actor visual path),
+`data/theme.tres` (title and palette), and `data/weapons/spark.tres` (lifetime).
+The sibling `<destination-name>-manifest.json` records before/after SHA-256
+hashes and rejects any other file difference. All scripts, UIDs, scenes,
+collision shapes and stable IDs remain identical. The copied project window
+name stays as configured in `project.godot`; its menu title comes from theme data.
+The base regression suite assumes the original damage/cadence balance; the
+example changes projectile lifetime, which those fixtures support.
+
+For a real-time native route with a 15-second viewport capture around 90 active
+seconds, use a **new absolute evidence directory**:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/acceptance_sample.gd -- --evidence-dir=/private/tmp/survivors-acceptance-example
+ffmpeg -nostdin -n -framerate 30 -i /private/tmp/survivors-acceptance-example/frames/%04d.png -frames:v 450 -c:v libx264 -pix_fmt yuv420p -movflags +faststart /private/tmp/survivors-acceptance-example/mid-run.mp4
+```
+
+The fixture saves 450 native viewport PNGs, their measured wall timestamps,
+and route/result/retry stills. Encoding requires an available FFmpeg; neither
+Python nor FFmpeg is required to play the game. The capture contains scripted
+movement and injected menu confirmation, with no audio or physical input claim.
+Inspect `clip-timestamps.json` for capture timing; 450 encoded frames at 30 fps
+produce a 15-second clip. A PNG/MP4 capture is evidence tooling, not game art.
 
 See [design](docs/DESIGN.md), [steps](docs/STEPS.md), and
 [acceptance evidence](docs/ACCEPTANCE.md). Continue one requested step at a time.

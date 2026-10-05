@@ -531,3 +531,145 @@ Run/stat/weapon/upgrade Resources, player movement, arena geometry, weapon and
 progression mechanics, existing games, sibling projects, engine/renderer,
 OpenSpec requirements and Step 06 implementation remain untouched. No asset
 import, dependency, branch, commit, push or PR was added.
+
+## Step 06 — verification and independent reskin proof — 2026-10-05
+
+Implementation and evidence tooling are in place. Final acceptance remains
+open for physical keyboard/mouse, human movement/attraction/pause feel, balance
+and a complete human route. No controller support or verification is claimed.
+The DESIGN route checkboxes and tasks 2.5, 4.6, 5.5 and 6.6 remain unchecked.
+The OpenSpec change has not been archived.
+
+### Commands and regression evidence
+
+Godot CLI and MCP both reported **4.7.2.stable.official.ed1daf0bf**. Native
+rendering used Compatibility/OpenGL on macOS, Apple M2. From repository root:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path survivors --editor --import --quit
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path survivors --script tests/run_tests.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path survivors --script tests/run_tests.gd
+python3 survivors/tests/prepare_reskin.py /private/tmp/survivors-step06-20261005/copper-marsh-proof
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path /private/tmp/survivors-step06-20261005/copper-marsh-proof --editor --import --quit
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path /private/tmp/survivors-step06-20261005/copper-marsh-proof --script tests/run_tests.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path /private/tmp/survivors-step06-20261005/copper-marsh-proof --script tests/acceptance_sample.gd -- --evidence-dir=/private/tmp/survivors-step06-20261005/reskin-route
+ffmpeg -nostdin -n -framerate 30 -i /private/tmp/survivors-step06-20261005/reskin-route/frames/%04d.png -frames:v 450 -c:v libx264 -pix_fmt yuv420p -movflags +faststart /private/tmp/survivors-step06-20261005/reskin-route/mid-run.mp4
+OPENSPEC_TELEMETRY=0 openspec validate add-survivors --strict --no-interactive
+git diff --check
+```
+
+Evidence destinations must be new; the helpers refuse existing directories.
+Final source and copy imports exited 0 without errors using normal Godot
+application-data access. The source headless and native suites, and isolated
+copy headless suite, each reported **252 passed, 0 failed**, exit 0. All previous
+241 checks remain. The 11 added checks exercise loaded title/name/visual/tint,
+unchanged collision radius/layers and movement speed, configured lifetime on a
+live automatic projectile, weapon Resource identity and reskinned retry.
+All **34 GDScript files** have generated `.gd.uid` companions, including both
+new test scripts. No runtime script was added or modified.
+
+The initial restricted import produced macOS certificate/editor-settings access
+errors. An early fixture type-inference error was corrected before the passing
+suites. The first viewport recorder waited on a draw signal that did not recur
+for this custom SceneTree; explicit per-frame drawing fixed it. The original
+route passed, but its incomplete recording is excluded from clip evidence.
+No gameplay defect or balance change was justified by these checks.
+
+### Independent copy and hashes
+
+The proof copy lives at
+`/private/tmp/survivors-step06-20261005/copper-marsh-proof/`. Preparation omitted
+`.godot/`, exports, logs and Python caches. The copied game imported from a fresh
+cache. Static inspection found no missing runtime `res://` references, and
+there are no symlinks or references to sibling games. OpenSpec links remain
+documentation-only. Repository files were still present on disk; isolation
+evidence is local runtime references, byte-identical mechanics and execution
+from the outside copy, not a filesystem-denial test of the repository.
+
+Exactly three Resource files differ:
+
+| Copied Resource | Change |
+| --- | --- |
+| `data/characters/keeper.tres` | Keeper → Lantern; visual path switched to the existing crawler scene |
+| `data/theme.tres` | Copper Marsh menu title; purple floor/background, copper boundaries/enemies, cyan player |
+| `data/weapons/spark.tres` | Spark projectile lifetime 3.0 → 3.2 seconds |
+
+Stable IDs, schemas, collision layers/shapes, stats other than that lifetime,
+all **23 runtime scripts and 23 matching UID files**, and all **22 scene files**
+are unchanged. The complete before/after SHA-256 manifest is
+`/private/tmp/survivors-step06-20261005/copper-marsh-proof-manifest.json`.
+Rehashing copied files after import, regression checks and native completion
+found no differences
+from its recorded post-reskin hashes. The manifest also includes test and data
+files, preserving the exact prepared snapshot. Later source documentation edits
+do not change the copy's mechanics evidence.
+
+### Native routes and capture
+
+The original-content route used the inherited Step 05 scripted movement and
+injected Enter choices, normal content, earned XP and normal damage. It
+completed victory at **180.00 active seconds**, **182.88 wall seconds** including
+choices; all weapons were equipped by **15.67 s**, Arc Spark observed at
+**33.75 s**, and exactly one elite spawned. A separate normal-stat deliberate
+contact route lost at **19.20 s**. Retry restored HP 100, level 1, XP 0, one
+weapon and cleared elite history. It exited 0 without console errors. Stills
+live in `/private/tmp/survivors-step06-20261005/original/`; its incomplete frame
+sequence is not the accepted clip.
+
+The reskinned normal-content route reached all four weapons at **15.58 s** and
+Arc Spark at **34.12 s**. Victory occurred at **180.00 active seconds**,
+**182.86 wall seconds** including choices, with one scheduled elite. No supplied
+XP, altered health/speed, fast-forwarding or extra starting weapons were used.
+The only weapon-stat difference is the documented Resource lifetime change.
+The short loss route ended at **18.50 s**, HP 0. Retry restored HP 100, level 1,
+XP 0, one weapon and cleared elite history. The complete copied route exited 0;
+its console log contains no errors or warnings.
+
+The accepted capture is
+`/private/tmp/survivors-step06-20261005/reskin-route/mid-run.mp4`.
+FFmpeg encoded it successfully; FFprobe reports **1280×720, 30 fps, 450 frames,
+15.000 seconds**. The PNG sampling timestamps span **14.977 seconds**, with a
+largest interval of **46 ms**. This is a sampled native viewport capture encoded
+at constant frame rate; it includes brief upgrade pauses and contains no audio.
+The console log is
+`/private/tmp/survivors-step06-20261005/reskin-route.log`.
+
+Visual inspection covered a one-frame-per-second contact sheet across the clip,
+full-size frames at roughly 5/10/15 seconds, and route/result/retry stills.
+The cyan player, orange enemies and bordered diamond gems remain distinguishable
+in those samples; the sequence shows pickups near the player and XP increasing.
+Halo can overlap the character label, and shots/enemies can cross the HUD/text
+regions. Those overlaps are recorded as a readability concern for the human
+route; temporal sample inspection does not establish continuous legibility or
+human attraction feel. No presentation change is made on the basis of a claim
+that human acceptance has passed.
+
+The Godot MCP launched the copied `project.godot` at its menu. Debug output
+contained the 4.7.2/OpenGL startup lines with an empty errors list, and the MCP
+process was stopped afterward. This is a separate startup/debug check, not a
+played route or physical input check.
+
+### Remaining human acceptance
+
+The captured route uses `Input.action_press` movement and injected Enter
+press/release events. The suites exercise pause/resume and confirmation-release
+boundaries. These establish scripted native/input behavior, not physical
+keyboard/mouse or human feel. Physical WASD/arrows, choice navigation,
+Escape/P pause/resume, continuous threat/pickup readability, human challenge
+and an under-five-minute human completion still need the DESIGN route.
+No tuning was applied to claim human balance from a scripted success.
+
+### Files and boundaries
+
+Added `tests/acceptance_sample.gd`, `tests/reskin_test.gd`, both UID companions
+and `tests/prepare_reskin.py`; extended `tests/run_tests.gd`. Updated README,
+DESIGN, STEPS, the Step 06 guide, provenance, this evidence record and Step 06
+OpenSpec progress. The isolated copy, hash manifests, logs, PNGs and MP4 remain
+local temporary evidence outside the repository and can be regenerated using
+the documented commands; no binary capture is a runtime dependency.
+
+Gameplay scripts, original content and visual/physics scenes, engine/renderer,
+OpenSpec requirements, existing and sibling games remain untouched. No art
+import, dependency installation, branch, commit, push, PR, publication or
+OpenSpec archive was performed. The next action is the remaining human
+acceptance route; there is no Step 07 in this slice.

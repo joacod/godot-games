@@ -8,10 +8,10 @@ Complete Step 05 and retain its passing checks. Read [the design](../DESIGN.md).
 
 Close all checklist items, document evidence, and demonstrate a data/visual-only reskin in an isolated copy.
 
-## Planned files
+## Files in scope
 
-These paths are relative to `survivors/` and are implementation targets, not files
-claimed to exist yet. Follow the established paths from earlier steps if refined.
+These paths are relative to `survivors/`. The original gameplay Resources and
+visual scenes remain unchanged; reskin mutations happen only in the copy.
 
 - `docs/ACCEPTANCE.md`
 - `docs/DESIGN.md`
@@ -30,9 +30,9 @@ claimed to exist yet. Follow the established paths from earlier steps if refined
 
 ## Completion gate
 
-- [ ] Complete win route in under five minutes including menus; short loss/retry route passes.
-- [ ] Isolated copy imports, runs, and finishes with new presentation and unchanged mechanics.
-- [ ] No unresolved console errors or unverified acceptance items are silently labeled passed.
+- [ ] Complete human win route in under five minutes including menus; short loss/retry route passes. Scripted native routes passed; human completion remains pending.
+- [x] Isolated copy imports, runs, and finishes with new presentation and unchanged mechanics.
+- [x] No unresolved console errors or unverified acceptance items are silently labeled passed.
 
 Run the import and test commands in [DESIGN.md](../DESIGN.md), extending
 `tests/run_tests.gd` to include this step's behavioral checks. Run the native
@@ -46,3 +46,18 @@ sibling new games, engine version and renderer remain untouched. Do not add
 later-step mechanics while completing this step. Do not commit, branch, push,
 or publish unless separately requested. Report exact files changed, behavior,
 commands/results, manual checks, intentionally untouched files and next step.
+
+## Repeatable evidence tooling
+
+`tests/prepare_reskin.py` prepares a new isolated copy, changes only three
+Resources and writes a sibling SHA-256 manifest. `tests/reskin_test.gd` is part
+of the standard test runner and checks loaded presentation, collision
+boundaries, live weapon lifetime and retry. `tests/acceptance_sample.gd` extends
+the normal-content scripted route with 450 native viewport frames around
+90 active seconds, route stills and measured capture timestamps. See
+[the README](../../README.md) for exact preparation, launch and encoding commands.
+
+Automated and scripted native evidence does not close physical keyboard, human
+movement/attraction/pause feel, balance or full human readability acceptance.
+Keep final completion and the prior human gates unchecked until that evidence
+is supplied; do not archive the change yet.

@@ -5,7 +5,9 @@ keyboard and movement-feel acceptance remains pending. Steps 03–04 are impleme
 with automated and native fixture evidence. Step 04 physical input and human
 attraction/pause/resume acceptance remain pending. Step 05 is implemented with
 automated and scripted native route evidence;
-physical input and human balance acceptance remain pending. Step 06 is pending. See
+physical input and human balance acceptance remain pending. Step 06 verification
+and independent reskin proof are implemented; final human acceptance remains
+pending. See
 [acceptance evidence](ACCEPTANCE.md). Implement one
 requested step at a time, in order. Each step depends on the preceding one;
 Step 01 depends on [DESIGN.md](DESIGN.md) and the researched content decisions.

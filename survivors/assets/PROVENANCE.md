@@ -76,3 +76,16 @@ its collision shape defined separately by run mechanics. `scripts/hud.gd`
 draws original geometric weapon symbols; `scripts/spawn_director.gd` draws
 edge warning crosses/rings. Pause and result panels reuse the existing local
 Theme and built-in font. No external asset, archive or account access was used.
+
+## Step 06 isolated reskin — 2026-10-05
+
+The proof copy uses the existing original `scenes/visuals/crawler.tscn` as the
+Lantern character visual, tinted cyan through theme data. Copper Marsh changes
+the menu title, background/floor/boundary/actor palette and Spark lifetime in
+three copied Resources. All visual and physics scene files remain byte-identical
+to the source. No new artwork, external media, CraftPix archive, download,
+account access or license claim is introduced.
+
+The native PNG/MP4 captures are local evidence of the running placeholder game,
+not imported runtime assets. See [acceptance evidence](../docs/ACCEPTANCE.md) for
+copy/hash locations, rendering checks and the remaining human acceptance gate.

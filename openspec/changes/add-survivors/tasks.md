@@ -5,7 +5,9 @@ and movement-feel acceptance remains pending. Steps 03–04 are implemented with
 automated and native fixture evidence. Step 04 physical input and human
 attraction/pause/resume acceptance remain pending. Step 05 is implemented with
 automated and scripted native route evidence;
-physical input and human balance acceptance remain pending. Step 06 is pending. See
+physical input and human balance acceptance remain pending. Step 06 verification
+and independent reskin proof are implemented; final human acceptance remains
+pending. See
 [acceptance evidence](../../../survivors/docs/ACCEPTANCE.md).
 Execute only the requested step and attach evidence
 before checking tasks. Research completion is not gameplay completion.
@@ -66,9 +68,16 @@ before checking tasks. Research completion is not gameplay completion.
 
 [Detailed step guide](../../../survivors/docs/steps/06-acceptance-and-reskin.md)
 
-- [ ] 6.1 Run all import and behavioral checks; fix only slice defects exposed by them.
+- [x] 6.1 Run all import and behavioral checks; fix only slice defects exposed by them.
 - [ ] 6.2 Follow the DESIGN.md acceptance route in a native window. Save a representative 15-second mid-run capture and note whether threats and pickup attraction remain legible.
-- [ ] 6.3 Copy the game outside the repository, omit .godot, and change character name, palette, actor visual and a weapon tuning value in data. Confirm unchanged mechanics-script hashes.
-- [ ] 6.4 Launch and complete the copy without sibling files. Record separate automated, visual, keyboard and human-balance evidence; no controller claim.
-- [ ] 6.5 Update the README copy instructions and actual content paths. Mark OpenSpec tasks complete only when evidence supports them; archive only after the game is accepted.
+- [x] 6.3 Copy the game outside the repository, omit .godot, and change character name, palette, actor visual and a weapon tuning value in data. Confirm unchanged mechanics-script hashes.
+- [x] 6.4 Launch and complete the copy without sibling files. Record separate automated, visual, keyboard and human-balance evidence; no controller claim.
+- [x] 6.5 Update the README copy instructions and actual content paths. Mark OpenSpec tasks complete only when evidence supports them; archive only after the game is accepted.
 - [ ] 6.6 Pass the step completion gate and record automated and native evidence in `survivors/docs/ACCEPTANCE.md`.
+
+Step 06 evidence: source headless/native and isolated-copy headless suites each
+pass 252 checks; unchanged mechanics/scene hashes, scripted native victory/loss/
+retry and a 15-second native reskin clip are recorded in ACCEPTANCE.md. Task 6.2
+remains open for the full human route and continuous readability assessment;
+its scripted route and clip portions are complete. Task 6.6 and prior human
+gates remain open. No controller claim or OpenSpec archive was made.

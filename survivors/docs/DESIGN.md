@@ -159,7 +159,9 @@ Research handoff dated 2026-10-03. Steps 01–05 were implemented on
 and attraction/pause/resume feel acceptance are pending. Step 05 has a scripted
 180-second native victory and loss/retry route; physical input and human balance
 acceptance remain pending. See [acceptance evidence](ACCEPTANCE.md). This document describes
-the full slice; Step 06 independent reskin and human acceptance remain pending.
+the full slice; Step 06 verification and independent reskin proof are implemented,
+with human acceptance still pending. The route checklist above remains the human
+acceptance gate; scripted evidence is recorded separately.
 Use Godot 4.7, verified locally as 4.7.2, GDScript, and Compatibility rendering.
 Each game owns its eventual `project.godot`, scenes, scripts, data, assets, and
 checks. No shared launcher, autoload, source imports, symlinks, or sibling-game
