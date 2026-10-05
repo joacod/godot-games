@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SurvivorUpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/content/upgrade_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"reach"
+display_name = "Reach"
+description = "Add 8 px pickup radius."
+icon_scene = "res://scenes/visuals/attack.tscn"
+kind = 4
+target_id = &"reach"
+max_rank = 0
+modifier = 8

@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="SurvivorRunData" load_steps=22 format=3]
+
+[ext_resource type="Script" path="res://scripts/content/run_data.gd" id="script"]
+[ext_resource type="Script" path="res://scripts/content/spawn_phase_data.gd" id="phase"]
+[ext_resource type="Resource" path="res://data/characters/keeper.tres" id="character"]
+[ext_resource type="Resource" path="res://data/weapons/spark.tres" id="spark"]
+[ext_resource type="Resource" path="res://data/weapons/halo.tres" id="halo"]
+[ext_resource type="Resource" path="res://data/weapons/pulse.tres" id="pulse"]
+[ext_resource type="Resource" path="res://data/weapons/shard.tres" id="shard"]
+[ext_resource type="Resource" path="res://data/enemies/crawler.tres" id="crawler"]
+[ext_resource type="Resource" path="res://data/enemies/elite_crawler.tres" id="elite_crawler"]
+[ext_resource type="Resource" path="res://data/upgrades/spark.tres" id="u_spark"]
+[ext_resource type="Resource" path="res://data/upgrades/halo.tres" id="u_halo"]
+[ext_resource type="Resource" path="res://data/upgrades/pulse.tres" id="u_pulse"]
+[ext_resource type="Resource" path="res://data/upgrades/shard.tres" id="u_shard"]
+[ext_resource type="Resource" path="res://data/upgrades/lens.tres" id="u_lens"]
+[ext_resource type="Resource" path="res://data/upgrades/recovery.tres" id="u_recovery"]
+[ext_resource type="Resource" path="res://data/upgrades/power.tres" id="u_power"]
+[ext_resource type="Resource" path="res://data/upgrades/reach.tres" id="u_reach"]
+[ext_resource type="Resource" path="res://data/upgrades/arc_spark.tres" id="u_arc_spark"]
+
+[sub_resource type="Resource" id="p0"]
+script = ExtResource("phase")
+start_seconds = 0.0
+interval = 1
+
+[sub_resource type="Resource" id="p1"]
+script = ExtResource("phase")
+start_seconds = 60.0
+interval = 0.65
+
+[sub_resource type="Resource" id="p2"]
+script = ExtResource("phase")
+start_seconds = 120.0
+interval = 0.4
+
+[resource]
+script = ExtResource("script")
+duration = 180.0
+arena_size = Vector2(960, 640)
+ordinary_cap = 60
+first_level_xp = 10
+level_xp_increment = 5
+starting_weapon_id = &"spark"
+damage_cooldown = 0.7
+pickup_radius = 48.0
+elite_spawn_seconds = 120.0
+character = ExtResource("character")
+weapons = Array[Resource]([ExtResource("spark"), ExtResource("halo"), ExtResource("pulse"), ExtResource("shard")])
+enemies = Array[Resource]([ExtResource("crawler"), ExtResource("elite_crawler")])
+upgrades = Array[Resource]([ExtResource("u_spark"), ExtResource("u_halo"), ExtResource("u_pulse"), ExtResource("u_shard"), ExtResource("u_lens"), ExtResource("u_recovery"), ExtResource("u_power"), ExtResource("u_reach"), ExtResource("u_arc_spark")])
+spawn_phases = Array[Resource]([SubResource("p0"), SubResource("p1"), SubResource("p2")])

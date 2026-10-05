@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SurvivorWeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/content/weapon_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"halo"
+display_name = "Halo"
+behavior = 1
+rank_damage = PackedFloat32Array(6, 7.5, 9)
+cadence = 0.5
+radius = 36.0
+projectile_speed = 0.0
+lifetime = 3.0
+attack_scene = "res://scenes/visuals/attack.tscn"

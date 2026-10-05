@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SurvivorUpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/content/upgrade_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"upgrade_shard"
+display_name = "Shard"
+description = "Unlock or improve Shard."
+icon_scene = "res://scenes/visuals/attack.tscn"
+kind = 0
+target_id = &"shard"
+max_rank = 3

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SurvivorWeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/content/weapon_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"pulse"
+display_name = "Pulse"
+behavior = 2
+rank_damage = PackedFloat32Array(14, 17.5, 21)
+cadence = 2
+radius = 72.0
+projectile_speed = 0.0
+lifetime = 3.0
+attack_scene = "res://scenes/visuals/attack.tscn"
