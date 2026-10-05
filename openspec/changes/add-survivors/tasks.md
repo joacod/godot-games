@@ -1,7 +1,8 @@
 # Tasks
 
 Step 01 is complete. Step 02 implementation is complete; physical keyboard
-and movement-feel acceptance remains pending. Steps 03–06 are pending. See
+and movement-feel acceptance remains pending. Step 03 is implemented with automated and native fixture evidence. Steps 04–06
+are pending. See
 [acceptance evidence](../../../survivors/docs/ACCEPTANCE.md).
 Execute only the requested step and attach evidence
 before checking tasks. Research completion is not gameplay completion.
@@ -31,11 +32,11 @@ before checking tasks. Research completion is not gameplay completion.
 
 [Detailed step guide](../../../survivors/docs/steps/03-automatic-weapons.md)
 
-- [ ] 3.1 Implement Spark nearest-target shots, Halo orbital contact, Pulse radial damage and Shard cardinal bursts from their data.
-- [ ] 3.2 Separate targeting/cadence from attack lifetime; delete expired attacks and guard against freed or already dead targets.
-- [ ] 3.3 Define collision layers for player, enemies, attacks and pickups. Attacks cannot damage the player.
-- [ ] 3.4 Give each effect a readable shape; hit feedback must leave the player silhouette visible. Use a test-only loadout fixture to exercise all four without adding debug controls to the player flow.
-- [ ] 3.5 Pass the step completion gate and record automated and native evidence in `survivors/docs/ACCEPTANCE.md`.
+- [x] 3.1 Implement Spark nearest-target shots, Halo orbital contact, Pulse radial damage and Shard cardinal bursts from their data.
+- [x] 3.2 Separate targeting/cadence from attack lifetime; delete expired attacks and guard against freed or already dead targets.
+- [x] 3.3 Define collision layers for player, enemies, attacks and pickups. Attacks cannot damage the player.
+- [x] 3.4 Give each effect a readable shape; hit feedback must leave the player silhouette visible. Use a test-only loadout fixture to exercise all four without adding debug controls to the player flow.
+- [x] 3.5 Pass the step completion gate and record automated and native evidence in `survivors/docs/ACCEPTANCE.md`.
 
 ## 4. XP, three choices and one evolution
 

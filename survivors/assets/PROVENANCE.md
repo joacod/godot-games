@@ -37,3 +37,18 @@ archive name, included files, dimensions, animation mapping, modifications, and
 applicable [license evidence](https://craftpix.net/file-licenses/). Keep the
 complete placeholder baseline runnable. Listing descriptions alone do not prove
 asset fit or permission to distribute retrievable art in a source template.
+
+## Step 03 effects — 2026-10-05
+
+CraftPix listing research found the
+[Free Water and Fire Magic Sprite Vector Pack](https://craftpix.net/freebies/free-water-and-fire-magic-sprite-vector-pack/)
+and [Top-Down Wind and Lightning Magic Effects Pack](https://craftpix.net/product/top-down-wind-and-lightning-magic-effects-pack/).
+These are candidate projectile/effect collections; actual archive fit, frame
+mapping, entitlements, and redistribution rights were not verified. No download,
+purchase, account access, or external asset inclusion occurred.
+
+The planned geometric baseline remains: `scenes/visuals/spark.tscn` is a yellow
+diamond, `halo.tscn` a violet square, `pulse.tscn` a thin green ring, and
+`shard.tscn` a cyan directional dart. These are original local shapes, created
+for Step 03, with no external licensing requirement. The weapon Resources
+reference them as replaceable art; physics stays in `scenes/attacks/`.

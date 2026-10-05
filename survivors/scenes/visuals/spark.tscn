@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[node name="Visual" type="Node2D"]
+
+[node name="Silhouette" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-7, 0, 0, -4, 7, 0, 0, 4)
+color = Color(1, 0.86, 0.3, 1)

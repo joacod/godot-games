@@ -1,10 +1,11 @@
 # Last Light Clearing
 
-A standalone Godot Survivors project. **Step 02 is implemented:** move the
-Keeper around a bounded arena while one Crawler pursues and damages on contact.
-Defeat offers a fresh-health retry. Automatic weapons, XP, upgrades, spawning,
-and the three-minute survival objective are future steps. Physical keyboard
-and movement-feel acceptance for Step 02 remain pending.
+A standalone Godot Survivors project. **Step 03 is implemented:** move the
+Keeper around a bounded arena while Spark automatically shoots the nearest
+living Crawler. Halo, Pulse, and Shard are implemented and exercised through
+combat fixtures; their normal unlocks arrive in Step 04. XP, upgrades, spawning,
+and the three-minute objective remain future work. Step 02 physical keyboard
+and movement-feel acceptance remains pending.
 
 ## Run and check
 
@@ -30,6 +31,17 @@ stop; **Retry** rebuilds both actors with fresh health and no immunity carried
 over. Pause remains a future step.
 The window opens at 1280×720 with a 640×360 logical viewport and preserved aspect.
 
+For all four weapons, run the test-only 15-second native combat fixture:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/combat_sample.gd
+```
+
+It uses scripted movement and manually placed high-health crawlers, writes three
+viewport captures to `/private/tmp/survivors-step03-*.png`, and exits. Normal
+Start has no debug controls or extra weapons. Combat kills the single placed
+crawler; continuous population is Step 05.
+
 ## Content and presentation
 
 | Path | Contract |
@@ -44,8 +56,9 @@ The window opens at 1280×720 with a 640×360 logical viewport and preserved asp
 | `scenes/visuals/*.tscn` | Replaceable presentation with Node2D roots and no physics nodes |
 
 Movement speed, player HP, crawler speed/contact damage, and player damage
-cooldown now come from these Resources. Weapon, XP, and spawn tuning remains
-for later steps.
+cooldown now come from these Resources. Weapon damage ranks, cadence, radius, projectile speed, lifetime, and visual
+scene also drive combat. Fractional damage rounds up to integer HP. XP and spawn
+tuning remains for later steps.
 `content_validator.gd` validates all referenced content before constructing a run.
 Invalid content leaves the menu open and shows field-specific diagnostics. Scene
 paths must be local `res://` `.tscn` files, with a Node2D root and no physics nodes.
@@ -57,7 +70,11 @@ The foundation uses fixed 960×640 geometry; changing its dimensions requires a
 matching geometry edit. The following camera is limited to the fixed arena plus a 64 px presentation
 margin, keeping walls and the player visible beside the HUD. The margin does
 not change physical boundaries. Collision layers are 1 (walls), 2 (player), and
-4 (enemies); the player Hurtbox scans enemies without blocking their motion. Loaded content is not mutated by
+4 (enemies), 8 (attacks), and 16 (reserved pickups); the player Hurtbox scans enemies without blocking their motion. Attacks scan only enemy layer 4. Enemy health is fresh per instance; death disables
+contact immediately and removes the enemy once. Halo renews its equipped orbit
+without resetting target hit windows; Pulse samples its radius once, then fades.
+Projectile and effect scenes own their hitboxes, with replaceable art under Visual.
+Loaded content is not mutated by
 menu transitions. Later mutable state belongs to each newly constructed run.
 
 ## Copy and reskin

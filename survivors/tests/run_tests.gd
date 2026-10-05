@@ -72,7 +72,7 @@ func _run() -> void:
     _check(not main.start_run(), "duplicate Start does not create second arena")
     _check(main.run == first_run, "duplicate Start preserves original run")
     _check(main.run.get_node("Player/Label").text == content.character.display_name, "character label comes from data")
-    _check(main.run.get_node("Enemy/Label").text == content.enemies[0].display_name, "enemy label comes from data")
+    _check(main.run.get_node("Enemies/Enemy/Label").text == content.enemies[0].display_name, "enemy label comes from data")
     var position_before: Vector2 = main.run.get_node("Player").position
     Input.action_press("move_right")
     await physics_frame
@@ -107,6 +107,7 @@ func _run() -> void:
     main.queue_free()
     await process_frame
     await preload("res://tests/movement_health_test.gd").new().run(self)
+    await preload("res://tests/weapons_test.gd").new().run(self)
     print("Results: %d passed, %d failed" % [passed, failed])
     quit(1 if failed else 0)
 
