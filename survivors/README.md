@@ -1,11 +1,11 @@
 # Last Light Clearing
 
-A standalone Godot Survivors project. **Step 03 is implemented:** move the
-Keeper around a bounded arena while Spark automatically shoots the nearest
-living Crawler. Halo, Pulse, and Shard are implemented and exercised through
-combat fixtures; their normal unlocks arrive in Step 04. XP, upgrades, spawning,
-and the three-minute objective remain future work. Step 02 physical keyboard
-and movement-feel acceptance remains pending.
+A standalone Godot Survivors project. **Step 04 is implemented:** defeated
+crawlers drop XP gems, nearby gems follow the Keeper, and level-ups pause action
+for three upgrade choices. Unlock Halo, Pulse and Shard, acquire Lens, and bring
+Spark to rank 3 to evolve it into Arc Spark. Spawning and the three-minute
+objective remain Step 05 work. Physical input and movement/pause feel acceptance
+remain pending.
 
 ## Run and check
 
@@ -28,7 +28,11 @@ Click **Start**, or press Enter/Space on the focused button. **Back to menu** or
 Escape removes the arena; Start builds a fresh one. Move with **WASD/arrows**. Contact costs 10 HP, with 0.7 seconds of player
 invulnerability and a short silhouette flash. At zero HP, movement and pursuit
 stop; **Retry** rebuilds both actors with fresh health and no immunity carried
-over. Pause remains a future step.
+over. Retry also resets XP, choices, ranks, Lens, modifiers, shield and gems.
+Upgrade panels freeze movement, damage and attacks; choose with mouse or arrows
+and confirm with Enter/Space. Action resumes after confirmation is released.
+Escape returns to the menu during gameplay; during choices, select an upgrade
+first. A separate manual pause menu remains future work.
 The window opens at 1280×720 with a 640×360 logical viewport and preserved aspect.
 
 For all four weapons, run the test-only 15-second native combat fixture:
@@ -40,7 +44,19 @@ For all four weapons, run the test-only 15-second native combat fixture:
 It uses scripted movement and manually placed high-health crawlers, writes three
 viewport captures to `/private/tmp/survivors-step03-*.png`, and exits. Normal
 Start has no debug controls or extra weapons. Combat kills the single placed
-crawler; continuous population is Step 05.
+crawler; continuous population is Step 05. That crawler supplies only 5 XP,
+below the first 10 XP threshold, so normal Start cannot yet reach a level-up.
+
+To inspect progression before spawn pacing is implemented, run the native
+fixture with supplied XP and manually placed enemies:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --path . --script tests/progression_sample.gd
+```
+
+It captures gem attraction, two choice panels, Arc Spark, shield and retry to
+`/private/tmp/survivors-step04-*.png`, uses injected Enter events, and exits.
+These fixtures do not establish physical input, human feel, or run balance.
 
 ## Content and presentation
 
@@ -57,8 +73,12 @@ crawler; continuous population is Step 05.
 
 Movement speed, player HP, crawler speed/contact damage, and player damage
 cooldown now come from these Resources. Weapon damage ranks, cadence, radius, projectile speed, lifetime, and visual
-scene also drive combat. Fractional damage rounds up to integer HP. XP and spawn
-tuning remains for later steps.
+scene also drive combat. Fractional damage rounds up to integer HP. XP costs,
+rewards, Lens, repeatable modifiers and the evolution recipe also use data.
+Recovery heals before adding leftover healing to shield; Power adds 5% of each
+weapon's rank-1 damage per choice; Reach adds pickup radius without a cap.
+Arc Spark inherits rank-3 damage/cadence and flies toward up to three distinct
+targets per shot. Spawn pacing and balance tuning remain for Step 05.
 `content_validator.gd` validates all referenced content before constructing a run.
 Invalid content leaves the menu open and shows field-specific diagnostics. Scene
 paths must be local `res://` `.tscn` files, with a Node2D root and no physics nodes.
@@ -70,7 +90,7 @@ The foundation uses fixed 960×640 geometry; changing its dimensions requires a
 matching geometry edit. The following camera is limited to the fixed arena plus a 64 px presentation
 margin, keeping walls and the player visible beside the HUD. The margin does
 not change physical boundaries. Collision layers are 1 (walls), 2 (player), and
-4 (enemies), 8 (attacks), and 16 (reserved pickups); the player Hurtbox scans enemies without blocking their motion. Attacks scan only enemy layer 4. Enemy health is fresh per instance; death disables
+4 (enemies), 8 (attacks), and 16 (pickups); the player Hurtbox scans enemies without blocking their motion. Attacks scan only enemy layer 4. Enemy health is fresh per instance; death disables
 contact immediately and removes the enemy once. Halo renews its equipped orbit
 without resetting target hit windows; Pulse samples its radius once, then fades.
 Projectile and effect scenes own their hitboxes, with replaceable art under Visual.

@@ -7,6 +7,8 @@ const RUN_SCENE = preload("res://scenes/run.tscn")
 @export var presentation: SurvivorThemeData = preload("res://data/theme.tres")
 var run: Node2D
 
+@onready var upgrade_menu: Control = $UI/Root/UpgradeMenu
+
 @onready var defeat: Control = $UI/Root/Defeat
 
 @onready var menu: ColorRect = $UI/Root/Menu
@@ -14,6 +16,7 @@ var run: Node2D
 @onready var arena_ui: Control = $UI/Root/ArenaUI
 
 func _ready() -> void:
+	upgrade_menu.chosen.connect(_choose_upgrade)
 	column.get_node("Start").pressed.connect(start_run)
 	defeat.get_node("Center/Column/Retry").pressed.connect(retry_run)
 	defeat.get_node("Center/Column/Back").pressed.connect(return_to_menu)
@@ -48,8 +51,11 @@ func start_run() -> bool:
 	run.presentation = presentation
 	run.defeated.connect(_show_defeat)
 	run.health_changed.connect(_update_health)
+	run.get_node("XP").choices_needed.connect(_show_upgrades)
+	run.get_node("XP").changed.connect(_update_progression)
 	add_child(run)
 	_update_health(content.character.max_health, content.character.max_health)
+	_update_progression()
 	defeat.hide()
 	menu.hide()
 	arena_ui.show()
@@ -57,6 +63,9 @@ func start_run() -> bool:
 	return true
 
 func return_to_menu() -> void:
+	get_tree().paused = false
+	upgrade_menu.hide()
+	upgrade_menu.selected = -1
 	if is_instance_valid(run):
 		remove_child(run)
 		run.queue_free()
@@ -73,6 +82,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _update_health(remaining: int, maximum: int) -> void:
 	arena_ui.get_node("Header").text = "HP %d / %d" % [remaining, maximum]
+	if is_instance_valid(run) and run.get_node("Player/Health").shield > 0:
+		arena_ui.get_node("Header").text += " • Shield %d" % run.get_node("Player/Health").shield
 
 func _show_defeat() -> void:
 	defeat.show()
@@ -81,3 +92,35 @@ func _show_defeat() -> void:
 func retry_run() -> void:
 	return_to_menu()
 	start_run()
+
+func _show_upgrades() -> void:
+	if not is_instance_valid(run) or run.ended or upgrade_menu.visible:
+		return
+	get_tree().paused = true
+	var xp := run.get_node("XP")
+	upgrade_menu.present(run.get_node("Upgrades").offers(xp.choice_level()), xp.choice_level())
+
+func _choose_upgrade(upgrade: SurvivorUpgradeData) -> void:
+	if not is_instance_valid(run) or run.ended:
+		return
+	if not run.get_node("Upgrades").apply(upgrade):
+		return
+	run.get_node("XP").resolve_level()
+	_update_health(run.get_node("Player/Health").current, content.character.max_health)
+	_update_progression()
+	upgrade_menu.hide()
+	if run.get_node("XP").pending_levels > 0:
+		_show_upgrades()
+	else:
+		get_tree().paused = false
+
+func _update_progression() -> void:
+	var xp := run.get_node("XP")
+	var rack := run.get_node("Player/WeaponRack")
+	var loadout := PackedStringArray()
+	for index in rack.equipped.size():
+		var label: String = rack.equipped[index].display_name
+		if rack.chain_limits.has(index):
+			label = run.get_node("Upgrades").recipe().display_name
+		loadout.append("%s %d" % [label, rack.ranks[index]])
+	arena_ui.get_node("Progress").text = "Lv %d • XP %d / %d • %s" % [xp.level, xp.xp, xp.threshold(), ", ".join(loadout)]

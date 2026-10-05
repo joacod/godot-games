@@ -52,3 +52,18 @@ diamond, `halo.tscn` a violet square, `pulse.tscn` a thin green ring, and
 `shard.tscn` a cyan directional dart. These are original local shapes, created
 for Step 03, with no external licensing requirement. The weapon Resources
 reference them as replaceable art; physics stays in `scenes/attacks/`.
+
+## Step 04 gems and menus — 2026-10-05
+
+CraftPix listing research found
+[Free Mining Pixel 32×32 Icons](https://craftpix.net/freebies/free-mining-pixel-32x32-icons/)
+and [Gems Games – Free GUI](https://craftpix.net/freebies/gems-games-gui/).
+These are possible pickup/icon or menu sources, pending archive inspection,
+scale/palette fit and source redistribution review. No archive, entitlement,
+frame mapping or license applicability was verified; no files were downloaded.
+
+`scenes/visuals/xp_gem.tscn` uses an original cyan diamond with a dark border,
+created for Step 04. Gem collision lives in `scenes/xp_gem.tscn`, outside the
+replaceable visual child. `scenes/ui/upgrade_menu.tscn` uses existing Theme
+styles, Godot Controls and the built-in font. Arc Spark reuses Spark art with
+runtime tint after a chain hit. No external media or new dependencies were added.

@@ -5,6 +5,9 @@ var weapon: SurvivorWeaponData
 var damage: int
 var remaining: float
 var spent := false
+var enemies: Node2D
+var chain_limit := 1
+var hit_targets: Array[RID] = []
 
 func configure(data: SurvivorWeaponData, rank: int) -> void:
     weapon = data
@@ -28,14 +31,35 @@ func _physics_process(delta: float) -> void:
     # Sweep the center as well as using Area overlap, so fast shots cannot skip
     # an enemy between physics ticks. Both paths share the same spent guard.
     var query := PhysicsRayQueryParameters2D.create(global_position, destination, 4)
+    query.exclude = hit_targets
     var hit := get_world_2d().direct_space_state.intersect_ray(query)
     if not hit.is_empty():
+        global_position = hit.position
         _hit(hit.collider)
-    global_position = destination
+    else:
+        global_position = destination
 
 func _hit(body: Node) -> void:
-    if spent or not is_instance_valid(body) or not body.has_method("is_alive") or not body.is_alive():
+    if get_tree().paused or spent or not is_instance_valid(body) or not body.has_method("is_alive") or not body.is_alive():
         return
-    spent = true
+    if body.get_rid() in hit_targets:
+        return
+    hit_targets.append(body.get_rid())
     body.get_node("Health").take_damage(damage)
-    queue_free()
+    var nearest: CharacterBody2D
+    var distance := INF
+    if hit_targets.size() < chain_limit and is_instance_valid(enemies):
+        for enemy in enemies.get_children():
+            if not enemy.is_alive() or enemy.get_rid() in hit_targets:
+                continue
+            var candidate: float = global_position.distance_squared_to(enemy.global_position)
+            if candidate < distance:
+                nearest = enemy
+                distance = candidate
+    if is_instance_valid(nearest):
+        direction = global_position.direction_to(nearest.global_position)
+        rotation = direction.angle()
+        $Visual.modulate = Color(0.6, 1.2, 1.8, 1)
+    else:
+        spent = true
+        queue_free()

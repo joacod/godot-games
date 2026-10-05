@@ -10,6 +10,7 @@ static func add_enemy(run: Node2D, at: Vector2, hp: int = 200) -> CharacterBody2
     var enemy := preload("res://scenes/enemy.tscn").instantiate()
     run.get_node("Enemies").add_child(enemy)
     enemy.configure(run.content.enemies[0])
+    run.watch_enemy(enemy)
     enemy.get_node("Health").configure(hp, 0.0)
     enemy.target = run.get_node("Player")
     enemy.global_position = at

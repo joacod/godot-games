@@ -13,7 +13,13 @@ func _ready() -> void:
     $Player/Health.configure(content.character.max_health, content.damage_cooldown)
     $Player/Health.damaged.connect(_on_damage)
     $Player/Health.died.connect(_on_death)
+    $XP.content = content
+    $Upgrades.content = content
+    $Upgrades.rack = $Player/WeaponRack
+    $Upgrades.health = $Player/Health
+    $Upgrades.pickup_radius = content.pickup_radius
     $Enemies/Enemy.configure(content.enemies[0])
+    watch_enemy($Enemies/Enemy)
     $Enemies/Enemy.target = $Player
     _attach_visual($Arena/Visual, presentation.arena_visual_scene, presentation.floor_color)
     for edge in [$Arena/TopEdge, $Arena/BottomEdge, $Arena/LeftEdge, $Arena/RightEdge]:
@@ -48,4 +54,30 @@ func _on_death() -> void:
         enemy.velocity = Vector2.ZERO
         enemy.set_physics_process(false)
     $Player/WeaponRack.stop()
+    for gem in $Gems.get_children():
+        gem.set_physics_process(false)
     defeated.emit()
+
+func watch_enemy(enemy: CharacterBody2D) -> void:
+    if not enemy.died.is_connected(_on_enemy_death):
+        enemy.died.connect(_on_enemy_death, CONNECT_ONE_SHOT)
+
+func _on_enemy_death(enemy: CharacterBody2D) -> void:
+    if ended:
+        return
+    call_deferred("_drop_gem", enemy.global_position, enemy.content.xp_reward)
+
+func _drop_gem(at: Vector2, amount: int) -> void:
+    if ended or not is_inside_tree():
+        return
+    var gem := preload("res://scenes/xp_gem.tscn").instantiate()
+    gem.actor = $Player
+    gem.upgrades = $Upgrades
+    gem.amount = amount
+    gem.collected.connect(_grant_xp)
+    $Gems.add_child(gem)
+    gem.global_position = at
+
+func _grant_xp(amount: int) -> void:
+    if not ended:
+        $XP.grant(amount)

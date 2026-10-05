@@ -301,3 +301,113 @@ schemas, upgrade Resources, engine/renderer, OpenSpec requirements, other games,
 and all later mechanics remain untouched. No XP, upgrades, evolution, spawning,
 pause, timer, victory, commit, branch, push, PR, or publication was added.
 Step 04 is the next implementation step; it has not been started.
+
+
+## Step 04 — implemented 2026-10-05, human acceptance pending
+
+Enemy death connects once to a deferred gem drop, keeping physics callbacks
+safe. Each gem awards its data reward once. Within the run's pickup radius it
+starts following the Keeper at 240 px/s, retaining attraction if the Keeper
+moves away. Collection uses a 12 px distance and is suppressed during choices
+or after death. The cyan outlined diamond lives under a replaceable Visual.
+
+XP uses the first cost and per-level increment in `data/run.tres`, preserves
+excess, and queues each earned level. Panels resolve in earned-level order.
+The SceneTree is paused while the UpgradeMenu alone processes input; movement,
+pursuit, health immunity, attacks and gems inherit pause. Direct damage and gem
+collection also reject work while paused. No spawn director or gameplay timer
+exists yet; Step 05 must inherit the same pause behavior for those systems.
+
+Choices use a deterministic priority: one unowned weapon, Lens from the level-3
+panel if unowned, Spark rank when eligible, then distinct eligible remaining
+choices. Exhausted ranks/owned Lens leave Recovery, Power and Reach. Recovery
+heals up to maximum HP and adds unused healing to uncapped shield; shield absorbs
+contact damage before HP. Power adds a cumulative fraction of rank-1 weapon
+damage before integer rounding; current Halo damage updates without resetting
+its hit window. Reach adds radius, and earlier Reach survives Lens acquisition.
+
+Either recipe acquisition order evolves Spark once. The rack replaces its
+runtime slot ID with Arc Spark and retains its immutable base Resource,
+rank-3 values and cooldown. Other weapon slots remain intact; old Spark shots
+are removed. Arc Spark projectiles redirect toward the next living target,
+exclude previously hit body RIDs from sweeps and overlaps, and stop after three
+distinct targets or when no target/lifetime remains. Confirmation locks a panel
+and waits for Enter/Space or the mouse button to be released before applying
+one choice. Queued panels keep action paused. Retry/menu return remove the run,
+clear pending menu selection, and restore processing with fresh progression.
+
+### Automated checks
+
+CLI and MCP confirmed **4.7.2.stable.official.ed1daf0bf**. Commands from the
+repository root:
+
+```sh
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path survivors --editor --import --quit
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path survivors --script tests/run_tests.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path survivors --script tests/run_tests.gd
+/Applications/Godot.app/Contents/MacOS/Godot --path survivors --script tests/progression_sample.gd
+OPENSPEC_TELEMETRY=0 openspec validate add-survivors --strict --no-interactive
+```
+
+Final import exited 0 without errors using normal macOS application-data access.
+Headless and native regression suites each reported **204 passed, 0 failed**,
+exit 0, without console errors. All previous 150 checks remain. The 54 new
+checks cover death/drop once, reward/collision layer, attraction boundaries and
+persistence, collection once, exact XP boundaries, data costs, overflow/queued
+panels, effective choice priority and exhaustion, paused movement/damage/immunity/
+cadence/lifetime/pickups, injected Enter press/release and double-selection
+suppression, both evolution orders, original-slot replacement/other-slot
+preservation, old-shot cleanup, unavailable ranks/Lens, shield healing/overflow,
+Power/Reach, a real three-target projectile chain, retry/menu reset and immutable
+Resources. Each suite retains its 15-second failure timeout.
+
+Initial sandboxed imports reported macOS certificate/editor-settings access
+errors despite exit 0; the final import used normal application-data access.
+The first chain fixture also allowed Halo damage; isolating the projectile
+removed that fixture failure. Final evidence excludes those early runs.
+All **28 scripts** have `.gd.uid` companions, including six new scripts.
+No content schema or gameplay stat Resource was changed.
+
+### Native fixture and remaining gaps
+
+`tests/progression_sample.gd` uses manually supplied XP, one collected gem,
+placed enemies and injected Enter events. It exited 0 without console errors,
+reported `paused=true` and HP **100/100** during the choice, then fresh level
+**1**, XP **0** and `paused=false` after retry. Six individually inspected
+native viewport captures show an outlined cyan gem beside the Keeper,
+three readable/focused choices, Lens on level 3, Arc Spark in the original
+loadout, shield **40**, and fresh retry state:
+
+- `/private/tmp/survivors-step04-attraction.png`
+- `/private/tmp/survivors-step04-choices.png`
+- `/private/tmp/survivors-step04-lens-offer.png`
+- `/private/tmp/survivors-step04-evolved.png`
+- `/private/tmp/survivors-step04-shield.png`
+- `/private/tmp/survivors-step04-retry.png`
+
+Panels fit the 640×360 logical viewport at the native 1280×720 window. Dense
+crawler labels still overlap in the evolved fixture, as observed in Step 03.
+These are scripted native execution, injected input, and snapshot inspection;
+physical mouse/keyboard, continuous human attraction/pause/resume feel,
+controller, run pacing and full survival-route evidence are unverified.
+Step 04 task 4.6 remains unchecked for that human acceptance, along with the
+existing Step 02 input gate. Normal Start still has one crawler yielding 5 XP;
+reaching the 10 XP first threshold requires fixtures until Step 05 spawning.
+No independent-copy or reskin test was repeated; that remains Step 06.
+
+### Files and boundaries
+
+Added `scripts/xp_progression.gd`, `xp_gem.gd`, `upgrade_choices.gd`,
+`upgrade_menu.gd`; `tests/progression_test.gd`, `progression_sample.gd`; all six
+UID companions; `scenes/xp_gem.tscn`, `scenes/visuals/xp_gem.tscn`, and
+`scenes/ui/upgrade_menu.tscn`. Updated `scripts/main.gd`, `run.gd`, `health.gd`,
+`weapon_rack.gd`, `projectile.gd`; `scenes/main.tscn`, `run.tscn`;
+`tests/run_tests.gd`, `combat_fixture.gd`; `data/theme.tres` labels;
+`project.godot` pickup-layer label; README, DESIGN, STEPS, provenance, this
+acceptance record and Step 04 progress in OpenSpec tasks.
+
+Existing games/sibling projects, arena geometry, player movement, enemy logic,
+base stat/upgrade Resources, content schemas, engine/renderer and OpenSpec
+requirements remain untouched. No spawn pacing, elite, timer, victory, separate
+pause menu, art download, dependency, branch, commit, push or PR was added.
+Step 05 is the next implementation slice; human acceptance remains as above.
