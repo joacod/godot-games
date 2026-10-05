@@ -1,5 +1,9 @@
 # Step 02 — Movement, health and a pursuer
 
+Historical snapshot from implementation on 2026-10-05. Pending items and
+future-tense statements below describe that stage. See the
+[current acceptance record](../../ACCEPTANCE.md) for final status.
+
 ## Entry condition
 
 Complete Step 01 and retain its passing checks. Read [the design](../DESIGN.md).

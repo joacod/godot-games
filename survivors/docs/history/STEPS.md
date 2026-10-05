@@ -1,5 +1,9 @@
 # survivors implementation steps
 
+Historical snapshot from implementation on 2026-10-05. Pending items and
+future-tense statements below describe that stage. See the
+[current acceptance record](../ACCEPTANCE.md) for final status.
+
 Status: Step 01 completed on 2026-10-05. Step 02 is implemented; its physical
 keyboard and movement-feel acceptance remains pending. Steps 03–04 are implemented
 with automated and native fixture evidence. Step 04 physical input and human
@@ -13,8 +17,8 @@ requested step at a time, in order. Each step depends on the preceding one;
 Step 01 depends on [DESIGN.md](DESIGN.md) and the researched content decisions.
 Do not mark an implementation checkbox complete for writing this handoff.
 
-[OpenSpec requirements](../../openspec/changes/add-survivors/specs/survivors-slice/spec.md)
-are the behavior contract. [OpenSpec tasks](../../openspec/changes/add-survivors/tasks.md)
+[OpenSpec requirements](../../../openspec/changes/add-survivors/specs/survivors-slice/spec.md)
+are the behavior contract. [OpenSpec tasks](../../../openspec/changes/add-survivors/tasks.md)
 are the single progress checklist; the guides below contain execution detail.
 Repository-level links are planning conveniences and are not needed by a copied
 game at runtime. Its DESIGN.md and step guides remain inside the game folder.

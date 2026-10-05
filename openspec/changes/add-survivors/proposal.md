@@ -1,5 +1,8 @@
 # Add survivors
 
+Historical planning record. Implementation and user-reported manual acceptance
+are complete; see [current game documentation](../../../survivors/README.md).
+
 ## Why
 
 Provide an independent one-level example that can be copied and reskinned for
@@ -32,5 +35,5 @@ Runtime work is confined to `survivors/`; planning lives in this OpenSpec change
 No shared launcher, autoload, codebase, runtime dependency or required asset
 purchase. Existing `2d-platform/` and `beat-em-up/` remain unchanged.
 
-See [the canonical design](../../../survivors/docs/DESIGN.md) and
-[the step index](../../../survivors/docs/STEPS.md).
+See [the canonical design](../../../survivors/docs/history/DESIGN.md) and
+[the step index](../../../survivors/docs/history/STEPS.md).

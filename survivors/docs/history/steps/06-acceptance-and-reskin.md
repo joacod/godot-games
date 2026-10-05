@@ -1,5 +1,9 @@
 # Step 06 — Acceptance and independent reskin proof
 
+Historical snapshot from implementation on 2026-10-05. Pending items and
+future-tense statements below describe that stage. See the
+[current acceptance record](../../ACCEPTANCE.md) for final status.
+
 ## Entry condition
 
 Complete Step 05 and retain its passing checks. Read [the design](../DESIGN.md).
@@ -55,7 +59,7 @@ of the standard test runner and checks loaded presentation, collision
 boundaries, live weapon lifetime and retry. `tests/acceptance_sample.gd` extends
 the normal-content scripted route with 450 native viewport frames around
 90 active seconds, route stills and measured capture timestamps. See
-[the README](../../README.md) for exact preparation, launch and encoding commands.
+[the README](../../../README.md) for exact preparation, launch and encoding commands.
 
 Automated and scripted native evidence does not close physical keyboard, human
 movement/attraction/pause feel, balance or full human readability acceptance.
